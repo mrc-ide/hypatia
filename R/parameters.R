@@ -92,13 +92,13 @@ parameters_explicit_SEIR <- function(
   # parameters
   # probabilities
   # probabilities
-  prob_hosp = probs$prob_hosp,
-  prob_severe = probs$prob_severe,
-  prob_non_severe_death_treatment = probs$prob_non_severe_death_treatment,
-  prob_non_severe_death_no_treatment = probs$prob_non_severe_death_no_treatment,
-  prob_severe_death_treatment = probs$prob_severe_death_treatment,
-  prob_severe_death_no_treatment = probs$prob_severe_death_no_treatment,
-  p_dist = probs$p_dist,
+  prob_hosp = squire:::probs$prob_hosp,
+  prob_severe = squire:::probs$prob_severe,
+  prob_non_severe_death_treatment = squire:::probs$prob_non_severe_death_treatment,
+  prob_non_severe_death_no_treatment = squire:::probs$prob_non_severe_death_no_treatment,
+  prob_severe_death_treatment = squire:::probs$prob_severe_death_treatment,
+  prob_severe_death_no_treatment = squire:::probs$prob_severe_death_no_treatment,
+  p_dist = squire:::probs$p_dist,
 
   # durations
   dur_E  = 4.6,
@@ -126,7 +126,7 @@ parameters_explicit_SEIR <- function(
 ) {
 
   # Handle country population args
-  cpm <- parse_country_population_mixing_matrix(country = country,
+  cpm <- squire:::parse_country_population_mixing_matrix(country = country,
                                                 population = population,
                                                 contact_matrix_set = contact_matrix_set)
   country <- cpm$country
@@ -151,7 +151,7 @@ parameters_explicit_SEIR <- function(
   # populate hospital and ICU bed capacity if not provided
   if (is.null(hosp_bed_capacity)) {
     if (!is.null(country)) {
-      beds <- get_healthcare_capacity(country)
+      beds <- squire::get_healthcare_capacity(country)
       hosp_beds <- beds$hosp_beds
       hosp_bed_capacity <- rep(round(hosp_beds * sum(population)/1000), length(tt_hosp_beds))
     } else {
@@ -160,7 +160,7 @@ parameters_explicit_SEIR <- function(
   }
   if (is.null(ICU_bed_capacity)) {
     if (!is.null(country)) {
-      beds <- get_healthcare_capacity(country)
+      beds <- squire::get_healthcare_capacity(country)
       ICU_beds <- beds$ICU_beds
       ICU_bed_capacity <- rep(round(ICU_beds * sum(population)/1000), length(tt_ICU_beds))
     } else {
@@ -174,71 +174,71 @@ parameters_explicit_SEIR <- function(
   # Initialise initial conditions
   if (!is.null(seeding_cases)) {
     assert_int(seeding_cases)
-    mod_init <- init_check_explicit(init, population, seeding_cases)
+    mod_init <- squire:::init_check_explicit(init, population, seeding_cases)
   } else {
-    mod_init <- init_check_explicit(init, population)
+    mod_init <- squire:::init_check_explicit(init, population)
   }
 
   # Convert contact matrices to input matrices
-  matrices_set <- matrix_set_explicit(contact_matrix_set, population)
+  matrices_set <- squire:::matrix_set_explicit(contact_matrix_set, population)
 
   # Input checks
   # ----------------------------------------------------------------------------
-  mc <- matrix_check(population[-1], contact_matrix_set)
+  mc <- squire:::matrix_check(population[-1], contact_matrix_set)
   stopifnot(length(R0) == length(tt_R0))
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
-  tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt), check_time_change, time_period/dt)
-  tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt), check_time_change, time_period/dt)
+  tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt), squire:::check_time_change, time_period/dt)
+  tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt), squire:::check_time_change, time_period/dt)
 
-  assert_pos(dt)
-  assert_pos(dur_E)
-  assert_pos(dur_IMild)
-  assert_pos(dur_ICase)
-  assert_pos(dur_get_ox_survive)
-  assert_pos(dur_get_ox_die)
-  assert_pos(dur_not_get_ox_survive)
-  assert_pos(dur_not_get_ox_die)
-  assert_pos(dur_get_mv_survive)
-  assert_pos(dur_get_mv_die)
-  assert_pos(dur_not_get_mv_survive)
-  assert_pos(dur_not_get_mv_die)
-  assert_pos(time_period)
-  assert_pos(hosp_bed_capacity)
-  assert_pos(ICU_bed_capacity)
+  squire:::assert_pos(dt)
+  squire:::assert_pos(dur_E)
+  squire:::assert_pos(dur_IMild)
+  squire:::assert_pos(dur_ICase)
+  squire:::assert_pos(dur_get_ox_survive)
+  squire:::assert_pos(dur_get_ox_die)
+  squire:::assert_pos(dur_not_get_ox_survive)
+  squire:::assert_pos(dur_not_get_ox_die)
+  squire:::assert_pos(dur_get_mv_survive)
+  squire:::assert_pos(dur_get_mv_die)
+  squire:::assert_pos(dur_not_get_mv_survive)
+  squire:::assert_pos(dur_not_get_mv_die)
+  squire:::assert_pos(time_period)
+  squire:::assert_pos(hosp_bed_capacity)
+  squire:::assert_pos(ICU_bed_capacity)
 
-  assert_length(prob_hosp, length(population))
-  assert_length(prob_severe, length(population))
-  assert_length(prob_non_severe_death_treatment, length(population))
-  assert_length(prob_non_severe_death_no_treatment, length(population))
-  assert_length(prob_severe_death_treatment, length(population))
-  assert_length(prob_severe_death_no_treatment, length(population))
-  assert_length(p_dist, length(population))
+  squire:::assert_length(prob_hosp, length(population))
+  squire:::assert_length(prob_severe, length(population))
+  squire:::assert_length(prob_non_severe_death_treatment, length(population))
+  squire:::assert_length(prob_non_severe_death_no_treatment, length(population))
+  squire:::assert_length(prob_severe_death_treatment, length(population))
+  squire:::assert_length(prob_severe_death_no_treatment, length(population))
+  squire:::assert_length(p_dist, length(population))
 
-  assert_numeric(prob_hosp, length(population))
-  assert_numeric(prob_severe, length(population))
-  assert_numeric(prob_non_severe_death_treatment, length(population))
-  assert_numeric(prob_non_severe_death_no_treatment, length(population))
-  assert_numeric(prob_severe_death_treatment, length(population))
-  assert_numeric(prob_severe_death_no_treatment, length(population))
-  assert_numeric(p_dist, length(population))
+  squire:::assert_numeric(prob_hosp, length(population))
+  squire:::assert_numeric(prob_severe, length(population))
+  squire:::assert_numeric(prob_non_severe_death_treatment, length(population))
+  squire:::assert_numeric(prob_non_severe_death_no_treatment, length(population))
+  squire:::assert_numeric(prob_severe_death_treatment, length(population))
+  squire:::assert_numeric(prob_severe_death_no_treatment, length(population))
+  squire:::assert_numeric(p_dist, length(population))
 
-  assert_leq(prob_hosp, 1)
-  assert_leq(prob_severe, 1)
-  assert_leq(prob_non_severe_death_treatment, 1)
-  assert_leq(prob_non_severe_death_no_treatment, 1)
-  assert_leq(prob_severe_death_treatment, 1)
-  assert_leq(prob_severe_death_no_treatment, 1)
-  assert_leq(p_dist, 1)
+  squire:::assert_leq(prob_hosp, 1)
+  squire:::assert_leq(prob_severe, 1)
+  squire:::assert_leq(prob_non_severe_death_treatment, 1)
+  squire:::assert_leq(prob_non_severe_death_no_treatment, 1)
+  squire:::assert_leq(prob_severe_death_treatment, 1)
+  squire:::assert_leq(prob_severe_death_no_treatment, 1)
+  squire:::assert_leq(p_dist, 1)
 
-  assert_greq(prob_hosp, 0)
-  assert_greq(prob_severe, 0)
-  assert_greq(prob_non_severe_death_treatment, 0)
-  assert_greq(prob_non_severe_death_no_treatment, 0)
-  assert_greq(prob_severe_death_treatment, 0)
-  assert_greq(prob_severe_death_no_treatment, 0)
-  assert_greq(p_dist, 0)
+  squire:::assert_greq(prob_hosp, 0)
+  squire:::assert_greq(prob_severe, 0)
+  squire:::assert_greq(prob_non_severe_death_treatment, 0)
+  squire:::assert_greq(prob_non_severe_death_no_treatment, 0)
+  squire:::assert_greq(prob_severe_death_treatment, 0)
+  squire:::assert_greq(prob_severe_death_no_treatment, 0)
+  squire:::assert_greq(p_dist, 0)
 
 
   # Convert and Generate Parameters As Required
@@ -259,8 +259,8 @@ parameters_explicit_SEIR <- function(
   gamma_rec = 2 * 1/dur_rec
 
   if (is.null(beta_set)) {
-    baseline_matrix <- process_contact_matrix_scaled_age(contact_matrix_set[[1]], population)
-    beta_set <- beta_est_explicit(dur_IMild = dur_IMild,
+    baseline_matrix <- squire:::process_contact_matrix_scaled_age(contact_matrix_set[[1]], population)
+    beta_set <- squire:::beta_est_explicit(dur_IMild = dur_IMild,
                                   dur_ICase = dur_ICase,
                                   prob_hosp = prob_hosp,
                                   mixing_matrix = baseline_matrix,

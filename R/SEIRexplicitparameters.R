@@ -38,11 +38,41 @@ gamma_rec <- user() # rate of progression through post-ICU recovery compartment
 
 }
 
-#' @title Setting the parameters for Explicit SEIR
+
+#' Parameter list for SQUIRE
 #'
-#' @return
+#' @param S susceptible
+#' @param E1 First of the latent infection compartments
+#' @param E2 Second of the latent infection compartments
+#' @param ICase1 First of the compartments for infections that will require hospitalisation
+#' @param ICase2 Second of the compartments for infections that will require hospitalisation
+#' @param IOxGetLive1 First of the compartments for infections that will require oxygen, get it, and who survive
+#' @param IOxGetLive2 Second of the compartments for infections that will require oxygen, get it, and who survive
+#' @param IOxNotGetLive1 First of the compartments for infections that will require oxygen, do NOT get it, and live
+#' @param IOxNotGetLive2 Second of the compartments for infections that will require oxygen, do NOT get it, and live
+#' @param IOxGetDie1 First of the compartments for infections that will require oxygen, get it, and die
+#' @param IOxGetDie2 Second of the compartments for infections that will require oxygen, get it, and die
+#' @param IOxNotGetDie1 First of the compartments for infections that will require oxygen, do NOT get it, and die
+#' @param IOxNotGetDie2 Second of the compartments for infections that will require oxygen, do NOT get it, and die
+#' @param IMVGetLive1 First of the compartments for infections that will require mechanical ventilation, get it, and who survive
+#' @param IMVGetLive2 Second of the compartments for infections that will require mechanical ventilation, get it, and who survive
+#' @param IMVNotGetLive1 First of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive
+#' @param IMVNotGetLive2 Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive
+#' @param IMVGetDie1 First of the compartments for infections that will require mechanical ventilation, get it, and die
+#' @param IMVGetDie2 Second of the compartments for infections that will require mechanical ventilation, get it, and die
+#' @param IMVNotGetDie1 First of the compartments for infections that will require mechanical ventilation, do NOT get it, and die
+#' @param IMVNotGetDie2 Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and die
+#' @param IRec1 First of the compartments for those recovering from ICU
+#' @param IRec2 Second of the compartments for those recovering from ICU
+#' @param R recovered
+#' @param D dead
+#' @param D_get dead
+#' @param D_not_get dead
+#' @param i element index
+#' @param j element index
+#'
+#' @return list
 #' @export
-#'
 SEIRexplicitparameters <- function(S, E1, E2, IMild, ICase1, ICase2, cum_hosp_inc, cum_ICU_inc, IOxGetLive1, IOxGetLive2,
                                    IOxGetDie1, IOxGetDie2, IOxNotGetLive1, IOxNotGetLive2, IOxNotGetDie1, IOxNotGetDie2,
                                    IMVGetLive1, IMVGetLive2, IMVGetDie1, IMVGetDie2, IMVNotGetLive1, IMVNotGetLive2,
@@ -151,7 +181,7 @@ p_Rec2_R <- 1 - exp(-gamma_rec * dt) # Progression through recovery from ICU in 
 n_S_E1[] <- rbinom(S[i], p_S_E1[i]) # Number of newly infected individuals
 n_E1_E2[] <- rbinom(E1[i], p_E1_E2) # Number progressing through latent compartments
 n_E2_I[] <- rbinom(E2[i], p_E2_I) # Number of new symptom onsets
-n_E2_ICase1[] <- rbinom(n_E2_I[i], prob_hosp[i]) # Proportion of the new symptom onsets that will require hospitalisation (note: haven't entered hospital yet, delay between onset and hospitalisation)
+n_E2_ICase1[] <- rbinom(n_E2_I[i], prob_hosp[i])
 n_E2_IMild[] <- n_E2_I[i] - n_E2_ICase1[i] # 1 - Above, the rest of the infections, which we consider to be mild and not require hospitalisation
 n_IMild_R[] <- rbinom(IMild[i], p_IMild_R) # Number of mild infections recovering
 n_ICase1_ICase2[] <- rbinom(ICase1[i], p_ICase1_ICase2) # Number progressing through the onset but not hospitalised compartment
@@ -290,6 +320,7 @@ prob <- prob/round(population$age_group[i])
 
 # Generating Force of Infection
 temp[] <- IMild[i] + ICase1[i] + ICase2[i]
+#s_ij[,] <- m[i, j] * prob * temp[j]
 s_ij[,] <- m[i, j] * prob * temp[j]
 lambda[] <- beta * sum(s_ij[i, ])
 

@@ -1,27 +1,27 @@
-#' Create an explicit model
+#' #' Create an explicit model
+#' #'
+#' #' @title Explicit SEIR model creation.
+#' #'
+#' #' We will use this structure to ensure that model fitting is flexible in the
+#' #' future as more models are added
+#' #'
+#' #' @export
+#' explicit_model <- function() {
 #'
-#' @title Explicit SEIR model creation.
+#'   model_class <- "explicit_SEIR_model"
+#'   compare_model <- function(model, pars_obs, data) {
+#'     compare_output(model, pars_obs, data, type=model_class)
+#'   }
 #'
-#' We will use this structure to ensure that model fitting is flexible in the
-#' future as more models are added
+#'   explicit_model <- list(odin_model = explicit_SEIR,
+#'                          generate_beta_func = squire:::beta_est_explicit,
+#'                          parameter_func = parameters_explicit_SEEIR,
+#'                          run_func = run_explicit_SEEIR_model,
+#'                          compare_model = compare_model)
+#'   class(explicit_model) <- c(model_class, "stochastic", "squire_model")
+#'   explicit_model
 #'
-#' @export
-explicit_model <- function() {
-
-  model_class <- "explicit_SEIR_model"
-  compare_model <- function(model, pars_obs, data) {
-    compare_output(model, pars_obs, data, type=model_class)
-  }
-
-  explicit_model <- list(odin_model = explicit_SEIR,
-                         generate_beta_func = beta_est_explicit,
-                         parameter_func = parameters_explicit_SEEIR,
-                         run_func = run_explicit_SEEIR_model,
-                         compare_model = compare_model)
-  class(explicit_model) <- c(model_class, "stochastic", "squire_model")
-  explicit_model
-
-}
+#' }
 
 
 #' @importFrom stats rbinom
@@ -208,6 +208,55 @@ displaythemodel2 <- function(df) {
       legend.box = c("horizontal", "vertical")
     ) +
     ggplot2::scale_colour_manual(values=c("blue", "red", "green", "purple", "yellow")) +
+    ggplot2::theme(text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
+                   plot.title = ggplot2::element_text(size = 26, color = '#333333'),
+                   plot.subtitle = ggplot2::element_text(size = 13),
+                   axis.title.x = ggplot2::element_text(size = 16, color = '#333333'),
+                   axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
+
+}
+
+displaythemodel3 <- function(df) {
+
+  # This function displays data in a list. df must be in the form of a list.
+
+  # Check if df is a dataframe. If yes then turn it into a list
+  numruns <- 0
+  datapoints <- 0
+  subtitle <- ""
+
+  if (is.data.frame(df)) {
+    numdatapoints <- paste(length(df$time))
+    numruns <- 1
+    df <- list(df)
+    subtitle <- paste('Simulation for', numruns, 'run and', numdatapoints, 'data points')
+  }
+  else{
+    numruns <- length(df)
+    numdatapoints <- length(df[[1]][[1]])-1
+    subtitle <- paste('Simulation for', numruns, 'runs,', numdatapoints, 'data points per run')
+  }
+
+  # Create group id for data
+  df <- dplyr::bind_rows(df, .id = "group")
+
+  # Convert to long format
+  df <- tidyr::pivot_longer(tibble::as_tibble(df), c("S", "E1", "E2","ICase1","ICase2","IOxGetLive1","IOxGetLive2","IOxNotGetLive1","IOxNotGetLive2","IOxGetDie1","IOxGetDie2",
+                                                     "IOxNotGetDie1","IOxNotGetDie2","IMVGetLive1","IMVGetLive2","IMVNotGetLive1","IMVNotGetLive2","IMVGetDie1","IMVGetDie2",
+                                                     "IMVNotGetDie1","IMVNotGetDie2", "IRec1", "IRec2"))
+
+  strname <- paste("SIR", df$type, "Model Simulation")
+
+  ggplot2::ggplot(df, ggplot2::aes(x=df$time, y=df$value, group=interaction(df$group, df$name), colour=df$name ) ) +
+    ggplot2::geom_line(size=0.5) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(title = strname, subtitle = subtitle, color=df$legend) +
+    ggplot2::labs(y ="S, I, & R", x="time") +
+    ggplot2::theme(
+      legend.justification = c("right", "top"),
+      legend.box = c("horizontal", "vertical")
+    ) +
+    #ggplot2::scale_colour_manual(values=c("blue", "red", "green", "purple", "yellow")) +
     ggplot2::theme(text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
                    plot.title = ggplot2::element_text(size = 26, color = '#333333'),
                    plot.subtitle = ggplot2::element_text(size = 13),
@@ -701,6 +750,260 @@ individual_R_to_S <- function(S, R, human, immunity, age, location, pars = NULL)
 #   }
 # }
 
+#'
+#' #' @title Newly infected process -> S to E1
+#' #'
+#' #' @param S susceptible
+#' #' @param E1 newly infected
+#' #' @param human human
+#' #' @param immunity immunity
+#' #' @param age age
+#' #' @param location location
+#' #' @param pars parameter list
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' individual_S_to_E1 (S, E1, human, immunity, age, location, pars)
+#' #' @importFrom stats rbinom
+#' individual_S_to_E1 <- function(S, E1, human, immunity, age, location, pars = NULL) {
+#'   function(api) {
+#'
+#'     pars <- get_parameters_for_sirstochastic(pars)
+#'
+#'     susceptible <- api$get_state(human, S)
+#'
+#'     p_S_E1 <- 1 - exp(-lambda * pars$dt)
+#'     n_S_E1 <- rbinom(S, p_S_E1) # Number of newly infected individuals
+#'
+#'     if (pars$novariations) {
+#'       newinfected <- susceptible[sample.int(length(susceptible), n_S_E1)]
+#'       api$queue_state_update(human, E1, newinfected)
+#'     }
+#'   }
+#' }
+#'
+#' #' @title Progressing through latent compartments -> E1 to E2
+#' #'
+#' #' @param E1 newly infected
+#' #' @param E2 progressed infected
+#' #' @param human human
+#' #' @param immunity immunity
+#' #' @param age age
+#' #' @param location location
+#' #' @param pars parameter list
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' individual_E1_to_E2 (E1, E2, human, immunity, age, location, pars)
+#' #' @importFrom stats rbinom
+#' individual_E1_to_E2 <- function(E1, E2, human, immunity, age, location, pars = NULL) {
+#'   function(api) {
+#'
+#'     pars <- get_parameters_for_sirstochastic(pars)
+#'     newinfected <- api$get_state(human, E1)
+#'
+#'     p_E1_E2 <- 1 - exp(-gamma_E * pars$dt)
+#'     n_E1_E2 <- rbinom(E1, p_E1_E2)
+#'
+#'     if (pars$novariations) {
+#'       proginfected <- newinfected[sample.int(length(newinfected), n_E1_E2)]
+#'       api$queue_state_update(human, E2, proginfected)
+#'     }
+#'   }
+#' }
+#'
+#' #' @title New symptom onsets -> I to I
+#' #'
+#' #' @param E2 progressed infected
+#' #' @param I new symtom onsets
+#' #' @param human human
+#' #' @param immunity immunity
+#' #' @param age age
+#' #' @param location location
+#' #' @param pars parameter list
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' individual_E2_to_I (E2, I, human, immunity, age, location, pars)
+#' #' @importFrom stats rbinom
+#' individual_E2_to_I <- function(E2, I, human, immunity, age, location, pars = NULL) {
+#'   function(api) {
+#'
+#'     pars <- get_parameters_for_sirstochastic(pars)
+#'     proginfected <- api$get_state(human, E2)
+#'
+#'     p_E2_I <- 1 - exp(-gamma_E * dt)
+#'     n_E2_I <- rbinom(E2, p_E2_I)
+#'
+#'     if (pars$novariations) {
+#'       newsymptomonsets <- proginfected[sample.int(length(proginfected), n_E2_I)]
+#'       api$queue_state_update(human, E2, newsymptomonsets)
+#'     }
+#'   }
+#' }
+#'
+#' #' @title New symptom onsets -> E2 to I
+#' #'
+#' #' @param E2 progressed infected
+#' #' @param I new symtom onsets
+#' #' @param human human
+#' #' @param immunity immunity
+#' #' @param age age
+#' #' @param location location
+#' #' @param pars parameter list
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' individual_E2_to_I (E2, I, human, immunity, age, location, pars)
+#' #' @importFrom stats rbinom
+#' individual_E2_to_IMild_ICase1 <- function(E2, I, human, immunity, age, location, pars = NULL) {
+#'   function(api) {
+#'
+#'     prob_hosp <- 0.2
+#'     pars <- get_parameters_for_sirstochastic(pars)
+#'     proginfected <- api$get_state(human, E2)
+#'
+#'     n_E2_I <- rbinom(E2, p_E2_I)
+#'     n_E2_ICase1 <- rbinom(n_E2_I, prob_hosp) # Proportion of the new symptom onsets that will require hospitalisation (note: haven't entered hospital yet, delay between onset and hospitalisation)
+#'     n_E2_IMild <- n_E2_I - n_E2_ICase1 # 1 - Above, the rest of the infections, which we consider to be mild and not require hospitalisation
+#'     p_IMild_R <- 1 - exp(-gamma_IMild * pars$dt) # Recovery from mild disease
+#'     n_IMild_R <- rbinom(IMild, p_IMild_R) # Number of mild infections recovering
+#'
+#'     if (pars$novariations) {
+#'       newsymptomonsets <- proginfected[sample.int(length(proginfected), n_E2_I)]
+#'       api$queue_state_update(human, E2, newsymptomonsets)
+#'     }
+#'   }
+#' }
+#'
+#' #' @title ICase1 to ICase2
+#' #'
+#' #' @param ICase1 # Proportion of the new symptom onsets that will require hospitalisation (note: haven't entered hospital yet, delay between onset and hospitalisation)
+#' #' @param ICase2 Number progressing through the onset but not hospitalised compartment
+#' #' @param human human
+#' #' @param immunity immunity
+#' #' @param age age
+#' #' @param location location
+#' #' @param pars parameter list
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' individual_ICase1_to_ICase2 (ICase1, ICase2, human, immunity, age, location, pars)
+#' #' @importFrom stats rbinom
+#' individual_ICase1_to_ICase2 <- function(ICase1, ICase2, human, immunity, age, location, pars = NULL) {
+#'   function(api) {
+#'
+#'     pars <- get_parameters_for_sirstochastic(pars)
+#'     p_ICase1_ICase2 <- 1 - exp(-gamma_ICase * pars$dt)
+#'
+#'     # Number progressing through the onset but not hospitalised compartment
+#'     n_ICase1_ICase2 <- rbinom(ICase1, p_ICase1_ICase2)
+#'     old <- api$get_state(human, ICase1)
+#'
+#'     if (pars$novariations) {
+#'       new <- old[sample.int(length(old), n_ICase1_ICase2)]
+#'       api$queue_state_update(human, ICase1, new)
+#'     }
+#'   }
+#' }
+#'
+#' #' @title ICase2 to ICase2
+#' #'
+#' #' @param ICase2
+#' #' @param ICase2
+#' #' @param human human
+#' #' @param immunity immunity
+#' #' @param age age
+#' #' @param location location
+#' #' @param pars parameter list
+#' #'
+#' #' @export
+#' #'
+#' #' @examples
+#' #' individual_ICase2_to_ICase2 (ICase1, ICase2, human, immunity, age, location, pars)
+#' #' @importFrom stats rbinom
+#' individual_ICase2_to_Hosp <- function(ICase1, Hosp, human, immunity, age, location, pars = NULL) {
+#'   function(api) {
+#'
+#'     pars <- get_parameters_for_sirstochastic(pars)
+#'     p_ICase2_Hosp <- 1 - exp(-gamma_ICase * pars$dt)
+#'
+#'     n_ICase2_Hosp <- rbinom(ICase2, p_ICase2_Hosp) # Number progressing to requiring hospitalisation
+#'     old <- api$get_state(human, ICase2)
+#'
+#'     if (pars$novariations) {
+#'       new <- old[sample.int(length(old), n_ICase2_Hosp)]
+#'       api$queue_state_update(human, Hosp, new)
+#'     }
+#'   }
+#' }
+
+
+
+#' @title Function to check states
+#'
+#' @param api api
+#' @param individual individual
+#' @param state1 state1
+#' @param state2 individual
+#' @param prob prob
+#'
+#' @export
+#'
+#' @examples
+#' validate_fixed_probability_state_change_process(individual, state1, state2, prob)
+validate_fixed_probability_state_change_process <- function(individual, state1, state2, prob) {
+
+  function(api) {
+    if(!api$get_state(human, state1)){
+      stop(paste0('Your state ', state1, ' does not exist \n'))
+    }
+    else if(!api$get_state(human, state2)){
+      stop(paste0('Your state ', state2, ' does not exist \n'))
+    }
+    else if (api$get_state(human, state1) && api$get_state(human, state2)) {
+       individual::fixed_probability_state_change_process(individual, state1, state2, prob)
+    }
+  }
+
+}
+
+#' @title Function to find FOI and its probability
+#'
+#' @param api api
+#' @param IMild Mild infections
+#' @param ICase1 First of the compartments for infections that will require hospitalisation
+#' @param Icase2 Second of the compartments for infections that will require hospitalisation
+#' @param dt delta time
+#' @param lambda FOI
+#' @param problambda probability using lambda
+#'
+#' @return list
+#' @export
+#' @examples
+#' infection(IMild, ICase1, Icase2, dt, lambda, problambda)
+infection <- function(IMild, ICase1, Icase2, dt, lambda, problambda) {
+  function(api) {
+    # pars <- get_parameters_for_sirstochastic(pars)
+    #
+    # m[, ] <- interpolate(tt_matrix, mix_mat_set, "constant")
+    #
+    # # Generating Force of Infection
+    temp <- IMild + ICase1 + ICase2
+    # s_ij[,] <- m[i, j] * prob * temp[j]
+    # lambda[] <- pars$beta * sum(s_ij[i, ])
+    lambda <- 0.4
+    problambda <- 1 - exp(-lambda * dt)
+  }
+
+  list(lambda = lambda, problambda = problambda)
+}
+
 #' @title Renders the sizes for S, I, R
 #' @param S S
 #' @param I I
@@ -738,6 +1041,73 @@ render_state_sizes2 <- function(S, I, R, I2, D, human) {
     api$render('recovered_counts', length(api$get_state(human, R)))
   }
 }
+
+#' Render sizes for SQUIRE states - note IMild is missing for now
+#'
+#' @param S susceptible
+#' @param E1 First of the latent infection compartments
+#' @param E2 Second of the latent infection compartments
+#' @param ICase1 First of the compartments for infections that will require hospitalisation
+#' @param ICase2 Second of the compartments for infections that will require hospitalisation
+#' @param Hosp Those requiring hospitalisation. Number split between I_Oxygen and I_MV
+#' @param IOxGetLive1 First of the compartments for infections that will require oxygen, get it, and who survive
+#' @param IOxGetLive2 Second of the compartments for infections that will require oxygen, get it, and who survive
+#' @param IOxNotGetLive1 First of the compartments for infections that will require oxygen, do NOT get it, and live
+#' @param IOxNotGetLive2 Second of the compartments for infections that will require oxygen, do NOT get it, and live
+#' @param IOxGetDie1 First of the compartments for infections that will require oxygen, get it, and die
+#' @param IOxGetDie2 Second of the compartments for infections that will require oxygen, get it, and die
+#' @param IOxNotGetDie1 First of the compartments for infections that will require oxygen, do NOT get it, and die
+#' @param IOxNotGetDie2 Second of the compartments for infections that will require oxygen, do NOT get it, and die
+#' @param IMVGetLive1 First of the compartments for infections that will require mechanical ventilation, get it, and who survive
+#' @param IMVGetLive2 Second of the compartments for infections that will require mechanical ventilation, get it, and who survive
+#' @param IMVNotGetLive1 First of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive
+#' @param IMVNotGetLive2 Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive
+#' @param IMVGetDie1 First of the compartments for infections that will require mechanical ventilation, get it, and die
+#' @param IMVGetDie2 Second of the compartments for infections that will require mechanical ventilation, get it, and die
+#' @param IMVNotGetDie1 First of the compartments for infections that will require mechanical ventilation, do NOT get it, and die
+#' @param IMVNotGetDie2 Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and die
+#' @param IRec1 First of the compartments for those recovering from ICU
+#' @param IRec2 Second of the compartments for those recovering from ICU
+#' @param R Recovered
+#' @param D Dead
+#' @param human human
+#'
+#' @export
+#' @examples
+#' render_state_sizes3(S, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human)
+render_state_sizes3 <- function(S, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,
+                                IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,
+                                IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human) {
+  function(api) {
+    api$render('S', length(api$get_state(human, S)))
+    api$render('E1', length(api$get_state(human, E1)))
+    api$render('E2', length(api$get_state(human, E2)))
+    api$render('ICase1', length(api$get_state(human, ICase1)))
+    api$render('ICase2', length(api$get_state(human, ICase2)))
+    api$render('Hosp', length(api$get_state(human, Hosp)))
+    api$render('IOxGetLive1', length(api$get_state(human, IOxGetLive1)))
+    api$render('IOxGetLive2', length(api$get_state(human, IOxGetLive2)))
+    api$render('IOxNotGetLive1', length(api$get_state(human, IOxNotGetLive1)))
+    api$render('IOxNotGetLive2', length(api$get_state(human, IOxNotGetLive2)))
+    api$render('IOxGetDie1', length(api$get_state(human, IOxGetDie1)))
+    api$render('IOxGetDie2', length(api$get_state(human, IOxGetDie2)))
+    api$render('IOxNotGetDie1', length(api$get_state(human, IOxNotGetDie1)))
+    api$render('IOxNotGetDie2', length(api$get_state(human, IOxNotGetDie2)))
+    api$render('IMVGetLive1', length(api$get_state(human, IMVGetLive1)))
+    api$render('IMVGetLive2', length(api$get_state(human, IMVGetLive2)))
+    api$render('IMVNotGetLive1', length(api$get_state(human, IMVNotGetLive1)))
+    api$render('IMVNotGetLive2', length(api$get_state(human, IMVNotGetLive2)))
+    api$render('IMVGetDie1', length(api$get_state(human, IMVGetDie1)))
+    api$render('IMVGetDie2', length(api$get_state(human, IMVGetDie2)))
+    api$render('IMVNotGetDie1', length(api$get_state(human, IMVNotGetDie1)))
+    api$render('IMVNotGetDie2', length(api$get_state(human, IMVNotGetDie2)))
+    api$render('IRec1', length(api$get_state(human, IRec1)))
+    api$render('IRec2', length(api$get_state(human, IRec2)))
+    api$render('D', length(api$get_state(human, D)))
+    api$render('R', length(api$get_state(human, R)))
+  }
+}
+
 
 #' @title Check state update is valid
 #'
