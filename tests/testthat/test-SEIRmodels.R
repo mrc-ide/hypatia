@@ -435,14 +435,14 @@ test_that("test individual model with SQUIRE states", {
 
   output <- individual::simulate(human, processes, timestep)
 
-  df <- data.frame(list(S = output$S, E1 = output$E1, E2 = output$E2, I = output$I, ICase1 = output$ICase1, ICase2 = output$ICase2, Hosp = output$Hosp, IOxGetLive1 = output$IOxGetLive1,
+  df <- data.frame(S = output$S, E1 = output$E1, E2 = output$E2, I = output$I, ICase1 = output$ICase1, ICase2 = output$ICase2, Hosp = output$Hosp, IOxGetLive1 = output$IOxGetLive1,
                      IOxGetLive2 = output$IOxGetLive2, IOxNotGetLive1 = output$IOxNotGetLive1, IOxNotGetLive2 = output$IOxNotGetLive2,
                      IOxGetDie1 = output$IOxGetDie1, IOxGetDie2 = output$IOxGetDie2,
                      IOxNotGetDie1 = output$IOxNotGetDie1, IOxNotGetDie2 = output$IOxNotGetDie2, IMVGetLive1 = output$IMVGetLive1,
                      IMVGetLive2 = output$IMVGetLive2, IMVNotGetLive1 = output$IMVNotGetLive1, IMVNotGetLive2 = output$IMVNotGetLive2,
                      IMVGetDie1 = output$IMVNotGetLive2, IMVGetDie2 = output$IMVGetDie2,
                      IMVNotGetDie1 = output$IMVNotGetDie1, IMVNotGetDie2 = output$IMVNotGetDie2, IRec1 = output$IRec1, IRec2= output$IRec2,
-                     R = output$R, D = output$D), time = output$time, type = "Individual",
+                     R = output$R, D = output$D, time = output$time, type = "Individual",
                      legend = "Individual", stringsAsFactors = FALSE)
 
   hypatia::displaythemodel3(df)
