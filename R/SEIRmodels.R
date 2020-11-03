@@ -240,10 +240,12 @@ displaythemodel3 <- function(df) {
   # Create group id for data
   df <- dplyr::bind_rows(df, .id = "group")
 
-  # Convert to long format
+  #Convert to long format
   df <- tidyr::pivot_longer(tibble::as_tibble(df), c("S", "E1", "E2","ICase1","ICase2","IOxGetLive1","IOxGetLive2","IOxNotGetLive1","IOxNotGetLive2","IOxGetDie1","IOxGetDie2",
-                                                     "IOxNotGetDie1","IOxNotGetDie2","IMVGetLive1","IMVGetLive2","IMVNotGetLive1","IMVNotGetLive2","IMVGetDie1","IMVGetDie2",
-                                                     "IMVNotGetDie1","IMVNotGetDie2", "IRec1", "IRec2"))
+                                                    "IOxNotGetDie1","IOxNotGetDie2","IMVGetLive1","IMVGetLive2","IMVNotGetLive1","IMVNotGetLive2","IMVGetDie1","IMVGetDie2",
+                                                "IMVNotGetDie1","IMVNotGetDie2", "IRec1", "IRec2"))
+
+  #df <- tidyr::pivot_longer(tibble::as_tibble(df), names_to = df$list)
 
   strname <- paste("SIR", df$type, "Model Simulation")
 
@@ -256,7 +258,6 @@ displaythemodel3 <- function(df) {
       legend.justification = c("right", "top"),
       legend.box = c("horizontal", "vertical")
     ) +
-    #ggplot2::scale_colour_manual(values=c("blue", "red", "green", "purple", "yellow")) +
     ggplot2::theme(text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
                    plot.title = ggplot2::element_text(size = 26, color = '#333333'),
                    plot.subtitle = ggplot2::element_text(size = 13),
@@ -300,22 +301,29 @@ function(api) {
     # Get the immunity for susceptible humans and use the complement to modify the
     # infection rate
     rate_modifier <- 1 - api$get_variable(human, immunity, susceptible)
-    infected <- susceptible[runif(length(susceptible)) , 20] #< (pars$infection_rate * rate_modifier)]
-    api$queue_state_update(human, I, infected)
+    prob <- pars$infection_rate * rate_modifier
+    individual::fixed_probability_state_change_process('human', S$name, I$name, prob)
+
+    # infected <- susceptible[runif(length(susceptible)) , 20] #< (pars$infection_rate * rate_modifier)]
+    # api$queue_state_update(human, I, infected)
   }
   if (pars$includeage) {
     # Get the age for susceptible humans and use the complement to modify the
     # infection rate
     rate_modifier <- 1 - api$get_variable(human, age, susceptible)
-    infected <- susceptible[runif(length(susceptible)) , 20] #< (pars$location_rate * rate_modifier)]
-    api$queue_state_update(human, I, infected)
+    prob <- pars$age_rate * rate_modifier
+    individual::fixed_probability_state_change_process('human', S$name, I$name, prob)
+    # infected <- susceptible[runif(length(susceptible)) , 20] #< (pars$location_rate * rate_modifier)]
+    # api$queue_state_update(human, I, infected)
   }
   if (pars$includelocation) {
     # Get the location for susceptible humans and use the complement to modify the
     # infection rate
     rate_modifier <- 1 - api$get_variable(human, location, susceptible)
-    infected <- susceptible[runif(length(susceptible)) , 20] #< (pars$location_rate * rate_modifier)]
-    api$queue_state_update(human, I, infected)
+    prob <- pars$location_rate * rate_modifier
+    individual::fixed_probability_state_change_process('human', S$name, I$name, prob)
+    # infected <- susceptible[runif(length(susceptible)) , 20] #< (pars$location_rate * rate_modifier)]
+    # api$queue_state_update(human, I, infected)
   }
 }
 }
@@ -414,20 +422,27 @@ individual_S_to_I_and_I2 <- function(S, I, I2, human, immunity, age, location, p
       rate_modifier <- 1 - api$get_variable(human, immunity, susceptible)
       #infected <- as.integer(round(susceptible[sample.int(length(susceptible), (pars$infection_rate * rate_modifier))]))
 
-      infected <- susceptible[runif(length(susceptible)) < (pars$recovery_rate * rate_modifier)]
+      prob <- par$infection_rate * rate_modifier
+      individual::fixed_probability_state_change_process('human', S$name, I$name, prob)
 
-      if(length(infected) != 0 && infected !=0) {
-        infected1 <- as.integer(pars$infection_rate * infected)
-        severelyinfected <- as.integer(infected - infected1)
-        if(length(infected1) != 0 && infected1 !=0) {
-          validated_state_update(api, human, I, infected1, pars$N)
-        }
 
-        if(length(severelyinfected) != 0 && severelyinfected !=0){
-          validated_state_update(api, human, I2, severelyinfected, pars$N)
-        }
+      prob <- par$severe_infection_rate * rate_modifier
+      individual::fixed_probability_state_change_process('human', S$name, I2$name, prob)
 
-      }
+      # infected <- susceptible[runif(length(susceptible)) < (pars$recovery_rate * rate_modifier)]
+      #
+      # if(length(infected) != 0 && infected !=0) {
+      #   infected1 <- as.integer(pars$infection_rate * infected)
+      #   severelyinfected <- as.integer(infected - infected1)
+      #   if(length(infected1) != 0 && infected1 !=0) {
+      #     validated_state_update(api, human, I, infected1, pars$N)
+      #   }
+      #
+      #   if(length(severelyinfected) != 0 && severelyinfected !=0){
+      #     validated_state_update(api, human, I2, severelyinfected, pars$N)
+      #   }
+      #
+      # }
     }
     if (pars$includeage) {
       # Get the age for susceptible humans and use the complement to modify the
@@ -435,22 +450,31 @@ individual_S_to_I_and_I2 <- function(S, I, I2, human, immunity, age, location, p
       rate_modifier <- 1 - api$get_variable(human, age, susceptible)
       if(length(susceptible) != 0 && susceptible != 0 && !(any(is.na(susceptible)))) {
 
-        infected <- susceptible[runif(length(susceptible)) < (pars$age_rate * rate_modifier)]
 
-        #infected <- as.integer(round(susceptible[sample.int(length(susceptible), (pars$age_rate * rate_modifier))]))
 
-        if(length(infected) != 0 && infected !=0) {
+        prob <- par$infection_rate * rate_modifier
+        individual::fixed_probability_state_change_process('human', S$name, I$name, prob)
 
-          infected1 <- as.integer(pars$age_rate * infected)
-          severelyinfected <- as.integer(infected - infected1)
-          if(length(infected1) != 0 && infected1 !=0) {
-            validated_state_update(api, human, I, infected1, pars$N)
-          }
 
-          if(length(severelyinfected) != 0 && severelyinfected !=0){
-            validated_state_update(api, human, I2, severelyinfected, pars$N)
-          }
-        }
+        prob <- par$severe_infection_rate * rate_modifier
+        individual::fixed_probability_state_change_process('human', S$name, I2$name, prob)
+        #
+        # infected <- susceptible[runif(length(susceptible)) < (pars$age_rate * rate_modifier)]
+        #
+        # #infected <- as.integer(round(susceptible[sample.int(length(susceptible), (pars$age_rate * rate_modifier))]))
+        #
+        # if(length(infected) != 0 && infected !=0) {
+        #
+        #   infected1 <- as.integer(pars$age_rate * infected)
+        #   severelyinfected <- as.integer(infected - infected1)
+        #   if(length(infected1) != 0 && infected1 !=0) {
+        #     validated_state_update(api, human, I, infected1, pars$N)
+        #   }
+        #
+        #   if(length(severelyinfected) != 0 && severelyinfected !=0){
+        #     validated_state_update(api, human, I2, severelyinfected, pars$N)
+        #   }
+        # }
       }
 
     }
@@ -958,17 +982,15 @@ individual_R_to_S <- function(S, R, human, immunity, age, location, pars = NULL)
 #' @examples
 #' validate_fixed_probability_state_change_process(individual, state1, state2, prob)
 validate_fixed_probability_state_change_process <- function(individual, state1, state2, prob) {
-
+  force(individual, state1, state2, prob)
   function(api) {
-    if(!api$get_state(human, state1)){
-      stop(paste0('Your state ', state1, ' does not exist \n'))
-    }
-    else if(!api$get_state(human, state2)){
-      stop(paste0('Your state ', state2, ' does not exist \n'))
-    }
-    else if (api$get_state(human, state1) && api$get_state(human, state2)) {
-       individual::fixed_probability_state_change_process(individual, state1, state2, prob)
-    }
+    # if(!api$get_state(human, state1)){
+    #   stop(paste0('Your state ', state1, ' does not exist \n'))
+    # }
+    # else if(!api$get_state(human, state2)){
+    #   stop(paste0('Your state ', state2, ' does not exist \n'))
+    # }
+    individual::fixed_probability_state_change_process(individual, state1, state2, prob)
   }
 
 }
@@ -997,7 +1019,7 @@ infection <- function(IMild, ICase1, Icase2, dt, lambda, problambda) {
     temp <- IMild + ICase1 + ICase2
     # s_ij[,] <- m[i, j] * prob * temp[j]
     # lambda[] <- pars$beta * sum(s_ij[i, ])
-    lambda <- 0.4
+    lambda <- 50.0
     problambda <- 1 - exp(-lambda * dt)
   }
 
@@ -1045,6 +1067,7 @@ render_state_sizes2 <- function(S, I, R, I2, D, human) {
 #' Render sizes for SQUIRE states - note IMild is missing for now
 #'
 #' @param S susceptible
+#' @param I infected
 #' @param E1 First of the latent infection compartments
 #' @param E2 Second of the latent infection compartments
 #' @param ICase1 First of the compartments for infections that will require hospitalisation
@@ -1075,11 +1098,12 @@ render_state_sizes2 <- function(S, I, R, I2, D, human) {
 #' @export
 #' @examples
 #' render_state_sizes3(S, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human)
-render_state_sizes3 <- function(S, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,
+render_state_sizes3 <- function(S, I, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,
                                 IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,
                                 IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human) {
   function(api) {
     api$render('S', length(api$get_state(human, S)))
+    api$render('I', length(api$get_state(human, I)))
     api$render('E1', length(api$get_state(human, E1)))
     api$render('E2', length(api$get_state(human, E2)))
     api$render('ICase1', length(api$get_state(human, ICase1)))
@@ -1108,6 +1132,24 @@ render_state_sizes3 <- function(S, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetL
   }
 }
 
+#' @title Renders the sizes for S, E1, E2, I
+#' @param S S
+#' @param E1 E1
+#' @param E2 E2
+#' @param I I
+#' @param human human
+#' @export
+#' @examples
+#' render_state_sizes4(S, E1, E2, I, human)
+#'
+render_state_sizes4 <- function(S, E1, E2, I, human) {
+  function(api) {
+    api$render('S', length(api$get_state(human, S)))
+    api$render('E1', length(api$get_state(human, E1)))
+    api$render('E2', length(api$get_state(human, E2)))
+    api$render('I', length(api$get_state(human, I)))
+  }
+}
 
 #' @title Check state update is valid
 #'

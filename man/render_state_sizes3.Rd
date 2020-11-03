@@ -6,6 +6,7 @@
 \usage{
 render_state_sizes3(
   S,
+  I,
   E1,
   E2,
   ICase1,
@@ -36,6 +37,8 @@ render_state_sizes3(
 }
 \arguments{
 \item{S}{susceptible}
+
+\item{I}{infected}
 
 \item{E1}{First of the latent infection compartments}
 

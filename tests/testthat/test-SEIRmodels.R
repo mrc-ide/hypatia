@@ -258,6 +258,68 @@ test_that("test individual model with 10000 humans with immunity, age and locati
 
 })
 
+
+test_that("small test individual model with SQUIRE states", {
+  # Use hypatia::displaythemodel3(df) to plot
+  pars <- hypatia::get_parameters_for_sirstochastic()
+
+  population <- squire:::get_population("Afghanistan", simple_SEIR = FALSE)
+
+  parssquire <- hypatia::parameters_explicit_SEIR( population = population$n,
+                                                   dt = 1,
+                                                   R0 = 2,
+                                                   time_period = 1000,
+                                                   contact_matrix_set=squire::contact_matrices[[1]])
+
+  newpopulation <- population$n[2]
+  NI <- pars$I0
+  NE1 <- 1
+  NE2 <- 2
+  NR <- 0
+  NImild <- 0
+  NICase1 <- 0
+  pops <- newpopulation - NI - NE1 - NE2 - NR
+  timestep <- 100
+
+  S <- individual::State$new('S', pops)
+  I <- individual::State$new('I', NI)
+  E1 <- individual::State$new('E1', NE1)
+  E2 <- individual::State$new('E2', NE2)
+  Imild <- individual::State$new('Imild', NR)
+  ICase1 <- individual::State$new('ICase1', NR)
+  ICase2 <- individual::State$new('ICase2', NR)
+
+  immunity <- individual::Variable$new('immunity',  rep(0, newpopulation))
+  age  <- individual::Variable$new('age', rep(0, newpopulation))
+  location <- individual::Variable$new('location', rep(0, newpopulation))
+  human <- individual::Individual$new('human', list(S, I, E1, E2), variables = list(immunity, age, location))
+
+
+  pgamma_E <- 1 - exp(-1.0*(parssquire$gamma_E * parssquire$dt))
+
+  lambda <- 0.0 #Set FOI to 0.0
+  problambda <- 0.0 #Set to 0.0
+
+  inf <-  hypatia::infection(IMild, ICase1, Icase2, parssquire$dt, lambda, problambda)
+
+  processes <- list(
+    individual::fixed_probability_state_change_process('human', S$name, E1$name, inf$problambda),
+    individual::fixed_probability_state_change_process('human', E1$name, E2$name, pgamma_E),
+    individual::fixed_probability_state_change_process('human', E2$name, I$name,  pgamma_E),
+    hypatia::render_state_sizes4(S, E1, E2, I,human)
+  )
+
+  output <- individual::simulate(human, processes, timestep)
+
+  df <- data.frame(S = output$S, E1 = output$E1, E2 = output$E2, I = output$I,
+                   time = output$time, type = "Individual",
+                   legend = "Individual", stringsAsFactors = FALSE)
+
+  expect_true(is.data.frame(df))
+
+})
+
+
 test_that("test individual model with SQUIRE states", {
   # Use hypatia::displaythemodel3(df) to plot
   warnings()
@@ -272,15 +334,17 @@ test_that("test individual model with SQUIRE states", {
                                                    contact_matrix_set=squire::contact_matrices[[1]])
 
   newpopulation <- population$n[2]
-  NE1 <- pars$I0
-  NE2 <- 1
+  NI <- pars$I0
+  NE1 <- 1
+  NE2 <- 2
   NR <- 0
   NImild <- 0
   NICase1 <- 0
-  pops <- newpopulation - NE1 - NE2 - NR
-  timestep <- pars$num/pars$dt
+  pops <- newpopulation - NI - NE1 - NE2 - NR
+  timestep <- 100
 
   S <- individual::State$new('S', pops)
+  I <- individual::State$new('I', NI)
   E1 <- individual::State$new('E1', NE1)
   E2 <- individual::State$new('E2', NE2)
   Imild <- individual::State$new('Imild', NR)
@@ -315,7 +379,7 @@ test_that("test individual model with SQUIRE states", {
   immunity <- individual::Variable$new('immunity',  rep(0, newpopulation))
   age  <- individual::Variable$new('age', rep(0, newpopulation))
   location <- individual::Variable$new('location', rep(0, newpopulation))
-  human <- individual::Individual$new('human', list(S, E1, E2, ICase1, ICase2, Hosp, IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1, IOxGetDie2,
+  human <- individual::Individual$new('human', list(S, I, E1, E2, ICase1, ICase2, Hosp, IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1, IOxGetDie2,
                                                     IOxNotGetDie1, IOxNotGetDie2, IMVGetLive1, IMVGetLive2, IMVNotGetLive1, IMVNotGetLive2, IMVGetDie1, IMVGetDie2,
                                                     IMVNotGetDie1, IMVNotGetDie2, IRec1, IRec2, R, D), variables = list(immunity, age, location))
 
@@ -338,74 +402,47 @@ test_that("test individual model with SQUIRE states", {
   inf <-  hypatia::infection(IMild, ICase, Icase2, parssquire$dt, lambda, problambda)
 
   processes <- list(
-    # individual::fixed_probability_state_change_process('human', 'S$name', 'E1$name', inf$problambda),
-    # individual::fixed_probability_state_change_process('human', 'E1$name', 'E2$name', pgamma_E),
-    # individual::fixed_probability_state_change_process('human', 'E2$name', 'I$name',  pgamma_E),
-    # individual::fixed_probability_state_change_process('human', 'E2$name', 'ICase1$name', parssquire$prob_hosp[2]),
-    # #E2_to_IMild
-    # individual::fixed_probability_state_change_process('human', 'ICase1$name','ICase2$name', pgamma_ICase),
-    # individual::fixed_probability_state_change_process('human', 'ICase2$name','Hosp$name', pgamma_ICase),
-    # individual::fixed_probability_state_change_process('human', 'IOxGetLive1$name','IOxGetLive2$name', pgamma_get_ox_survive),
-    # individual::fixed_probability_state_change_process('human', 'IOxGetLive2$name','R$name', pgamma_get_ox_survive),
-    # individual::fixed_probability_state_change_process('human', 'IOxNotGetLive1$name','IOxNotGetLive2$name', pgamma_not_get_ox_survive),
-    # individual::fixed_probability_state_change_process('human', 'IOxNotGetLive2$name','R$name', pgamma_not_get_ox_survive),
-    # individual::fixed_probability_state_change_process('human', 'IOxGetDie1$name','IOxGetDie2$name', pgamma_get_ox_die),
-    # individual::fixed_probability_state_change_process('human', 'IOxGetDie2$name', 'D$name', pgamma_get_ox_die),
-    # individual::fixed_probability_state_change_process('human', 'IOxNotGetDie1$name', 'IOxNotGetDie2$name', pgamma_not_get_ox_die),
-    # individual::fixed_probability_state_change_process('human', 'IOxNotGetDie2$name', 'D$name', pgamma_not_get_ox_die),
-    # individual::fixed_probability_state_change_process('human', 'IMVGetLive1$name', 'IMVGetLive2$name', pgamma_get_mv_survive),
-    # individual::fixed_probability_state_change_process('human', 'IMVGetLive2$name', 'IRec1$name', pgamma_get_mv_survive),
-    # individual::fixed_probability_state_change_process('human','IMVNotGetLive1$name', 'IMVNotGetLive2$name', pgamma_not_get_mv_survive),
-    # individual::fixed_probability_state_change_process('human','IMVNotGetLive2$name', 'R$name', pgamma_not_get_mv_survive),
-    # individual::fixed_probability_state_change_process('human', 'IMVGetDie1$name', 'IMVGetDie2$name', pgamma_get_mv_die),
-    # individual::fixed_probability_state_change_process('human','IMVGetDie2$name', 'D$name',  pgamma_get_mv_die),
-    # individual::fixed_probability_state_change_process('human', 'IMVNotGetDie1$name', 'IMVNotGetDie2$name', pgamma_not_get_mv_die),
-    # individual::fixed_probability_state_change_process('human', 'IMVNotGetDie2$name','D$name', pgamma_not_get_mv_die),
-    # individual::fixed_probability_state_change_process('human', 'IRec1$name', 'IRec2$name', pgamma_rec),
-    # individual::fixed_probability_state_change_process('human','IRec2$name', 'R$name', pgamma_rec),
-
-
-    hypatia::validate_fixed_probability_state_change_process('human', S$name, E1$name, inf$problambda),
-    hypatia::validate_fixed_probability_state_change_process('human', E1$name, E2$name, pgamma_E),
-    hypatia::validate_fixed_probability_state_change_process('human', E2$name, I$name,  pgamma_E),
-    hypatia::validate_fixed_probability_state_change_process('human', E2$name, ICase1$name, parssquire$prob_hosp[2]),
+    individual::fixed_probability_state_change_process('human', S$name, E1$name, inf$problambda),
+    individual::fixed_probability_state_change_process('human', E1$name, E2$name, pgamma_E),
+    individual::fixed_probability_state_change_process('human', E2$name, I$name,  pgamma_E),
+    individual::fixed_probability_state_change_process('human', E2$name, ICase1$name, parssquire$prob_hosp[2]),
     #E2_to_IMild
-    hypatia::validate_fixed_probability_state_change_process('human', ICase1$name,ICase2$name, pgamma_ICase),
-    hypatia::validate_fixed_probability_state_change_process('human', ICase2$name,Hosp$name, pgamma_ICase),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxGetLive1$name,IOxGetLive2$name, pgamma_get_ox_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxGetLive2$name,R$name, pgamma_get_ox_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxNotGetLive1$name,IOxNotGetLive2$name, pgamma_not_get_ox_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxNotGetLive2$name,R$name, pgamma_not_get_ox_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxGetDie1$name,IOxGetDie2$name, pgamma_get_ox_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxGetDie2$name, D$name, pgamma_get_ox_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxNotGetDie1$name, IOxNotGetDie2$name, pgamma_not_get_ox_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IOxNotGetDie2$name, D$name, pgamma_not_get_ox_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVGetLive1$name, IMVGetLive2$name, pgamma_get_mv_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVGetLive2$name, IRec1$name, pgamma_get_mv_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVNotGetLive1$name, IMVNotGetLive2$name, pgamma_not_get_mv_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVNotGetLive2$name, R$name, pgamma_not_get_mv_survive),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVGetDie1$name, IMVGetDie2$name, pgamma_get_mv_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVGetDie2$name, D$name,  pgamma_get_mv_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVNotGetDie1$name, IMVNotGetDie2$name, pgamma_not_get_mv_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IMVNotGetDie2$name,D$name, pgamma_not_get_mv_die),
-    hypatia::validate_fixed_probability_state_change_process('human', IRec1$name, IRec2$name, pgamma_rec),
-    hypatia::validate_fixed_probability_state_change_process('human', IRec2$name, R$name, pgamma_rec),
+    individual::fixed_probability_state_change_process('human', ICase1$name,ICase2$name, pgamma_ICase),
+    individual::fixed_probability_state_change_process('human', ICase2$name,Hosp$name, pgamma_ICase),
+    individual::fixed_probability_state_change_process('human', IOxGetLive1$name,IOxGetLive2$name, pgamma_get_ox_survive),
+    individual::fixed_probability_state_change_process('human', IOxGetLive2$name,R$name, pgamma_get_ox_survive),
+    individual::fixed_probability_state_change_process('human', IOxNotGetLive1$name,IOxNotGetLive2$name, pgamma_not_get_ox_survive),
+    individual::fixed_probability_state_change_process('human', IOxNotGetLive2$name,R$name, pgamma_not_get_ox_survive),
+    individual::fixed_probability_state_change_process('human', IOxGetDie1$name,IOxGetDie2$name, pgamma_get_ox_die),
+    individual::fixed_probability_state_change_process('human', IOxGetDie2$name, D$name, pgamma_get_ox_die),
+    individual::fixed_probability_state_change_process('human', IOxNotGetDie1$name, IOxNotGetDie2$name, pgamma_not_get_ox_die),
+    individual::fixed_probability_state_change_process('human', IOxNotGetDie2$name, D$name, pgamma_not_get_ox_die),
+    individual::fixed_probability_state_change_process('human', IMVGetLive1$name, IMVGetLive2$name, pgamma_get_mv_survive),
+    individual::fixed_probability_state_change_process('human', IMVGetLive2$name, IRec1$name, pgamma_get_mv_survive),
+    individual::fixed_probability_state_change_process('human', IMVNotGetLive1$name, IMVNotGetLive2$name, pgamma_not_get_mv_survive),
+    individual::fixed_probability_state_change_process('human', IMVNotGetLive2$name, R$name, pgamma_not_get_mv_survive),
+    individual::fixed_probability_state_change_process('human', IMVGetDie1$name, IMVGetDie2$name, pgamma_get_mv_die),
+    individual::fixed_probability_state_change_process('human', IMVGetDie2$name, D$name,  pgamma_get_mv_die),
+    individual::fixed_probability_state_change_process('human', IMVNotGetDie1$name, IMVNotGetDie2$name, pgamma_not_get_mv_die),
+    individual::fixed_probability_state_change_process('human', IMVNotGetDie2$name,D$name, pgamma_not_get_mv_die),
+    individual::fixed_probability_state_change_process('human', IRec1$name, IRec2$name, pgamma_rec),
+    individual::fixed_probability_state_change_process('human', IRec2$name, R$name, pgamma_rec),
 
-    hypatia::render_state_sizes3(S, E1, E2, ICase1, ICase2, Hosp, IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1, IOxGetDie2,
+    hypatia::render_state_sizes3(S, E1, E2, I, ICase1, ICase2, Hosp, IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1, IOxGetDie2,
                                  IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,
                                  IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human)
   )
 
   output <- individual::simulate(human, processes, timestep)
 
-  df <- data.frame(S = output$S, E1 = output$E1, E2 = output$E2, ICase1 = output$ICase1, ICase2 = output$ICase2, Hosp = output$Hosp, IOxGetLive1 = output$IOxGetLive1,
+  df <- data.frame(list(S = output$S, E1 = output$E1, E2 = output$E2, I = output$I, ICase1 = output$ICase1, ICase2 = output$ICase2, Hosp = output$Hosp, IOxGetLive1 = output$IOxGetLive1,
                      IOxGetLive2 = output$IOxGetLive2, IOxNotGetLive1 = output$IOxNotGetLive1, IOxNotGetLive2 = output$IOxNotGetLive2,
                      IOxGetDie1 = output$IOxGetDie1, IOxGetDie2 = output$IOxGetDie2,
                      IOxNotGetDie1 = output$IOxNotGetDie1, IOxNotGetDie2 = output$IOxNotGetDie2, IMVGetLive1 = output$IMVGetLive1,
                      IMVGetLive2 = output$IMVGetLive2, IMVNotGetLive1 = output$IMVNotGetLive1, IMVNotGetLive2 = output$IMVNotGetLive2,
                      IMVGetDie1 = output$IMVNotGetLive2, IMVGetDie2 = output$IMVGetDie2,
                      IMVNotGetDie1 = output$IMVNotGetDie1, IMVNotGetDie2 = output$IMVNotGetDie2, IRec1 = output$IRec1, IRec2= output$IRec2,
-                     R = output$R, D = output$D, time = output$time, type = "Individual",
+                     R = output$R, D = output$D), time = output$time, type = "Individual",
                      legend = "Individual", stringsAsFactors = FALSE)
 
   hypatia::displaythemodel3(df)
