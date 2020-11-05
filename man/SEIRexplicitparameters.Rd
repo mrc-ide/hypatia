@@ -12,7 +12,6 @@ SEIRexplicitparameters(
   ICase1,
   ICase2,
   cum_hosp_inc,
-  cum_ICU_inc,
   IOxGetLive1,
   IOxGetLive2,
   IOxGetDie1,
@@ -33,10 +32,14 @@ SEIRexplicitparameters(
   IRec2,
   R,
   D,
-  D_get,
-  D_not_get,
+  tt_matrix,
+  mix_mat_set,
+  tt_beta,
+  beta_set,
   i,
-  j
+  N_age,
+  lambda,
+  problambda
 )
 }
 \arguments{
@@ -46,9 +49,13 @@ SEIRexplicitparameters(
 
 \item{E2}{Second of the latent infection compartments}
 
+\item{IMild}{rest of the infections, which we consider to be mild and not require hospitalisation}
+
 \item{ICase1}{First of the compartments for infections that will require hospitalisation}
 
 \item{ICase2}{Second of the compartments for infections that will require hospitalisation}
+
+\item{cum_hosp_inc}{cumulative hosptal incidences}
 
 \item{IOxGetLive1}{First of the compartments for infections that will require oxygen, get it, and who survive}
 
@@ -90,13 +97,17 @@ SEIRexplicitparameters(
 
 \item{D}{dead}
 
-\item{D_get}{dead}
+\item{tt_matrix}{tt_matrix}
 
-\item{D_not_get}{dead}
+\item{mix_mat_set}{mixing matrix}
+
+\item{tt_beta}{tt_beta}
+
+\item{beta_set}{beta_set}
 
 \item{i}{element index}
 
-\item{j}{element index}
+\item{N_age}{population for age that is being analysed}
 }
 \value{
 list

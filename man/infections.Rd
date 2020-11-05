@@ -2,24 +2,17 @@
 % Please edit documentation in R/SEIRmodels.R
 \name{infections}
 \alias{infections}
-\title{#' Create an explicit model
-#'
-#' @title Explicit SEIR model creation.
-#'
-#' We will use this structure to ensure that model fitting is flexible in the
-#' future as more models are added
-#'
-#' @export
-explicit_model <- function() {}
+\title{infections for SIR model}
 \usage{
 infections(I, S, pars)
 }
-\description{
-model_class <- "explicit_SEIR_model"
-compare_model <- function(model, pars_obs, data) {
-compare_output(model, pars_obs, data, type=model_class)
-}
-}
-\details{
+\arguments{
+\item{I}{I}
 
+\item{S}{S}
+
+\item{pars}{list}
+}
+\description{
+infections for SIR model
 }

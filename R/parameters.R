@@ -186,6 +186,11 @@ parameters_explicit_SEIR <- function(
   # ----------------------------------------------------------------------------
   mc <- squire:::matrix_check(population[-1], contact_matrix_set)
   stopifnot(length(R0) == length(tt_R0))
+  print(length(contact_matrix_set) )
+  print(length(tt_contact_matrix))
+  print(dim(contact_matrix_set) )
+  print(dim(tt_contact_matrix))
+  print(contact_matrix_set)
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
@@ -258,6 +263,19 @@ parameters_explicit_SEIR <- function(
   gamma_not_get_mv_die = 2 * 1/dur_not_get_mv_die
   gamma_rec = 2 * 1/dur_rec
 
+  # probabilities
+  pgamma_E <- 1 - exp(-1.0*(gamma_E * dt))
+  pgamma_ICase <- 1 - exp(-1.0*(gamma_ICase * dt))
+  pgamma_get_ox_survive <- 1 - exp(-1.0*(gamma_get_ox_survive * dt))
+  pgamma_not_get_ox_survive <- 1 - exp(-1.0*(gamma_not_get_ox_survive * dt))
+  pgamma_get_ox_die <- 1 - exp(-1.0*(gamma_get_ox_die * dt))
+  pgamma_not_get_ox_die <- 1 - exp(-1.0*(gamma_not_get_ox_die * dt))
+  pgamma_get_mv_survive <- 1 - exp(-1.0*(gamma_get_mv_survive * dt))
+  pgamma_not_get_mv_survive <- 1 - exp(-1.0*(gamma_not_get_mv_survive * dt))
+  pgamma_get_mv_die <- 1 - exp(-1.0*(gamma_get_mv_die * dt))
+  pgamma_not_get_mv_die  <- 1 - exp(-1.0*( gamma_not_get_mv_die * dt))
+  pgamma_rec  <- 1 - exp(-1.0*( gamma_rec * dt))
+
   if (is.null(beta_set)) {
     baseline_matrix <- squire:::process_contact_matrix_scaled_age(contact_matrix_set[[1]], population)
     beta_set <- squire:::beta_est_explicit(dur_IMild = dur_IMild,
@@ -310,6 +328,17 @@ parameters_explicit_SEIR <- function(
                gamma_not_get_mv_survive = gamma_not_get_mv_survive,
                gamma_not_get_mv_die = gamma_not_get_mv_die,
                gamma_rec = gamma_rec,
+               pgamma_E = pgamma_E,
+               pgamma_ICase = pgamma_ICase,
+               pgamma_get_ox_survive = pgamma_get_ox_survive,
+               pgamma_not_get_ox_survive = pgamma_not_get_ox_survive,
+               pgamma_get_ox_die = pgamma_get_ox_die,
+               pgamma_not_get_ox_die = pgamma_not_get_ox_die,
+               pgamma_get_mv_survive = pgamma_get_mv_survive,
+               pgamma_not_get_mv_survive = pgamma_not_get_mv_survive,
+               pgamma_get_mv_die = pgamma_get_mv_die,
+               pgamma_not_get_mv_die = pgamma_not_get_mv_die,
+               pgamma_rec = pgamma_rec,
                prob_hosp = prob_hosp,
                prob_severe = prob_severe,
                prob_non_severe_death_treatment = prob_non_severe_death_treatment,

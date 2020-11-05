@@ -9,9 +9,10 @@ render_state_sizes3(
   I,
   E1,
   E2,
+  IMild,
   ICase1,
   ICase2,
-  Hosp,
+  cum_hosp_inc,
   IOxGetLive1,
   IOxGetLive2,
   IOxNotGetLive1,
@@ -44,11 +45,13 @@ render_state_sizes3(
 
 \item{E2}{Second of the latent infection compartments}
 
+\item{IMild}{rest of the infections, which we consider to be mild and not require hospitalisation}
+
 \item{ICase1}{First of the compartments for infections that will require hospitalisation}
 
 \item{ICase2}{Second of the compartments for infections that will require hospitalisation}
 
-\item{Hosp}{Those requiring hospitalisation. Number split between I_Oxygen and I_MV}
+\item{cum_hosp_inc}{Those requiring hospitalisation}
 
 \item{IOxGetLive1}{First of the compartments for infections that will require oxygen, get it, and who survive}
 
@@ -96,5 +99,5 @@ render_state_sizes3(
 Render sizes for SQUIRE states - note IMild is missing for now
 }
 \examples{
-render_state_sizes3(S, E1, E2,ICase1,ICase2,Hosp,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human)
+render_state_sizes3(S, E1, E2,IMildICase1,ICase2,cum_hosp_inc,IOxGetLive1,IOxGetLive2,IOxNotGetLive1,IOxNotGetLive2,IOxGetDie1,IOxGetDie2,IOxNotGetDie1,IOxNotGetDie2,IMVGetLive1,IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,IMVGetDie1,IMVGetDie2,IMVNotGetDie1,IMVNotGetDie2,IRec1,IRec2,R,D,human)
 }
