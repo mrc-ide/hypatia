@@ -9,14 +9,15 @@ test_that("test individual model with 10000 humans with immunity, age and locati
   pops <- population - NI - NR
   timestep <- pars$num/pars$dt
 
-  S <- individual::State$new('S', pops)
-  I <- individual::State$new('I', NI)
-  R <- individual::State$new('R', NR)
+  S <- individual::State$new("S", pops)
+  I <- individual::State$new("I", NI)
+  R <- individual::State$new("R", NR)
 
-  immunity <- individual::Variable$new('immunity', rep(0, pars$N))
-  age <- individual::Variable$new('age', rep(0, pars$N))
-  location <- individual::Variable$new('location', rep(0, pars$N))
-  human <- individual::Individual$new('human', list(S, I, R), variables = list(immunity, age, location))
+  immunity <- individual::Variable$new("immunity", rep(0, pars$N))
+  age <- individual::Variable$new("age", rep(0, pars$N))
+  location <- individual::Variable$new("location", rep(0, pars$N))
+  human <- individual::Individual$new("human", list(S, I, R),
+                                      variables = list(immunity, age, location))
 
   processes <- list(
     hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
@@ -25,10 +26,14 @@ test_that("test individual model with 10000 humans with immunity, age and locati
     hypatia::render_state_sizes_2(S, I, R, human)
   )
 
-  output <- individual::simulate(human, processes, timestep, parameters = list(immunity_level = .2, age_level=0.3, location_level = 0.4))
+  output <- individual::simulate(human, processes, timestep,
+                                 parameters = list(immunity_level = .2,
+                                 age_level=0.3, location_level = 0.4))
 
-  df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts, R = output$recovered_counts,
-                                 time = output$time, type = "Individual",  legend = "Individual", stringsAsFactors = FALSE)
+  df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
+                     R = output$recovered_counts,
+                     time = output$time, type = "Individual",
+                     legend = "Individual", stringsAsFactors = FALSE)
 
   expect_true(is.data.frame(df))
 
@@ -53,11 +58,12 @@ test_that("test individual model with 10000 humans with immunity, age and locati
   I <- individual::State$new('I', NI)
   R <- individual::State$new('R', NR)
 
-  immunity <- individual::Variable$new('immunity', runif(population, 0, .1))
+  immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
   rate=1/pars$average_age
-  age <- individual::Variable$new('age', rexp(pars$N, rate))
-  location <- individual::Variable$new('location', runif(population, 0, .2))
-  human <- individual::Individual$new('human', list(S, I, R), variables = list(immunity, age, location))
+  age <- individual::Variable$new("age", rexp(pars$N, rate))
+  location <- individual::Variable$new("location", runif(population, 0, .2))
+  human <- individual::Individual$new("human", list(S, I, R),
+                                      variables = list(immunity, age, location))
 
   processes <- list(
     hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
@@ -66,9 +72,15 @@ test_that("test individual model with 10000 humans with immunity, age and locati
     hypatia::render_state_sizes_2(S, I, R, human)
   )
 
-  output <- individual::simulate(human, processes, timestep, parameters = list(immunity_level = .2, age_level=0.3, location_level = 0.4))
+  output <- individual::simulate(human, processes, timestep,
+                                 parameters = list(immunity_level = .2,
+                                                   age_level=0.3,
+                                                   location_level = 0.4))
 
-  df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts, R = output$recovered_counts, time = output$time, type = "Individual",  legend = "Individual", stringsAsFactors = FALSE)
+  df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
+                     R = output$recovered_counts, time = output$time,
+                     type = "Individual",  legend = "Individual",
+                     stringsAsFactors = FALSE)
 
   expect_true(is.data.frame(df))
 
@@ -93,11 +105,12 @@ test_that("test individual model with 10000 humans with immunity, age and locati
   I <- individual::State$new('I', NI)
   R <- individual::State$new('R', NR)
 
-  immunity <- individual::Variable$new('immunity', runif(population, 0, .1))
+  immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
   rate=1/pars$average_age
-  age <- individual::Variable$new('age', rexp(pars$N, rate))
-  location <- individual::Variable$new('location', runif(population, 0, .2))
-  human <- individual::Individual$new('human', list(S, I, R), variables = list(immunity, age, location))
+  age <- individual::Variable$new("age", rexp(pars$N, rate))
+  location <- individual::Variable$new("location", runif(population, 0, .2))
+  human <- individual::Individual$new("human", list(S, I, R),
+                                      variables = list(immunity, age, location))
 
   processes <- list(
     hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
@@ -106,9 +119,14 @@ test_that("test individual model with 10000 humans with immunity, age and locati
     hypatia::render_state_sizes_2(S, I, R, human)
   )
 
-  output <- individual::simulate(human, processes, timestep, parameters = list(immunity_level = .2, age_level=0.3, location_level = 0.4))
+  output <- individual::simulate(human, processes, timestep,
+                                 parameters = list(immunity_level = .2,
+                                 age_level=0.3, location_level = 0.4))
 
-  df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts, R = output$recovered_counts, time = output$time, type = "Individual",  legend = "Individual", stringsAsFactors = FALSE)
+  df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
+                     R = output$recovered_counts, time = output$time,
+                     type = "Individual",  legend = "Individual",
+                     stringsAsFactors = FALSE)
 
   expect_true(is.data.frame(df))
 
@@ -130,10 +148,11 @@ S <- individual::State$new('S', pops)
 I <- individual::State$new('I', NI)
 R <- individual::State$new('R', NR)
 
-immunity <- individual::Variable$new('immunity',  rep(0, pars$N))
-age  <- individual::Variable$new('age', rep(0, pars$N))
-location <- individual::Variable$new('location', rep(0, pars$N))
-human <- individual::Individual$new('human', list(S, I, R), variables = list(immunity, age, location))
+immunity <- individual::Variable$new("immunity",  rep(0, pars$N))
+age  <- individual::Variable$new("age", rep(0, pars$N))
+location <- individual::Variable$new("location", rep(0, pars$N))
+human <- individual::Individual$new("human", list(S, I, R),
+                                    variables = list(immunity, age, location))
 
 processes <- list(
   hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
@@ -144,7 +163,10 @@ processes <- list(
 
 output <- individual::simulate(human, processes, timestep)
 
-df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts, R = output$recovered_counts, time = output$time, type = "Individual",  legend = "Individual", stringsAsFactors = FALSE)
+df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
+                   R = output$recovered_counts, time = output$time,
+                   type = "Individual", legend = "Individual",
+                   stringsAsFactors = FALSE)
 
 expect_true(is.data.frame(df))
 
@@ -252,7 +274,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd ag
 
   population <- squire:::get_population("Afghanistan", simple_SEIR = FALSE)
 
-  parssq <- hypatia::parameters_explicit_SEIR(
+  psq <- hypatia::parameters_explicit_SEIR(
     population = population$n,
     dt = 1,
     R0 = 2,
@@ -263,39 +285,47 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd ag
   NR <- 0
   newpopulation <- population$n[2]
   timestep <- 100
-  index <- 2
+  ind <- 2
 
-  S <- individual::State$new('S', parssq$S_0[index])
-  E1 <- individual::State$new('E1', parssq$E1_0[index])
-  E2 <- individual::State$new('E2', parssq$E2_0[index])
-  IMild <- individual::State$new('IMild', parssq$IMild_0[index])
-  ICase1 <- individual::State$new('ICase1', parssq$ICase1_0[index])
-  ICase2 <- individual::State$new('ICase2', parssq$ICase2_0[index])
-  cum_hosp_inc <- individual::State$new('cum_hosp_inc', NR)
-  # cum_ICU_inc <- individual::State$new('cum_ICU_inc', NR)
-  IOxGetLive1 <- individual::State$new('IOxGetLive1', parssq$IOxGetLive1_0[index])
-  IOxGetLive2 <- individual::State$new('IOxGetLive2', parssq$IOxGetLive2_0[index])
-  IOxGetDie1 <- individual::State$new('IOxGetDie1', parssq$IOxGetDie1_0[index])
-  IOxGetDie2 <- individual::State$new('IOxGetDie2', parssq$IOxGetDie2_0[index])
-  IOxNotGetLive1 <- individual::State$new('IOxNotGetLive1', parssq$IOxNotGetLive1_0[index])
-  IOxNotGetLive2 <- individual::State$new('IOxNotGetLive2', parssq$IOxNotGetLive2_0[index])
-  IOxNotGetDie1 <- individual::State$new('IOxNotGetDie1', parssq$IOxNotGetDie1_0[index])
-  IOxNotGetDie2 <- individual::State$new('IOxNotGetDie2', parssq$IOxNotGetDie2_0[index])
-  IMVGetLive1 <- individual::State$new('IMVGetLive1', parssq$IMVGetLive1_0[index])
-  IMVGetLive2 <- individual::State$new('IMVGetLive2', parssq$IMVGetLive2_0[index])
-  IMVGetDie1 <- individual::State$new('IMVGetDie1', parssq$IMVGetDie1_0[index])
-  IMVGetDie2 <- individual::State$new('IMVGetDie2', parssq$IMVGetDie2_0[index])
-  IMVNotGetLive1 <- individual::State$new('IMVNotGetLive1', parssq$IMVNotGetLive1_0[index])
-  IMVNotGetLive2 <- individual::State$new('IMVNotGetLive2', parssq$IMVNotGetLive2_0[index])
-  IMVNotGetDie1 <- individual::State$new('IMVNotGetDie1', parssq$IMVNotGetDie1_0[index])
-  IMVNotGetDie2 <- individual::State$new('IMVNotGetDie2', parssq$IMVNotGetDie2_0[index])
-  IRec1 <- individual::State$new('IRec1', parssq$IRec1_0[index])
-  IRec2 <- individual::State$new('IRec2', parssq$IRec2_0[index])
-  R <- individual::State$new('R', parssq$R_0[index])
-  D <- individual::State$new('D', parssq$D_0[index])
+  S <- individual::State$new("S", psq$S_0[ind])
+  E1 <- individual::State$new("E1", psq$E1_0[ind])
+  E2 <- individual::State$new("E2", psq$E2_0[ind])
+  IMild <- individual::State$new("IMild", psq$IMild_0[ind])
+  ICase1 <- individual::State$new("ICase1", psq$ICase1_0[ind])
+  ICase2 <- individual::State$new("ICase2", psq$ICase2_0[ind])
+  cum_hosp_inc <- individual::State$new("cum_hosp_inc", NR)
+  # cum_ICU_inc <- individual::State$new("cum_ICU_inc", NR)
+  IOxGetLive1 <- individual::State$new("IOxGetLive1", psq$IOxGetLive1_0[ind])
+  IOxGetLive2 <- individual::State$new("IOxGetLive2", psq$IOxGetLive2_0[ind])
+  IOxGetDie1 <- individual::State$new("IOxGetDie1", psq$IOxGetDie1_0[ind])
+  IOxGetDie2 <- individual::State$new("IOxGetDie2", psq$IOxGetDie2_0[ind])
+  IOxNotGetLive1 <- individual::State$new("IOxNotGetLive1",
+                                          psq$IOxNotGetLive1_0[ind])
+  IOxNotGetLive2 <- individual::State$new("IOxNotGetLive2",
+                                          psq$IOxNotGetLive2_0[ind])
+  IOxNotGetDie1 <- individual::State$new("IOxNotGetDie1",
+                                         psq$IOxNotGetDie1_0[ind])
+  IOxNotGetDie2 <- individual::State$new("IOxNotGetDie2",
+                                         psq$IOxNotGetDie2_0[ind])
+  IMVGetLive1 <- individual::State$new("IMVGetLive1", psq$IMVGetLive1_0[ind])
+  IMVGetLive2 <- individual::State$new("IMVGetLive2", psq$IMVGetLive2_0[ind])
+  IMVGetDie1 <- individual::State$new("IMVGetDie1", psq$IMVGetDie1_0[ind])
+  IMVGetDie2 <- individual::State$new("IMVGetDie2", psq$IMVGetDie2_0[ind])
+  IMVNotGetLive1 <- individual::State$new("IMVNotGetLive1",
+                                          psq$IMVNotGetLive1_0[ind])
+  IMVNotGetLive2 <- individual::State$new("IMVNotGetLive2",
+                                          psq$IMVNotGetLive2_0[ind])
+  IMVNotGetDie1 <- individual::State$new("IMVNotGetDie1",
+                                         psq$IMVNotGetDie1_0[ind])
+  IMVNotGetDie2 <- individual::State$new("IMVNotGetDie2",
+                                         psq$IMVNotGetDie2_0[ind])
+  IRec1 <- individual::State$new("IRec1", psq$IRec1_0[ind])
+  IRec2 <- individual::State$new("IRec2", psq$IRec2_0[ind])
+  R <- individual::State$new("R", psq$R_0[ind])
+  D <- individual::State$new("D", psq$D_0[ind])
 
-  human <- individual::Individual$new('human', list(S, E1, E2, IMild, ICase1, ICase2,
-                                          cum_hosp_inc, IOxGetLive1,
+  human <- individual::Individual$new("human", list(S, E1, E2, IMild, ICase1,
+                                          ICase2, cum_hosp_inc, IOxGetLive1,
                                           IOxGetLive2, IOxNotGetLive1,
                                           IOxNotGetLive2, IOxGetDie1,
                                           IOxGetDie2, IOxNotGetDie1,
@@ -312,32 +342,62 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd ag
   beta <- 0.1
 
   processes <- list(
-    hypatia::SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, index, population$n[2], lambda, problambda, beta, parssq$mix_mat_set[1,index,]),
-    individual::fixed_probability_state_change_process('human', S$name, E1$name, 0.1),
-    individual::fixed_probability_state_change_process('human', E1$name, E2$name, parssq$pgamma_E),
-    hypatia::E2_IMild(human, IMild, E2, ICase1, parssq$pgamma_E, parssq$prob_hosp[index]),
-    individual::fixed_probability_state_change_process('human', IMild$name, R$name, parssq$pgamma_IMild),
-    individual::fixed_probability_state_change_process('human', E2$name, ICase1$name, parssq$prob_hosp[index]),
-    individual::fixed_probability_state_change_process('human', ICase1$name,ICase2$name, parssq$pgamma_ICase),
-    individual::fixed_probability_state_change_process('human', ICase2$name,cum_hosp_inc$name, parssq$pgamma_ICase),
-    individual::fixed_probability_state_change_process('human', IOxGetLive1$name,IOxGetLive2$name, parssq$pgamma_get_ox_survive),
-    individual::fixed_probability_state_change_process('human', IOxGetLive2$name,R$name, parssq$pgamma_get_ox_survive),
-    individual::fixed_probability_state_change_process('human', IOxNotGetLive1$name,IOxNotGetLive2$name, parssq$pgamma_not_get_ox_survive),
-    individual::fixed_probability_state_change_process('human', IOxNotGetLive2$name,R$name, parssq$pgamma_not_get_ox_survive),
-    individual::fixed_probability_state_change_process('human', IOxGetDie1$name,IOxGetDie2$name, parssq$pgamma_get_ox_die),
-    individual::fixed_probability_state_change_process('human', IOxGetDie2$name, D$name, parssq$pgamma_get_ox_die),
-    individual::fixed_probability_state_change_process('human', IOxNotGetDie1$name, IOxNotGetDie2$name, parssq$pgamma_not_get_ox_die),
-    individual::fixed_probability_state_change_process('human', IOxNotGetDie2$name, D$name, parssq$pgamma_not_get_ox_die),
-    individual::fixed_probability_state_change_process('human', IMVGetLive1$name, IMVGetLive2$name, parssq$pgamma_get_mv_survive),
-    individual::fixed_probability_state_change_process('human', IMVGetLive2$name, IRec1$name, parssq$pgamma_get_mv_survive),
-    individual::fixed_probability_state_change_process('human', IMVNotGetLive1$name, IMVNotGetLive2$name, parssq$pgamma_not_get_mv_survive),
-    individual::fixed_probability_state_change_process('human', IMVNotGetLive2$name, R$name, parssq$pgamma_not_get_mv_survive),
-    individual::fixed_probability_state_change_process('human', IMVGetDie1$name, IMVGetDie2$name, parssq$pgamma_get_mv_die),
-    individual::fixed_probability_state_change_process('human', IMVGetDie2$name, D$name,  parssq$pgamma_get_mv_die),
-    individual::fixed_probability_state_change_process('human', IMVNotGetDie1$name, IMVNotGetDie2$name, parssq$pgamma_not_get_mv_die),
-    individual::fixed_probability_state_change_process('human', IMVNotGetDie2$name,D$name, parssq$pgamma_not_get_mv_die),
-    individual::fixed_probability_state_change_process('human', IRec1$name, IRec2$name, parssq$pgamma_rec),
-    individual::fixed_probability_state_change_process('human', IRec2$name, R$name, parssq$pgamma_rec),
+    hypatia::SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc,
+                                    ind, population$n[2], lambda, problambda,
+                                    beta, psq$mix_mat_set[1,ind,]),
+    individual::fixed_probability_state_change_process(
+      "human", S$name, E1$name, 0.1),
+    individual::fixed_probability_state_change_process(
+      "human", E1$name, E2$name, psq$pgamma_E),
+    hypatia::E2_IMild(human, IMild, E2, ICase1, psq$pgamma_E, psq$prob_hosp[ind]),
+    individual::fixed_probability_state_change_process(
+      "human", IMild$name, R$name, psq$pgamma_IMild),
+    individual::fixed_probability_state_change_process(
+      "human", E2$name, ICase1$name, psq$prob_hosp[ind]),
+    individual::fixed_probability_state_change_process(
+      "human", ICase1$name,ICase2$name, psq$pgamma_ICase),
+    individual::fixed_probability_state_change_process(
+      "human", ICase2$name,cum_hosp_inc$name, psq$pgamma_ICase),
+    individual::fixed_probability_state_change_process(
+      "human", IOxGetLive1$name,IOxGetLive2$name, psq$pgamma_get_ox_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IOxGetLive2$name,R$name, psq$pgamma_get_ox_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IOxNotGetLive1$name,IOxNotGetLive2$name,
+      psq$pgamma_not_get_ox_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IOxNotGetLive2$name,R$name, psq$pgamma_not_get_ox_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IOxGetDie1$name,IOxGetDie2$name, psq$pgamma_get_ox_die),
+    individual::fixed_probability_state_change_process(
+      "human", IOxGetDie2$name, D$name, psq$pgamma_get_ox_die),
+    individual::fixed_probability_state_change_process(
+      "human", IOxNotGetDie1$name, IOxNotGetDie2$name,
+      psq$pgamma_not_get_ox_die),
+    individual::fixed_probability_state_change_process(
+      "human", IOxNotGetDie2$name, D$name, psq$pgamma_not_get_ox_die),
+    individual::fixed_probability_state_change_process(
+      "human", IMVGetLive1$name, IMVGetLive2$name, psq$pgamma_get_mv_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IMVGetLive2$name, IRec1$name, psq$pgamma_get_mv_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IMVNotGetLive1$name, IMVNotGetLive2$name,
+      psq$pgamma_not_get_mv_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IMVNotGetLive2$name, R$name, psq$pgamma_not_get_mv_survive),
+    individual::fixed_probability_state_change_process(
+      "human", IMVGetDie1$name, IMVGetDie2$name, psq$pgamma_get_mv_die),
+    individual::fixed_probability_state_change_process(
+      "human", IMVGetDie2$name, D$name,  psq$pgamma_get_mv_die),
+    individual::fixed_probability_state_change_process(
+      "human", IMVNotGetDie1$name, IMVNotGetDie2$name,
+      psq$pgamma_not_get_mv_die),
+    individual::fixed_probability_state_change_process(
+      "human", IMVNotGetDie2$name,D$name, psq$pgamma_not_get_mv_die),
+    individual::fixed_probability_state_change_process(
+      "human", IRec1$name, IRec2$name, psq$pgamma_rec),
+    individual::fixed_probability_state_change_process(
+      "human", IRec2$name, R$name, psq$pgamma_rec),
 
     hypatia::render_state_sizes3(S, E1, E2, IMild, ICase1, ICase2, cum_hosp_inc,
                                  IOxGetLive1, IOxGetLive2, IOxNotGetLive1,
@@ -350,15 +410,32 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd ag
 
   out <- individual::simulate(human, processes, timestep)
 
-  df <- data.frame(S = out$S, E1 = out$E1, E2 = out$E2, IMild = out$IMild, ICase1 = out$ICase1, ICase2 = out$ICase2, cum_hosp_inc = out$cum_hosp_inc, IOxGetLive1 = out$IOxGetLive1,
-                     IOxGetLive2 = out$IOxGetLive2, IOxNotGetLive1 = out$IOxNotGetLive1, IOxNotGetLive2 = out$IOxNotGetLive2,
-                     IOxGetDie1 = out$IOxGetDie1, IOxGetDie2 = out$IOxGetDie2,
-                     IOxNotGetDie1 = out$IOxNotGetDie1, IOxNotGetDie2 = out$IOxNotGetDie2, IMVGetLive1 = out$IMVGetLive1,
-                     IMVGetLive2 = out$IMVGetLive2, IMVNotGetLive1 = out$IMVNotGetLive1, IMVNotGetLive2 = out$IMVNotGetLive2,
-                     IMVGetDie1 = out$IMVNotGetLive2, IMVGetDie2 = out$IMVGetDie2,
-                     IMVNotGetDie1 = out$IMVNotGetDie1, IMVNotGetDie2 = out$IMVNotGetDie2, IRec1 = out$IRec1, IRec2= out$IRec2,
-                     R = out$R, D = out$D, time = out$time, type = "Individual",
-                     legend = "Individual", stringsAsFactors = FALSE)
+  df <- data.frame(S = out$S,
+                   E1 = out$E1,
+                   E2 = out$E2,
+                   IMild = out$IMild,
+                   ICase1 = out$ICase1,
+                   ICase2 = out$ICase2,
+                   cum_hosp_inc = out$cum_hosp_inc,
+                   IOxGetLive1 = out$IOxGetLive1,
+                   IOxGetLive2 = out$IOxGetLive2,
+                   IOxNotGetLive1 = out$IOxNotGetLive1,
+                   IOxNotGetLive2 = out$IOxNotGetLive2,
+                   IOxGetDie1 = out$IOxGetDie1,
+                   IOxGetDie2 = out$IOxGetDie2,
+                   IOxNotGetDie1 = out$IOxNotGetDie1,
+                   IOxNotGetDie2 = out$IOxNotGetDie2,
+                   IMVGetLive1 = out$IMVGetLive1,
+                   IMVGetLive2 = out$IMVGetLive2,
+                   IMVNotGetLive1 = out$IMVNotGetLive1,
+                   IMVNotGetLive2 = out$IMVNotGetLive2,
+                   IMVGetDie1 = out$IMVNotGetLive2,
+                   IMVGetDie2 = out$IMVGetDie2,
+                   IMVNotGetDie1 = out$IMVNotGetDie1,
+                   IMVNotGetDie2 = out$IMVNotGetDie2,
+                   IRec1 = out$IRec1, IRec2= out$IRec2,
+                   R = out$R, D = out$D, time = out$time, type = "Individual",
+                   legend = "Individual", stringsAsFactors = FALSE)
 
   expect_true(is.data.frame(df))
 

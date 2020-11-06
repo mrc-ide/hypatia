@@ -294,9 +294,9 @@ individual_R_to_S_2 <- function(S, R, human, immunity, age, location, pars = NUL
 #' render_state_sizes_2(S, I, R, human)
 render_state_sizes_2 <- function(S, I, R, human) {
   function(api) {
-    api$render('susceptable_counts', length(api$get_state(human, S)))
-    api$render('infected_counts', length(api$get_state(human, I)))
-    api$render('recovered_counts', length(api$get_state(human, R)))
+    api$render("susceptable_counts", length(api$get_state(human, S)))
+    api$render("infected_counts", length(api$get_state(human, I)))
+    api$render("recovered_counts", length(api$get_state(human, R)))
   }
 }
 

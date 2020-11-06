@@ -16,8 +16,8 @@
 #'
 #' @examples
 #' SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,lambda, problambda, beta, m)
-SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,  i, N_age,
-                                   lambda, problambda, beta, m) {
+SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,
+                                   i, N_age, lambda, problambda, beta, m) {
   function(api) {
 
     # Generating Force of Infection
