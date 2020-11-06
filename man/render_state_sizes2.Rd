@@ -24,5 +24,4 @@ Renders the sizes for S, I, R, I2 and D
 }
 \examples{
 render_state_sizes2(S, I, R, I2, D, human)
-
 }

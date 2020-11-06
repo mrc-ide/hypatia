@@ -134,7 +134,7 @@ parameters_explicit_SEIR <- function(
   contact_matrix_set <- cpm$contact_matrix_set
 
   # Standardise contact matrix set
-  if(is.matrix(contact_matrix_set)){
+  if (is.matrix(contact_matrix_set)) {
     contact_matrix_set <- list(contact_matrix_set)
   }
 
@@ -186,11 +186,6 @@ parameters_explicit_SEIR <- function(
   # ----------------------------------------------------------------------------
   mc <- squire:::matrix_check(population[-1], contact_matrix_set)
   stopifnot(length(R0) == length(tt_R0))
-  print(length(contact_matrix_set) )
-  print(length(tt_contact_matrix))
-  print(dim(contact_matrix_set) )
-  print(dim(tt_contact_matrix))
-  print(contact_matrix_set)
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
@@ -265,6 +260,7 @@ parameters_explicit_SEIR <- function(
 
   # probabilities
   pgamma_E <- 1 - exp(-1.0*(gamma_E * dt))
+  pgamma_IMild <- 1 - exp(-gamma_IMild * dt)
   pgamma_ICase <- 1 - exp(-1.0*(gamma_ICase * dt))
   pgamma_get_ox_survive <- 1 - exp(-1.0*(gamma_get_ox_survive * dt))
   pgamma_not_get_ox_survive <- 1 - exp(-1.0*(gamma_not_get_ox_survive * dt))
@@ -330,6 +326,7 @@ parameters_explicit_SEIR <- function(
                gamma_rec = gamma_rec,
                pgamma_E = pgamma_E,
                pgamma_ICase = pgamma_ICase,
+               pgamma_IMild = pgamma_IMild,
                pgamma_get_ox_survive = pgamma_get_ox_survive,
                pgamma_not_get_ox_survive = pgamma_not_get_ox_survive,
                pgamma_get_ox_die = pgamma_get_ox_die,

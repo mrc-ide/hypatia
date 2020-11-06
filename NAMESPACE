@@ -2,7 +2,6 @@
 
 export(E2_IMild)
 export(SEIRexplicitparameters)
-export(SEIRexplicitparameters2)
 export(get_parameters_for_sirstochastic)
 export(individual_I_to_R)
 export(individual_I_to_R_2)

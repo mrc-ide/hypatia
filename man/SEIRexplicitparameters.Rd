@@ -2,52 +2,24 @@
 % Please edit documentation in R/SEIRexplicitparameters.R
 \name{SEIRexplicitparameters}
 \alias{SEIRexplicitparameters}
-\title{Parameter list for SQUIRE}
+\title{Calculating the FOI}
 \usage{
 SEIRexplicitparameters(
-  S,
-  E1,
-  E2,
+  human,
   IMild,
   ICase1,
   ICase2,
   cum_hosp_inc,
-  IOxGetLive1,
-  IOxGetLive2,
-  IOxGetDie1,
-  IOxGetDie2,
-  IOxNotGetLive1,
-  IOxNotGetLive2,
-  IOxNotGetDie1,
-  IOxNotGetDie2,
-  IMVGetLive1,
-  IMVGetLive2,
-  IMVGetDie1,
-  IMVGetDie2,
-  IMVNotGetLive1,
-  IMVNotGetLive2,
-  IMVNotGetDie1,
-  IMVNotGetDie2,
-  IRec1,
-  IRec2,
-  R,
-  D,
-  tt_matrix,
-  mix_mat_set,
-  tt_beta,
-  beta_set,
   i,
   N_age,
   lambda,
-  problambda
+  problambda,
+  beta,
+  m
 )
 }
 \arguments{
-\item{S}{susceptible}
-
-\item{E1}{First of the latent infection compartments}
-
-\item{E2}{Second of the latent infection compartments}
+\item{human, }{human}
 
 \item{IMild}{rest of the infections, which we consider to be mild and not require hospitalisation}
 
@@ -57,61 +29,21 @@ SEIRexplicitparameters(
 
 \item{cum_hosp_inc}{cumulative hosptal incidences}
 
-\item{IOxGetLive1}{First of the compartments for infections that will require oxygen, get it, and who survive}
+\item{i}{index}
 
-\item{IOxGetLive2}{Second of the compartments for infections that will require oxygen, get it, and who survive}
+\item{N_age}{number of points for a particular age}
 
-\item{IOxGetDie1}{First of the compartments for infections that will require oxygen, get it, and die}
+\item{lambda}{FOI}
 
-\item{IOxGetDie2}{Second of the compartments for infections that will require oxygen, get it, and die}
+\item{problambda}{probability of}
 
-\item{IOxNotGetLive1}{First of the compartments for infections that will require oxygen, do NOT get it, and live}
+\item{beta}{beta}
 
-\item{IOxNotGetLive2}{Second of the compartments for infections that will require oxygen, do NOT get it, and live}
-
-\item{IOxNotGetDie1}{First of the compartments for infections that will require oxygen, do NOT get it, and die}
-
-\item{IOxNotGetDie2}{Second of the compartments for infections that will require oxygen, do NOT get it, and die}
-
-\item{IMVGetLive1}{First of the compartments for infections that will require mechanical ventilation, get it, and who survive}
-
-\item{IMVGetLive2}{Second of the compartments for infections that will require mechanical ventilation, get it, and who survive}
-
-\item{IMVGetDie1}{First of the compartments for infections that will require mechanical ventilation, get it, and die}
-
-\item{IMVGetDie2}{Second of the compartments for infections that will require mechanical ventilation, get it, and die}
-
-\item{IMVNotGetLive1}{First of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive}
-
-\item{IMVNotGetLive2}{Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive}
-
-\item{IMVNotGetDie1}{First of the compartments for infections that will require mechanical ventilation, do NOT get it, and die}
-
-\item{IMVNotGetDie2}{Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and die}
-
-\item{IRec1}{First of the compartments for those recovering from ICU}
-
-\item{IRec2}{Second of the compartments for those recovering from ICU}
-
-\item{R}{recovered}
-
-\item{D}{dead}
-
-\item{tt_matrix}{tt_matrix}
-
-\item{mix_mat_set}{mixing matrix}
-
-\item{tt_beta}{tt_beta}
-
-\item{beta_set}{beta_set}
-
-\item{i}{element index}
-
-\item{N_age}{population for age that is being analysed}
-}
-\value{
-list
+\item{m}{m}
 }
 \description{
-Parameter list for SQUIRE
+Calculating the FOI
+}
+\examples{
+SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,lambda, problambda, beta, m)
 }

@@ -124,16 +124,16 @@ displaythemodel_1 <- function(df) {
 
   strname <- paste("SIR", df$type, "Model Simulation")
 
-  ggplot2::ggplot(df, ggplot2::aes(x=df$time, y=df$value, group=interaction(df$group, df$name), colour=df$name ) ) +
+  ggplot2::ggplot(df, ggplot2::aes(x = df$time, y = df$value, group = interaction(df$group, df$name), colour = df$name ) ) +
     ggplot2::geom_line(size=0.5) +
     ggplot2::theme_bw() +
-    ggplot2::labs(title = strname, subtitle = subtitle, color=df$legend) +
+    ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
     ggplot2::labs(y ="S, I, & R", x="time") +
     ggplot2::theme(
       legend.justification = c("right", "top"),
       legend.box = c("horizontal", "vertical")
     ) +
-    ggplot2::scale_colour_manual(values=c("blue", "red", "green")) +
+    ggplot2::scale_colour_manual(values = c("blue", "red", "green")) +
     ggplot2::theme(text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
                    plot.title = ggplot2::element_text(size = 26, color = '#333333'),
                    plot.subtitle = ggplot2::element_text(size = 13),
@@ -167,7 +167,7 @@ individual_S_to_I_2 <- function(S, I, human, immunity, age, location, pars = NUL
     n_to_infect <- inf$n_infections_S
     susceptible <- api$get_state(human, S)
 
-    if(pars$novariations){
+    if (pars$novariations) {
       infected <- susceptible[sample.int(length(susceptible), n_to_infect)]
       api$queue_state_update(human, I, infected)
     }
