@@ -20,7 +20,7 @@ Matrix_set <- function(contact_matrix_set, population){
 #' @param population Vector of population by age
 #'
 #' @export
-#'
+#' @return Input matrix
 Matrix_set_explicit <- function(contact_matrix_set, population){
   contact <- lapply(contact_matrix_set, Process_contact_matrix_scaled_age,
                     population = population)

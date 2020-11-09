@@ -583,7 +583,6 @@ Individual_R_to_S <- function(
 #' @examples
 #' E2_IMild(human, IMild, E2, ICase1, p_E2_I, prob_hosp)
 E2_IMild <- function(human, IMild, E2, ICase1, p_E2_I, prob_hosp){
-
   function(api) {
     E2 <- api$get_state(human, E2)
     E2_I <- rbinom(length(E2), 1, p_E2_I)
