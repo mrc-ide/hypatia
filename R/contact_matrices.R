@@ -3,6 +3,8 @@
 #' @param contact_matrix_set Set of contact matrices
 #' @param population Vector of populaion by age
 #'
+#'#' @export
+#'
 #' @return Processed set of mixing matrices
 Matrix_set <- function(contact_matrix_set, population){
   contact <- lapply(contact_matrix_set, Process_contact_matrix,
@@ -12,6 +14,13 @@ Matrix_set <- function(contact_matrix_set, population){
   aperm(array(unlist(mixing), dim = c(dim(mixing[[1]]), length(mixing))), c(3, 1, 2))
 }
 
+#' Title
+#'
+#' @param contact_matrix_set contact_matrix_set
+#' @param population Vector of population by age
+#'
+#' @export
+#'
 Matrix_set_explicit <- function(contact_matrix_set, population){
   contact <- lapply(contact_matrix_set, Process_contact_matrix_scaled_age,
                     population = population)
@@ -22,8 +31,10 @@ Matrix_set_explicit <- function(contact_matrix_set, population){
 
 #' Divide matrix by population
 #'
-#' @param contact Matrix
-#' @param population Population vector
+#' @param contact contact
+#' @param population Vector of population by age
+#'
+#' @export
 #'
 #' @return Matrix
 Div_pop <- function(contact, population){
@@ -34,6 +45,8 @@ Div_pop <- function(contact, population){
 #'
 #' @param contact_matrix A contact matrix
 #' @param population Vector of population by age
+#'
+#' @export
 #'
 #' @return Processed matrix
 #'
@@ -71,6 +84,8 @@ Process_contact_matrix_scaled_age <- function(contact_matrix, population) {
 #'
 #' @param contact_matrix A contact matrix
 #' @param population Vector of population by age
+#'
+#' @export
 #'
 #' @return Processed matrix
 Process_contact_matrix <- function(contact_matrix, population) {

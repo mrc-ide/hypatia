@@ -7,7 +7,7 @@ Matrix_check <- function(population, contact_matrix_set){
 
   dims <- c(length(population),
             sapply(contact_matrix_set, dim))
-  if(length(unique(dims)) != 1){
+  if (length(unique(dims)) != 1) {
     stop("Length of population vector and dimensions of matrices
          in contact_matrix_set must all be equal")
   }
@@ -20,7 +20,7 @@ Matrix_check <- function(population, contact_matrix_set){
 #'
 #' @return Checked initial values data.frame
 Init_check <- function(init, population){
-  if(is.null(init)){
+  if (is.null(init)) {
     init = data.frame(
       S = population - 1,
       E = 0,
@@ -28,16 +28,16 @@ Init_check <- function(init, population){
       I = 1,
       R = 0
     )
-  } else{
-    if(!is.data.frame(init)){
+  } else {
+    if (!is.data.frame(init)) {
       stop("init should be a data.frame with columns:, S, E, E2, I, R
            and rows 1:age_groups")
     }
-    if(!all(names(init) == c("S", "E", "E2", "I", "R"))){
+    if (!all(names(init) == c("S", "E", "E2", "I", "R"))) {
       stop("Names of init must be identical to S, E, E2, I, R if sepecified manually")
     }
   }
-  if(!all(rowSums(init) == population)){
+  if (!all(rowSums(init) == population)) {
     stop("Row sums of init should be identical to population")
   }
   return(init)
@@ -49,7 +49,7 @@ Init_check <- function(init, population){
 #' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Checked initial values data.frame
-Init_check_explicit <- function(init, population, seeding_cases = 20){
+Init_check_explicit <- function(init, population, seeding_cases = 20) {
 
   if (length(population) != 17) {
     stop("population must be divided up into 17x 5-year age bands spanning 0 to 80+")
@@ -57,7 +57,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20){
   assert_int(seeding_cases)
   age_group_indices <- c(8, 9, 10, 11) # age_group indices corresponding to middle-aged travellers
 
-  if(is.null(init)){
+  if (is.null(init)) {
     raw_seeding_cases <- rep(0, length(population))
     raw_seeding_cases[age_group_indices] <- as.vector(stats::rmultinom(1, size = seeding_cases, prob = rep(0.25, 4)))
     init = data.frame(
@@ -89,7 +89,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20){
       D = 0
     )
   } else {
-    if(!is.data.frame(init)){
+    if (!is.data.frame(init)) {
       stop("init should be a data.frame with columns:
       S, E1, E2, ICase1, ICase2, IOxGetLive1, IOxGetLive2,
       IOxGetDie1, IOxGetDie2, IOxNotGetLive1, IOxNotGetLive2,
@@ -97,7 +97,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20){
       IMVGetDie1, IMVGetDie2, IMVNotGetLive1, IMVNotGetLive2,
       IMVNotGetDie1, IMVNotGetDie2, IRec1, IRec2, R, D and rows 1:age_groups")
     }
-    if(!all(names(init) == c("S","E1","E2","IMild","ICase1","ICase2","IOxGetLive1",
+    if (!all(names(init) == c("S","E1","E2","IMild","ICase1","ICase2","IOxGetLive1",
                              "IOxGetLive2","IOxGetDie1","IOxGetDie2",
                              "IOxNotGetLive1","IOxNotGetLive2","IOxNotGetDie1",
                              "IOxNotGetDie2","IMVGetLive1","IMVGetLive2",
@@ -115,10 +115,10 @@ Init_check_explicit <- function(init, population, seeding_cases = 20){
   # cases randomly distributed across 4 age groups so can't check
   # whole population is equal by row. Instead do it for first 7 age
   # groups
-  if(!all(rowSums(init[1:7, ]) == population[1:7])){
+  if (!all(rowSums(init[1:7, ]) == population[1:7])) {
     stop("Row sums of init should be identical to population")
   }
-  if(!all(init >= 0)) {
+  if (!all(init >= 0)) {
     stop("population size is not large enough in each age bracket")
   }
 
@@ -132,7 +132,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20){
 #'
 #' @return Nothing if check pass
 Check_time_change <- function(tt, time_period){
-  if(any(tt > time_period) | any(tt < 0)){
+  if (any(tt > time_period) | any(tt < 0)) {
     stop("Time change points must all be < time period
          and > 0")
   }
@@ -145,11 +145,11 @@ Check_time_change <- function(tt, time_period){
 #' @param name Name of argument
 #'
 #' @return Nothing if check pass
-Pos_num <- function(x, name = deparse(substitute(x))){
-  if(length(x) > 1){
+Pos_num <- function(x, name = deparse(substitute(x))) {
+  if (length(x) > 1) {
     stop(name, " must have length = 1")
   }
-  if(length(x) != 1 | !is.numeric(x) | x < 0){
+  if (length(x) != 1 | !is.numeric(x) | x < 0) {
     stop(name, " must be a positive number")
   }
   return(NULL)

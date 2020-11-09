@@ -9,7 +9,9 @@ Matrix_set(contact_matrix_set, population)
 \arguments{
 \item{contact_matrix_set}{Set of contact matrices}
 
-\item{population}{Vector of populaion by age}
+\item{population}{Vector of populaion by age
+
+#' @export}
 }
 \value{
 Processed set of mixing matrices

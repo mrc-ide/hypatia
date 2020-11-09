@@ -11,12 +11,12 @@ Infections <- function(I, S, pars) {
   # SIR: two types of events for S, so competing hazards. A fraction of
   # S events are deaths and the rest are infections.
 
-  FOI <- (pars$beta * I)/pars$N
+  FOI <- (pars$beta * I) / pars$N
   fmu <- FOI + pars$mu
   fmudt <- fmu * pars$dt
 
   prob1 <- 1.0 - exp(-1.0 * fmudt)
-  prob2 <- pars$mu/fmu
+  prob2 <- pars$mu / fmu
 
   n_events_S <- rbinom(1, S, prob1)
 
@@ -145,10 +145,10 @@ Displaythemodel <- function(df) {
     ) +
     ggplot2::scale_colour_manual(values = c("blue", "red", "green")) +
     ggplot2::theme(
-      text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
-      plot.title = ggplot2::element_text(size = 26, color = '#333333'),
+      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
+      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
       plot.subtitle = ggplot2::element_text(size = 13),
-      axis.title.x = ggplot2::element_text(size = 16, color = '#333333'),
+      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
       axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 }
 
@@ -197,10 +197,10 @@ Displaythemodel2 <- function(df) {
     ggplot2::scale_colour_manual(
       values = c("blue", "red", "green", "purple", "yellow")) +
     ggplot2::theme(
-      text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
-      plot.title = ggplot2::element_text(size = 26, color = '#333333'),
+      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
+      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
       plot.subtitle = ggplot2::element_text(size = 13),
-      axis.title.x = ggplot2::element_text(size = 16, color = '#333333'),
+      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
       axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 }
 
@@ -246,7 +246,7 @@ Displaythemodel3 <- function(df) {
 
   ggplot2::ggplot(
                   df, ggplot2::aes(x = df$time, y = df$value,
-                  group = interaction(df$group, df$name), colour = df$name )) +
+                  group = interaction(df$group, df$name), colour = df$name)) +
     ggplot2::geom_line(size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
@@ -256,10 +256,10 @@ Displaythemodel3 <- function(df) {
       legend.box = c("horizontal", "vertical")
     ) +
     ggplot2::theme(
-      text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
-      plot.title = ggplot2::element_text(size = 26, color = '#333333'),
+      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
+      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
       plot.subtitle = ggplot2::element_text(size = 13),
-      axis.title.x = ggplot2::element_text(size = 16, color = '#333333'),
+      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
       axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 
 }
@@ -362,11 +362,11 @@ Individual_S_to_I_and_I2 <- function(
         infected1 <- as.integer(pars$infection_rate * infected)
         severelyinfected <- as.integer(infected - infected1)
 
-        if (length(infected1) != 0 && infected1 !=0 ) {
+        if (length(infected1) != 0 && infected1 != 0) {
           Validated_state_update(api, human, I, infected1, pars$N)
         }
 
-        if (length(severelyinfected) != 0 && severelyinfected !=0 ) {
+        if (length(severelyinfected) != 0 && severelyinfected != 0) {
           Validated_state_update(api, human, I2, severelyinfected, pars$N)
         }
       }
@@ -779,4 +779,3 @@ Validated_state_update <- function(api, i, state, ix, population_size) {
 
   api$queue_state_update(i, state, ix)
 }
-

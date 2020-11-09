@@ -50,7 +50,7 @@ SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,
 }
 
 isEmpty <- function(x) {
-  return(length(x)==0)
+  return(length(x) == 0)
 }
 
 parse_country_population_mixing_matrix <- function(country = NULL,

@@ -255,7 +255,7 @@ assert_date <- function(x,
     return(TRUE)
   } else {
     if (is.character(x)) {
-      if(all(class(as.Date(x)) == "Date")) {
+      if (all(class(as.Date(x)) == "Date")) {
         return(TRUE)
       }
     } else {

@@ -7,9 +7,9 @@
 Div_pop(contact, population)
 }
 \arguments{
-\item{contact}{Matrix}
+\item{contact}{contact}
 
-\item{population}{Population vector}
+\item{population}{Vector of population by age}
 }
 \value{
 Matrix

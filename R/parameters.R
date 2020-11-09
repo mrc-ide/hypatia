@@ -163,20 +163,20 @@ Parameters_explicit_SEIR <- function(
     if (!is.null(country)) {
       beds <- squire::get_healthcare_capacity(country)
       hosp_beds <- beds$hosp_beds
-      hosp_bed_capacity <- rep(round(hosp_beds * sum(population)/1000),
+      hosp_bed_capacity <- rep(round(hosp_beds * sum(population) / 1000),
                                length(tt_hosp_beds))
     } else {
-      hosp_bed_capacity <- round(5 * sum(population)/1000)
+      hosp_bed_capacity <- round(5 * sum(population) / 1000)
     }
   }
   if (is.null(ICU_bed_capacity)) {
     if (!is.null(country)) {
       beds <- squire::get_healthcare_capacity(country)
       ICU_beds <- beds$ICU_beds
-      ICU_bed_capacity <- rep(round(ICU_beds * sum(population)/1000),
+      ICU_bed_capacity <- rep(round(ICU_beds * sum(population) / 1000),
                               length(tt_ICU_beds))
     } else {
-      ICU_bed_capacity <- round(3 * hosp_bed_capacity/100)
+      ICU_bed_capacity <- round(3 * hosp_bed_capacity / 100)
     }
   }
 
@@ -201,10 +201,10 @@ Parameters_explicit_SEIR <- function(
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
-  tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt),
-               Check_time_change, time_period/dt)
-  tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt),
-                Check_time_change, time_period/dt)
+  tc <- lapply(list(tt_R0 / dt, tt_contact_matrix / dt),
+               Check_time_change, time_period / dt)
+  tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds / dt),
+                Check_time_change, time_period / dt)
 
   assert_pos(dt)
   assert_pos(dur_E)
@@ -259,18 +259,18 @@ Parameters_explicit_SEIR <- function(
   # ----------------------------------------------------------------------------
 
   # durations
-  gamma_E = 2 * 1/dur_E
-  gamma_IMild = 1/dur_IMild
-  gamma_ICase = 2 * 1/dur_ICase
+  gamma_E = 2 * 1 / dur_E
+  gamma_IMild = 1 / dur_IMild
+  gamma_ICase = 2 * 1 / dur_ICase
   gamma_get_ox_survive = 2 * 1/dur_get_ox_survive
   gamma_get_ox_die = 2 * 1/dur_get_ox_die
-  gamma_not_get_ox_survive = 2 * 1/dur_not_get_ox_survive
-  gamma_not_get_ox_die = 2 * 1/dur_not_get_ox_die
-  gamma_get_mv_survive = 2 * 1/dur_get_mv_survive
-  gamma_get_mv_die = 2 * 1/dur_get_mv_die
-  gamma_not_get_mv_survive = 2 * 1/dur_not_get_mv_survive
-  gamma_not_get_mv_die = 2 * 1/dur_not_get_mv_die
-  gamma_rec = 2 * 1/dur_rec
+  gamma_not_get_ox_survive = 2 * 1 / dur_not_get_ox_survive
+  gamma_not_get_ox_die = 2 * 1 / dur_not_get_ox_die
+  gamma_get_mv_survive = 2 * 1 / dur_get_mv_survive
+  gamma_get_mv_die = 2 * 1 / dur_get_mv_die
+  gamma_not_get_mv_survive = 2 * 1 / dur_not_get_mv_survive
+  gamma_not_get_mv_die = 2 * 1 / dur_not_get_mv_die
+  gamma_rec = 2 * 1 / dur_rec
 
   # probabilities
   pgamma_E <- 1 - exp(-1.0*(gamma_E * dt))
@@ -364,11 +364,11 @@ Parameters_explicit_SEIR <- function(
      p_dist = p_dist,
      hosp_beds = hosp_bed_capacity,
      ICU_beds = ICU_bed_capacity,
-     tt_hosp_beds = round(tt_hosp_beds/dt),
-     tt_ICU_beds = round(tt_ICU_beds/dt),
-     tt_matrix = round(tt_contact_matrix/dt),
+     tt_hosp_beds = round(tt_hosp_beds / dt),
+     tt_ICU_beds = round(tt_ICU_beds / dt),
+     tt_matrix = round(tt_contact_matrix / dt),
      mix_mat_set = matrices_set,
-     tt_beta = round(tt_R0/dt),
+     tt_beta = round(tt_R0 / dt),
      beta_set = beta_set,
      dt = dt,
      population = population,
@@ -551,8 +551,6 @@ sir_model_parameters_defaults <- function() {
   pars
 }
 
-#' Return the default probabilities for modelling
-#' @return list of default probabilities
 Default_probs <- function() {
   prob_hosp <- c(
     0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
@@ -576,6 +574,7 @@ Default_probs <- function() {
     prob_severe_death_no_treat = rep(0.95, length(prob_hosp)),
     p_dist = rep(1, length(prob_hosp))
   )
+
 }
 
 

@@ -4,12 +4,12 @@ Infections2 <- function(I, S, pars){
   # SIR: two types of events for S, so competing hazards. A fraction of
   # S events are deaths and the rest are infections.
 
-  FOI <- (pars$beta * I)/pars$N
+  FOI <- (pars$beta * I) / pars$N
   fmu <- FOI + pars$mu
   fmudt <- fmu * pars$dt
 
   prob1 <- 1.0 - exp(-1.0 * fmudt)
-  prob2 <- pars$mu/fmu
+  prob2 <- pars$mu / fmu
 
   n_events_S <- rbinom(1, S, prob1)
 
@@ -33,7 +33,7 @@ Recoveries2 <- function(I, pars){
   coeffdt <- coeff * pars$dt
 
   prob1 <- 1.0 - exp(-1.0 * coeffdt)
-  prob2 <- 1.0 - exp(-1.0 * pars$mu/coeff)
+  prob2 <- 1.0 - exp(-1.0 * pars$mu / coeff)
 
   n_events_I <- rbinom(1, I, prob1)
 
@@ -138,12 +138,12 @@ Displaythemodel_1 <- function(df) {
     ) +
     ggplot2::scale_colour_manual(values = c("blue", "red", "green")) +
     ggplot2::theme(text = ggplot2::element_text(color = "#444444",
-                                                family = 'Lucida Bright'),
+                                                family = "Lucida Bright"),
                    plot.title = ggplot2::element_text(size = 26,
-                                                      color = '#333333'),
+                                                      color = "#333333"),
                    plot.subtitle = ggplot2::element_text(size = 13),
                    axis.title.x = ggplot2::element_text(size = 16,
-                                                        color = '#333333'),
+                                                        color = "#333333"),
                    axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 
 }
@@ -275,7 +275,7 @@ Individual_R_to_S_2 <- function(S, R, human, immunity, age, location,
     from_state <- api$get_state(human, R)
 
     if (pars$novariations) {
-      if(length(from_state) != 0 && length(from_state) > n_to_susceptible)
+      if (length(from_state) != 0 && length(from_state) > n_to_susceptible)
       {
         thenewsusceptible <- from_state[sample.int(length(from_state),
                                                    n_to_susceptible)]
