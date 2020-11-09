@@ -14,14 +14,15 @@
 #' @param problambda probability of
 #' @param beta beta
 #' @param m m
+#' @param dt dt
 #'
 #' @export
 #'
 #' @examples
 #' SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,
-#' lambda, problambda, beta, m)
+#' lambda, problambda, beta, m, dt)
 SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,
-                                   i, N_age, lambda, problambda, beta, m) {
+                                   i, N_age, lambda, problambda, beta, m, dt) {
   function(api) {
 
     # Generating Force of Infection
@@ -50,4 +51,33 @@ SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,
 
 isEmpty <- function(x) {
   return(length(x)==0)
+}
+
+parse_country_population_mixing_matrix <- function(country = NULL,
+                                                   population = NULL,
+                                                   contact_matrix_set = NULL) {
+
+  # Handle country population args
+  if (is.null(country) &&
+      (is.null(population) || is.null(contact_matrix_set))) {
+    stop("User must provide either the country being simulated or
+         both the population size and contact_matrix_set")
+  }
+
+  # If a country was provided then grab the population and matrices if needed
+  if (is.null(population)) {
+    population <- squire::get_population(country)
+
+    if (is.null(contact_matrix_set)) {
+      contact_matrix_set <- squire::get_mixing_matrix(country)
+    }
+    population <- population$n
+  }
+
+  ret <- list(population = population,
+              country = country,
+              contact_matrix_set = contact_matrix_set)
+
+  return(ret)
+
 }

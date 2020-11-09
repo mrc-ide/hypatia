@@ -376,10 +376,10 @@ individual_S_to_I_and_I2 <- function(
       # the infection rate
       rate_modifier <- 1 - api$get_variable(human, immunity, susceptible)
 
-      prob <- par$infection_rate * rate_modifier
+      prob <- pars$infection_rate * rate_modifier
       individual::fixed_probability_state_change_process("human", S, I, prob)
 
-      prob <- par$severe_infection_rate * rate_modifier
+      prob <- pars$severe_infection_rate * rate_modifier
       individual::fixed_probability_state_change_process("human", S, I2, prob)
 
     }
@@ -390,10 +390,10 @@ individual_S_to_I_and_I2 <- function(
       if (length(susceptible) != 0
           && susceptible != 0 && !(any(is.na(susceptible)))) {
 
-        prob <- par$infection_rate * pars$age_rate * rate_modifier
+        prob <- pars$infection_rate * pars$age_rate * rate_modifier
         individual::fixed_probability_state_change_process("human", S, I, prob)
 
-        prob <- par$severe_infection_rate * pars$age_rate * rate_modifier
+        prob <- pars$severe_infection_rate * pars$age_rate * rate_modifier
         individual::fixed_probability_state_change_process("human", S, I2, prob)
       }
 
@@ -408,10 +408,10 @@ individual_S_to_I_and_I2 <- function(
 
       if (length(infected) != 0 && infected != 0) {
 
-        prob <- par$infection_rate * pars$location_rate * rate_modifier
+        prob <- pars$infection_rate * pars$location_rate * rate_modifier
         individual::fixed_probability_state_change_process("human", S, I, prob)
 
-        prob <- par$severe_infection_rate * pars$location_rate * rate_modifier
+        prob <- pars$severe_infection_rate * pars$location_rate * rate_modifier
         individual::fixed_probability_state_change_process("human", S, I2, prob)
       }
     }
@@ -754,29 +754,30 @@ render_state_sizes4 <- function(S, E1, E2, I, human) {
 #'
 #' @param api api
 #' @param i human etc
-#' @param state S, I, R etc
-#' @param index recovered, susceptable, etc
+#' @param state S, I, R, etc
+#' @param ix index
 #' @param population_size population size
 #'
 #' @export
-#'
-#' @examples
-#' validated_state_update(api, i, state, index, population_size)
-validated_state_update <- function(api, i, state, index, population_size) {
+validated_state_update <- function(api, i, state, ix, population_size) {
 
-  if (any(index > population_size)) {
-    stop(paste0("Your index ", index, " for ", i$name, ":", state$name,
+  if (any(ix > population_size)) {
+    stop(paste0("Your ix ", ix, " for ", i$name, ":", state$name,
                 " is greater than the population size \n"))
   }
-  if (any(index <= 0)) {
-    stop(paste0("Your index ", index, " for ", i$name, ":", state$name,
+  if (any(is.integer(ix) == FALSE)) {
+    stop(paste0("Your ix ", ix, " for ", i$name, ":", state$name,
+                " is not an integer \n"))
+  }
+  if (any(ix <= 0)) {
+    stop(paste0("Your ix ", ix, " for ", i$name, ":", state$name,
                 " is less than or equal to 0 \n"))
   }
-  if (any(is.na(index))) {
-    stop(paste0("Your index ", index, " for ", i$name, ":", state$name,
+  if (any(is.na(ix))) {
+    stop(paste0("Your ix ", ix, " for ", i$name, ":", state$name,
                 " is not a number \n"))
   }
 
-  api$queue_state_update(i, state, index)
+  api$queue_state_update(i, state, ix)
 }
 

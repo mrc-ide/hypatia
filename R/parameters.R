@@ -1,10 +1,10 @@
 # -----------------------------------------------------------------------------
-#' @title Parmaters for explicit SEIR model
+#' @title Parmaters for the explicit SEIR model
 #'
 #' @details All durations are in days.
 #'
 #' @param population Population vector (for each age group). Default = NULL,
-#'   which will cause population to be sourced from \code{country}
+#'   which will cause the population to be sourced from \code{country}
 #' @param country Character for country beign simulated. WIll be used to
 #'   generate \code{population} and \code{contact_matrix_set} if
 #'   unprovided. Either \code{country} or \code{population} and
@@ -20,6 +20,7 @@
 #' @param dt Time Step. Default = 0.1
 #' @param init Data.frame of initial conditions. Default = NULL
 #' @param seeding_cases Initial number of cases seeding the epidemic
+#' @param probs = default_probs()
 #' @param prob_hosp probability of hospitalisation by age.
 #'   Default = c(0.001127564, 0.000960857, 0.001774408, 0.003628171,
 #'   0.008100662, 0.015590734, 0.024597885, 0.035377529,
@@ -30,19 +31,19 @@
 #'   0.000268514, 0.000516788, 0.00081535, 0.001242525,
 #'   0.001729275, 0.002880196, 0.00598205, 0.010821894,
 #'   0.022736324, 0.035911156, 0.056362032, 0.081467057)
-#' @param prob_non_severe_death_treatment Probability of death from non severe
-#'   treated infection.
+#' @param prob_non_severe_death_treat Probability of death from non
+#'   severe treated infection.
 #'   Default = c(0.0125702, 0.0125702, 0.0125702, 0.0125702,
 #'   0.0125702, 0.0125702, 0.0125702, 0.013361147,
 #'   0.015104687, 0.019164124, 0.027477519, 0.041762108,
 #'   0.068531658, 0.105302319, 0.149305732, 0.20349534)
-#' @param prob_severe_death_treatment Probability of death from severe infection
-#'   that is treated. Default = rep(0.5, 16)
-#' @param prob_non_severe_death_no_treatment Probability of death in non severe
-#'   hospital inections that aren't treated
-#' @param prob_severe_death_no_treatment Probability of death from severe
+#' @param prob_severe_death_treat Probability of death from severe
+#'   infection that is treated. Default = rep(0.5, 16)
+#' @param prob_non_severe_death_no_treat Probability of death
+#'   in non severe hospital inections that aren't treated
+#' @param prob_severe_death_no_treat Probability of death from severe
 #'   infection that is not treated. Default = rep(0.95, 16)
-#' @param p_dist Preferentiality of age group receiving treatment relative to
+#' @param p_dist Preferentiality of age group receiving treat relative to
 #'   other age groups when demand exceeds healthcare capacity.
 #' @param dur_E Mean duration of incubation period (days). Default = 4.6
 #' @param dur_IMild Mean duration of mild infection (days). Default = 2.1
@@ -62,13 +63,14 @@
 #'   survive. Default = 7.3
 #' @param dur_not_get_mv_die Mean duration without ventilation given
 #'   death. Default = 1
-#' @param dur_rec Duration of recovery after coming off ventilation. Default = 2
+#' @param dur_rec Duration of recovery after coming off ventilation.
+#' Default = 2
 #' @param hosp_bed_capacity General bed capacity. Can be single number or vector
 #' if capacity time-varies.
 #' @param ICU_bed_capacity ICU bed capacity. Can be single number or vector if
 #'  capacity time-varies.
-#' @param tt_hosp_beds Times at which hospital bed capacity changes (Default = 0
-#' = doesn't change)
+#' @param tt_hosp_beds Times at which hospital bed capacity changes
+#' (Default = 0 = doesn't change)
 #' @param tt_ICU_beds Times at which ICU bed capacity changes (Default = 0
 #' = doesn't change)
 #'
@@ -93,19 +95,21 @@ parameters_explicit_SEIR <- function(
   dt = 0.1,
   init = NULL,
   seeding_cases = NULL,
-
+  probs = default_probs(),
   # parameters
   # probabilities
   # probabilities
-  prob_hosp = squire:::probs$prob_hosp,
-  prob_severe = squire:::probs$prob_severe,
-  prob_non_severe_death_treatment =
-    squire:::probs$prob_non_severe_death_treatment,
-  prob_non_severe_death_no_treatment =
-    squire:::probs$prob_non_severe_death_no_treatment,
-  prob_severe_death_treatment = squire:::probs$prob_severe_death_treatment,
-  prob_severe_death_no_treatment = squire:::probs$prob_severe_death_no_treatment,
-  p_dist = squire:::probs$p_dist,
+  prob_hosp = probs$prob_hosp,
+  prob_severe = probs$prob_severe,
+  prob_non_severe_death_treat =
+    probs$prob_non_severe_death_treat,
+  prob_non_severe_death_no_treat =
+    probs$prob_non_severe_death_no_treat,
+  prob_severe_death_treat =
+    probs$prob_severe_death_treat,
+  prob_severe_death_no_treat =
+    probs$prob_severe_death_no_treat,
+  p_dist = probs$p_dist,
 
   # durations
   dur_E  = 4.6,
@@ -133,7 +137,7 @@ parameters_explicit_SEIR <- function(
 ) {
 
   # Handle country population args
-  cpm <- squire:::parse_country_population_mixing_matrix(country = country,
+  cpm <- parse_country_population_mixing_matrix(country = country,
          population = population,
          contact_matrix_set = contact_matrix_set)
   country <- cpm$country
@@ -153,7 +157,6 @@ parameters_explicit_SEIR <- function(
       contact_matrix_set[[i]] <- baseline
     }
   }
-
 
   # populate hospital and ICU bed capacity if not provided
   if (is.null(hosp_bed_capacity)) {
@@ -183,73 +186,73 @@ parameters_explicit_SEIR <- function(
   # Initialise initial conditions
   if (!is.null(seeding_cases)) {
     assert_int(seeding_cases)
-    mod_init <- squire:::init_check_explicit(init, population, seeding_cases)
+    mod_init <- init_check_explicit(init, population, seeding_cases)
   } else {
-    mod_init <- squire:::init_check_explicit(init, population)
+    mod_init <- init_check_explicit(init, population)
   }
 
   # Convert contact matrices to input matrices
-  matrices_set <- squire:::matrix_set_explicit(contact_matrix_set, population)
+  matrices_set <- matrix_set_explicit(contact_matrix_set, population)
 
   # Input checks
   # ----------------------------------------------------------------------------
-  mc <- squire:::matrix_check(population[-1], contact_matrix_set)
+  mc <- matrix_check(population[-1], contact_matrix_set)
   stopifnot(length(R0) == length(tt_R0))
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
   tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt),
-               squire:::check_time_change, time_period/dt)
+               check_time_change, time_period/dt)
   tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt),
-                squire:::check_time_change, time_period/dt)
+                check_time_change, time_period/dt)
 
-  squire:::assert_pos(dt)
-  squire:::assert_pos(dur_E)
-  squire:::assert_pos(dur_IMild)
-  squire:::assert_pos(dur_ICase)
-  squire:::assert_pos(dur_get_ox_survive)
-  squire:::assert_pos(dur_get_ox_die)
-  squire:::assert_pos(dur_not_get_ox_survive)
-  squire:::assert_pos(dur_not_get_ox_die)
-  squire:::assert_pos(dur_get_mv_survive)
-  squire:::assert_pos(dur_get_mv_die)
-  squire:::assert_pos(dur_not_get_mv_survive)
-  squire:::assert_pos(dur_not_get_mv_die)
-  squire:::assert_pos(time_period)
-  squire:::assert_pos(hosp_bed_capacity)
-  squire:::assert_pos(ICU_bed_capacity)
+  assert_pos(dt)
+  assert_pos(dur_E)
+  assert_pos(dur_IMild)
+  assert_pos(dur_ICase)
+  assert_pos(dur_get_ox_survive)
+  assert_pos(dur_get_ox_die)
+  assert_pos(dur_not_get_ox_survive)
+  assert_pos(dur_not_get_ox_die)
+  assert_pos(dur_get_mv_survive)
+  assert_pos(dur_get_mv_die)
+  assert_pos(dur_not_get_mv_survive)
+  assert_pos(dur_not_get_mv_die)
+  assert_pos(time_period)
+  assert_pos(hosp_bed_capacity)
+  assert_pos(ICU_bed_capacity)
 
-  squire:::assert_length(prob_hosp, length(population))
-  squire:::assert_length(prob_severe, length(population))
-  squire:::assert_length(prob_non_severe_death_treatment, length(population))
-  squire:::assert_length(prob_non_severe_death_no_treatment, length(population))
-  squire:::assert_length(prob_severe_death_treatment, length(population))
-  squire:::assert_length(prob_severe_death_no_treatment, length(population))
-  squire:::assert_length(p_dist, length(population))
+  assert_length(prob_hosp, length(population))
+  assert_length(prob_severe, length(population))
+  assert_length(prob_non_severe_death_treat, length(population))
+  assert_length(prob_non_severe_death_no_treat, length(population))
+  assert_length(prob_severe_death_treat, length(population))
+  assert_length(prob_severe_death_no_treat, length(population))
+  assert_length(p_dist, length(population))
 
-  squire:::assert_numeric(prob_hosp, length(population))
-  squire:::assert_numeric(prob_severe, length(population))
-  squire:::assert_numeric(prob_non_severe_death_treatment, length(population))
-  squire:::assert_numeric(prob_non_severe_death_no_treatment, length(population))
-  squire:::assert_numeric(prob_severe_death_treatment, length(population))
-  squire:::assert_numeric(prob_severe_death_no_treatment, length(population))
-  squire:::assert_numeric(p_dist, length(population))
+  assert_numeric(prob_hosp, length(population))
+  assert_numeric(prob_severe, length(population))
+  assert_numeric(prob_non_severe_death_treat, length(population))
+  assert_numeric(prob_non_severe_death_no_treat, length(population))
+  assert_numeric(prob_severe_death_treat, length(population))
+  assert_numeric(prob_severe_death_no_treat, length(population))
+  assert_numeric(p_dist, length(population))
 
-  squire:::assert_leq(prob_hosp, 1)
-  squire:::assert_leq(prob_severe, 1)
-  squire:::assert_leq(prob_non_severe_death_treatment, 1)
-  squire:::assert_leq(prob_non_severe_death_no_treatment, 1)
-  squire:::assert_leq(prob_severe_death_treatment, 1)
-  squire:::assert_leq(prob_severe_death_no_treatment, 1)
-  squire:::assert_leq(p_dist, 1)
+  assert_leq(prob_hosp, 1)
+  assert_leq(prob_severe, 1)
+  assert_leq(prob_non_severe_death_treat, 1)
+  assert_leq(prob_non_severe_death_no_treat, 1)
+  assert_leq(prob_severe_death_treat, 1)
+  assert_leq(prob_severe_death_no_treat, 1)
+  assert_leq(p_dist, 1)
 
-  squire:::assert_greq(prob_hosp, 0)
-  squire:::assert_greq(prob_severe, 0)
-  squire:::assert_greq(prob_non_severe_death_treatment, 0)
-  squire:::assert_greq(prob_non_severe_death_no_treatment, 0)
-  squire:::assert_greq(prob_severe_death_treatment, 0)
-  squire:::assert_greq(prob_severe_death_no_treatment, 0)
-  squire:::assert_greq(p_dist, 0)
+  assert_greq(prob_hosp, 0)
+  assert_greq(prob_severe, 0)
+  assert_greq(prob_non_severe_death_treat, 0)
+  assert_greq(prob_non_severe_death_no_treat, 0)
+  assert_greq(prob_severe_death_treat, 0)
+  assert_greq(prob_severe_death_no_treat, 0)
+  assert_greq(p_dist, 0)
 
 
   # Convert and Generate Parameters As Required
@@ -284,9 +287,9 @@ parameters_explicit_SEIR <- function(
   pgamma_rec  <- 1 - exp(-1.0*( gamma_rec * dt))
 
   if (is.null(beta_set)) {
-    baseline_matrix <- squire:::process_contact_matrix_scaled_age(
+    baseline_matrix <- process_contact_matrix_scaled_age(
       contact_matrix_set[[1]], population)
-    beta_set <- squire:::beta_est_explicit(dur_IMild = dur_IMild,
+    beta_set <- squire::beta_est_explicit(dur_IMild = dur_IMild,
                                   dur_ICase = dur_ICase,
                                   prob_hosp = prob_hosp,
                                   mixing_matrix = baseline_matrix,
@@ -298,87 +301,88 @@ parameters_explicit_SEIR <- function(
 
   # Collate Parameters Into List
   pars <- list(N_age = length(population),
-               S_0 = mod_init$S,
-               E1_0 = mod_init$E1,
-               E2_0 = mod_init$E2,
-               IMild_0 = mod_init$IMild,
-               ICase1_0 = mod_init$ICase1,
-               ICase2_0 = mod_init$ICase2,
-               IOxGetLive1_0 = mod_init$IOxGetLive1,
-               IOxGetLive2_0 = mod_init$IOxGetLive2,
-               IOxGetDie1_0 = mod_init$IOxGetDie1,
-               IOxGetDie2_0 = mod_init$IOxGetDie2,
-               IOxNotGetLive1_0 = mod_init$IOxNotGetLive1,
-               IOxNotGetLive2_0 = mod_init$IOxNotGetLive2,
-               IOxNotGetDie1_0 = mod_init$IOxNotGetDie1,
-               IOxNotGetDie2_0 = mod_init$IOxNotGetDie2,
-               IMVGetLive1_0 = mod_init$IMVGetLive1,
-               IMVGetLive2_0 = mod_init$IMVGetLive2,
-               IMVGetDie1_0 = mod_init$IMVGetDie1,
-               IMVGetDie2_0 = mod_init$IMVGetDie2,
-               IMVNotGetLive1_0 = mod_init$IMVNotGetLive1,
-               IMVNotGetLive2_0 = mod_init$IMVNotGetLive2,
-               IMVNotGetDie1_0 = mod_init$IMVNotGetDie1,
-               IMVNotGetDie2_0 = mod_init$IMVNotGetDie2,
-               IRec1_0 = mod_init$IRec1,
-               IRec2_0 = mod_init$IRec2,
-               R_0 = mod_init$R,
-               D_0 = mod_init$D,
-               gamma_E = gamma_E,
-               gamma_IMild = gamma_IMild,
-               gamma_ICase = gamma_ICase,
-               gamma_get_ox_survive = gamma_get_ox_survive,
-               gamma_get_ox_die = gamma_get_ox_die,
-               gamma_not_get_ox_survive = gamma_not_get_ox_survive,
-               gamma_not_get_ox_die = gamma_not_get_ox_die,
-               gamma_get_mv_survive = gamma_get_mv_survive,
-               gamma_get_mv_die = gamma_get_mv_die,
-               gamma_not_get_mv_survive = gamma_not_get_mv_survive,
-               gamma_not_get_mv_die = gamma_not_get_mv_die,
-               gamma_rec = gamma_rec,
-               pgamma_E = pgamma_E,
-               pgamma_ICase = pgamma_ICase,
-               pgamma_IMild = pgamma_IMild,
-               pgamma_get_ox_survive = pgamma_get_ox_survive,
-               pgamma_not_get_ox_survive = pgamma_not_get_ox_survive,
-               pgamma_get_ox_die = pgamma_get_ox_die,
-               pgamma_not_get_ox_die = pgamma_not_get_ox_die,
-               pgamma_get_mv_survive = pgamma_get_mv_survive,
-               pgamma_not_get_mv_survive = pgamma_not_get_mv_survive,
-               pgamma_get_mv_die = pgamma_get_mv_die,
-               pgamma_not_get_mv_die = pgamma_not_get_mv_die,
-               pgamma_rec = pgamma_rec,
-               prob_hosp = prob_hosp,
-               prob_severe = prob_severe,
-               prob_non_severe_death_treatment =
-                 prob_non_severe_death_treatment,
-               prob_non_severe_death_no_treatment =
-                 prob_non_severe_death_no_treatment,
-               prob_severe_death_treatment = prob_severe_death_treatment,
-               prob_severe_death_no_treatment = prob_severe_death_no_treatment,
-               p_dist = p_dist,
-               hosp_beds = hosp_bed_capacity,
-               ICU_beds = ICU_bed_capacity,
-               tt_hosp_beds = round(tt_hosp_beds/dt),
-               tt_ICU_beds = round(tt_ICU_beds/dt),
-               tt_matrix = round(tt_contact_matrix/dt),
-               mix_mat_set = matrices_set,
-               tt_beta = round(tt_R0/dt),
-               beta_set = beta_set,
-               dt = dt,
-               population = population,
-               contact_matrix_set = contact_matrix_set)
+     S_0 = mod_init$S,
+     E1_0 = mod_init$E1,
+     E2_0 = mod_init$E2,
+     IMild_0 = mod_init$IMild,
+     ICase1_0 = mod_init$ICase1,
+     ICase2_0 = mod_init$ICase2,
+     IOxGetLive1_0 = mod_init$IOxGetLive1,
+     IOxGetLive2_0 = mod_init$IOxGetLive2,
+     IOxGetDie1_0 = mod_init$IOxGetDie1,
+     IOxGetDie2_0 = mod_init$IOxGetDie2,
+     IOxNotGetLive1_0 = mod_init$IOxNotGetLive1,
+     IOxNotGetLive2_0 = mod_init$IOxNotGetLive2,
+     IOxNotGetDie1_0 = mod_init$IOxNotGetDie1,
+     IOxNotGetDie2_0 = mod_init$IOxNotGetDie2,
+     IMVGetLive1_0 = mod_init$IMVGetLive1,
+     IMVGetLive2_0 = mod_init$IMVGetLive2,
+     IMVGetDie1_0 = mod_init$IMVGetDie1,
+     IMVGetDie2_0 = mod_init$IMVGetDie2,
+     IMVNotGetLive1_0 = mod_init$IMVNotGetLive1,
+     IMVNotGetLive2_0 = mod_init$IMVNotGetLive2,
+     IMVNotGetDie1_0 = mod_init$IMVNotGetDie1,
+     IMVNotGetDie2_0 = mod_init$IMVNotGetDie2,
+     IRec1_0 = mod_init$IRec1,
+     IRec2_0 = mod_init$IRec2,
+     R_0 = mod_init$R,
+     D_0 = mod_init$D,
+     gamma_E = gamma_E,
+     gamma_IMild = gamma_IMild,
+     gamma_ICase = gamma_ICase,
+     gamma_get_ox_survive = gamma_get_ox_survive,
+     gamma_get_ox_die = gamma_get_ox_die,
+     gamma_not_get_ox_survive = gamma_not_get_ox_survive,
+     gamma_not_get_ox_die = gamma_not_get_ox_die,
+     gamma_get_mv_survive = gamma_get_mv_survive,
+     gamma_get_mv_die = gamma_get_mv_die,
+     gamma_not_get_mv_survive = gamma_not_get_mv_survive,
+     gamma_not_get_mv_die = gamma_not_get_mv_die,
+     gamma_rec = gamma_rec,
+     pgamma_E = pgamma_E,
+     pgamma_ICase = pgamma_ICase,
+     pgamma_IMild = pgamma_IMild,
+     pgamma_get_ox_survive = pgamma_get_ox_survive,
+     pgamma_not_get_ox_survive = pgamma_not_get_ox_survive,
+     pgamma_get_ox_die = pgamma_get_ox_die,
+     pgamma_not_get_ox_die = pgamma_not_get_ox_die,
+     pgamma_get_mv_survive = pgamma_get_mv_survive,
+     pgamma_not_get_mv_survive = pgamma_not_get_mv_survive,
+     pgamma_get_mv_die = pgamma_get_mv_die,
+     pgamma_not_get_mv_die = pgamma_not_get_mv_die,
+     pgamma_rec = pgamma_rec,
+     prob_hosp = prob_hosp,
+     prob_severe = prob_severe,
+     prob_non_severe_death_treat =
+       prob_non_severe_death_treat,
+     prob_non_severe_death_no_treat =
+       prob_non_severe_death_no_treat,
+     prob_severe_death_treat =
+       prob_severe_death_treat,
+     prob_severe_death_no_treat =
+       prob_severe_death_no_treat,
+     p_dist = p_dist,
+     hosp_beds = hosp_bed_capacity,
+     ICU_beds = ICU_bed_capacity,
+     tt_hosp_beds = round(tt_hosp_beds/dt),
+     tt_ICU_beds = round(tt_ICU_beds/dt),
+     tt_matrix = round(tt_contact_matrix/dt),
+     mix_mat_set = matrices_set,
+     tt_beta = round(tt_R0/dt),
+     beta_set = beta_set,
+     dt = dt,
+     population = population,
+     contact_matrix_set = contact_matrix_set)
 
   class(pars) <- c("explicit_SEIR_parameters", "squire_parameters")
 
   return(pars)
-
 }
 
 #' @title Default parameters for SIR model
 #'
-#' @param overrides use a named parameter list instead of defaults
-#' Parameters defined below
+#' @param overrides uses a named parameter list instead of defaults
+#' Parameters are defined below
 #'
 #' * `pars` list of parameters
 #' Compartmental
@@ -545,6 +549,33 @@ sir_model_parameters_defaults <- function() {
     location_rate = 0.2)
 
   pars
+}
+
+#' Return the default probabilities for modelling
+#' @return list of default probabilities
+default_probs <- function() {
+  prob_hosp <- c(
+    0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
+    0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042 ,
+    0.057734879, 0.072422135, 0.101602458, 0.116979814, 0.146099064,
+    0.176634654 ,0.180000000)
+  list(
+    prob_hosp = prob_hosp,
+    prob_severe = c(
+      0.05022296,	0.05022296,	0.05022296,	0.05022296,	0.05022296,
+      0.05022296,	0.05022296,	0.053214942, 0.05974426,	0.074602879,
+      0.103612417, 0.149427991, 0.223777304,	0.306985918,
+      0.385779555, 0.461217861, 0.709444444),
+    prob_non_severe_death_treat = c(
+      0.0125702,	0.0125702,	0.0125702,	0.0125702,
+      0.0125702,	0.0125702,	0.0125702,	0.013361147,
+      0.015104687,	0.019164124,	0.027477519,	0.041762108,
+      0.068531658,	0.105302319,	0.149305732,	0.20349534,	0.5804312),
+    prob_non_severe_death_no_treat = rep(0.6, length(prob_hosp)),
+    prob_severe_death_treat = rep(0.5, length(prob_hosp)),
+    prob_severe_death_no_treat = rep(0.95, length(prob_hosp)),
+    p_dist = rep(1, length(prob_hosp))
+  )
 }
 
 

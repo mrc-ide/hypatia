@@ -86,7 +86,7 @@ run_with_repetitions2 <- function(
   dfs <- fapply(
     seq(repetitions),
     function(repetition) {
-      df <- compartmental_sirmodel(end_time, pars)
+      #df <- compartmental_sirmodel(end_time, pars)
       df$repetition <- repetition
       df
     }
