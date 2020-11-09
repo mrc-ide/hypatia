@@ -1,9 +1,12 @@
 #' Calculating the FOI
 #'
 #' @param human, human
-#' @param IMild rest of the infections, which we consider to be mild and not require hospitalisation
-#' @param ICase1 First of the compartments for infections that will require hospitalisation
-#' @param ICase2 Second of the compartments for infections that will require hospitalisation
+#' @param IMild rest of the infections, which we consider to be mild and not
+#'  require hospitalisation
+#' @param ICase1 First of the compartments for infections that will require
+#'  hospitalisation
+#' @param ICase2 Second of the compartments for infections that will require
+#'  hospitalisation
 #' @param cum_hosp_inc cumulative hosptal incidences
 #' @param i index
 #' @param N_age number of points for a particular age
@@ -15,7 +18,8 @@
 #' @export
 #'
 #' @examples
-#' SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,lambda, problambda, beta, m)
+#' SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,
+#' lambda, problambda, beta, m)
 SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,
                                    i, N_age, lambda, problambda, beta, m) {
   function(api) {

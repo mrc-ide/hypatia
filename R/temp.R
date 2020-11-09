@@ -108,12 +108,14 @@ displaythemodel_1 <- function(df) {
     numdatapoints <- paste(length(df$time))
     numruns <- 1
     df <- list(df)
-    subtitle <- paste('Simulation for', numruns, 'run and', numdatapoints, 'data points')
+    subtitle <- paste('Simulation for', numruns, 'run and', numdatapoints,
+                      'data points')
   }
   else{
     numruns <- length(df)
     numdatapoints <- length(df[[1]][[1]])-1
-    subtitle <- paste('Simulation for', numruns, 'runs,', numdatapoints, 'data points per run')
+    subtitle <- paste('Simulation for', numruns, 'runs,', numdatapoints,
+                      'data points per run')
   }
 
   # Create group id for data
@@ -124,7 +126,8 @@ displaythemodel_1 <- function(df) {
 
   strname <- paste("SIR", df$type, "Model Simulation")
 
-  ggplot2::ggplot(df, ggplot2::aes(x = df$time, y = df$value, group = interaction(df$group, df$name), colour = df$name ) ) +
+  ggplot2::ggplot(df, ggplot2::aes(x = df$time, y = df$value,
+                  group = interaction(df$group, df$name), colour = df$name)) +
     ggplot2::geom_line(size=0.5) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
@@ -134,10 +137,13 @@ displaythemodel_1 <- function(df) {
       legend.box = c("horizontal", "vertical")
     ) +
     ggplot2::scale_colour_manual(values = c("blue", "red", "green")) +
-    ggplot2::theme(text = ggplot2::element_text(color = "#444444", family = 'Lucida Bright'),
-                   plot.title = ggplot2::element_text(size = 26, color = '#333333'),
+    ggplot2::theme(text = ggplot2::element_text(color = "#444444",
+                                                family = 'Lucida Bright'),
+                   plot.title = ggplot2::element_text(size = 26,
+                                                      color = '#333333'),
                    plot.subtitle = ggplot2::element_text(size = 13),
-                   axis.title.x = ggplot2::element_text(size = 16, color = '#333333'),
+                   axis.title.x = ggplot2::element_text(size = 16,
+                                                        color = '#333333'),
                    axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 
 }
@@ -157,12 +163,14 @@ displaythemodel_1 <- function(df) {
 #' @examples
 #' individual_S_to_I_2(S, I, human, immunity, age, location, pars)
 #' @importFrom stats runif
-individual_S_to_I_2 <- function(S, I, human, immunity, age, location, pars = NULL) {
+individual_S_to_I_2 <- function(S, I, human, immunity, age, location,
+                                pars = NULL) {
   function(api) {
     pars <- get_parameters_for_sirstochastic(pars)
 
     # calculate information for infections, recoveries and births
-    inf <- infections2(length(api$get_state(human, I)), length(api$get_state(human, S)), pars)
+    inf <- infections2(length(api$get_state(human, I)),
+                       length(api$get_state(human, S)), pars)
 
     n_to_infect <- inf$n_infections_S
     susceptible <- api$get_state(human, S)
@@ -175,21 +183,24 @@ individual_S_to_I_2 <- function(S, I, human, immunity, age, location, pars = NUL
       # Get the immunity for susceptible humans and use the complement to modify the
       # infection rate
       rate_modifier <- 1 - api$get_variable(human, immunity, susceptible)
-      infected <- susceptible[runif(length(susceptible)) < (pars$infection_rate * rate_modifier)]
+      infected <- susceptible[runif(length(susceptible)) <
+                                (pars$infection_rate * rate_modifier)]
       api$queue_state_update(human, I, infected)
     }
     if (pars$includeage) {
       # Get the age for susceptible humans and use the complement to modify the
       # infection rate
       rate_modifier <- 1 - api$get_variable(human, age, susceptible)
-      infected <- susceptible[runif(length(susceptible)) < (pars$location_rate * rate_modifier)]
+      infected <- susceptible[runif(length(susceptible)) <
+                                (pars$location_rate * rate_modifier)]
       api$queue_state_update(human, I, infected)
     }
     if (pars$includelocation) {
       # Get the location for susceptible humans and use the complement to modify the
       # infection rate
       rate_modifier <- 1 - api$get_variable(human, location, susceptible)
-      infected <- susceptible[runif(length(susceptible)) < (pars$location_rate * rate_modifier)]
+      infected <- susceptible[runif(length(susceptible)) <
+                                (pars$location_rate * rate_modifier)]
       api$queue_state_update(human, I, infected)
     }
   }
@@ -209,7 +220,8 @@ individual_S_to_I_2 <- function(S, I, human, immunity, age, location, pars = NUL
 #'
 #' @examples
 #' individual_I_to_R_2(I, R, human, immunity, age, location, pars)
-individual_I_to_R_2 <- function(I, R, human, immunity, age, location, pars = NULL) {
+individual_I_to_R_2 <- function(I, R, human, immunity, age, location,
+                                pars = NULL) {
   function(api) {
 
     pars <- get_parameters_for_sirstochastic(pars)
@@ -223,13 +235,15 @@ individual_I_to_R_2 <- function(I, R, human, immunity, age, location, pars = NUL
     }
     if (pars$includeage) {
       rate_modifier <- 1 - api$get_variable(human, age, infected)
-      recovered <- infected[runif(length(infected)) < (pars$age_rate * rate_modifier)]
+      recovered <- infected[runif(length(infected)) <
+                              (pars$age_rate * rate_modifier)]
       api$queue_state_update(human, I, recovered)
       #api$queue_state_update(human, R, recovered)
     }
     if (pars$includelocation) {
       rate_modifier <- 1 - api$get_variable(human, location, infected)
-      recovered <- infected[runif(length(infected)) < (pars$location_rate * rate_modifier)]
+      recovered <- infected[runif(length(infected)) <
+                              (pars$location_rate * rate_modifier)]
       api$queue_state_update(human, I, recovered)
       #api$queue_state_update(human, R, recovered)
     }
@@ -251,7 +265,8 @@ individual_I_to_R_2 <- function(I, R, human, immunity, age, location, pars = NUL
 #' @examples
 #' individual_R_to_S_2(S, R, human, immunity, age, location, pars)
 #' @importFrom stats runif
-individual_R_to_S_2 <- function(S, R, human, immunity, age, location, pars = NULL) {
+individual_R_to_S_2 <- function(S, R, human, immunity, age, location,
+                                pars = NULL) {
   function(api) {
 
     pars <- get_parameters_for_sirstochastic(pars)
@@ -262,24 +277,28 @@ individual_R_to_S_2 <- function(S, R, human, immunity, age, location, pars = NUL
     if (pars$novariations) {
       if(length(from_state) != 0 && length(from_state) > n_to_susceptible)
       {
-        thenewsusceptible <- from_state[sample.int(length(from_state), n_to_susceptible)]
+        thenewsusceptible <- from_state[sample.int(length(from_state),
+                                                   n_to_susceptible)]
         api$queue_state_update(human, S, thenewsusceptible)
       }
     }
     if (pars$includeimmune) {
       recovered <- from_state[runif(length(from_state)) < pars$recovery_rate]
       api$queue_state_update(human, R, recovered)
-      api$queue_variable_update(human, immunity, api$get_parameters()$immunity_level, recovered)
+      api$queue_variable_update(human, immunity,
+                                api$get_parameters()$immunity_level, recovered)
     }
     if (pars$includeage) {
       recovered <- from_state[runif(length(from_state)) < pars$age_rate]
       api$queue_state_update(human, R, recovered)
-      api$queue_variable_update(human, age, api$get_parameters()$age_level, recovered)
+      api$queue_variable_update(human, age, api$get_parameters()$age_level,
+                                recovered)
     }
     if (pars$includelocation) {
       recovered <- from_state[runif(length(from_state)) < pars$recovery_rate]
       api$queue_state_update(human, R, recovered)
-      api$queue_variable_update(human, age, api$get_parameters()$location_level, recovered)
+      api$queue_variable_update(human, age, api$get_parameters()$location_level,
+                                recovered)
     }
   }
 }

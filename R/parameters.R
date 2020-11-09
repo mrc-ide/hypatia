@@ -40,13 +40,14 @@
 #'   that is treated. Default = rep(0.5, 16)
 #' @param prob_non_severe_death_no_treatment Probability of death in non severe
 #'   hospital inections that aren't treated
-#' @param prob_severe_death_no_treatment Probability of death from severe infection
-#'   that is not treated. Default = rep(0.95, 16)
+#' @param prob_severe_death_no_treatment Probability of death from severe
+#'   infection that is not treated. Default = rep(0.95, 16)
 #' @param p_dist Preferentiality of age group receiving treatment relative to
 #'   other age groups when demand exceeds healthcare capacity.
 #' @param dur_E Mean duration of incubation period (days). Default = 4.6
 #' @param dur_IMild Mean duration of mild infection (days). Default = 2.1
-#' @param dur_ICase Mean duration from symptom onset to hospitil admission (days).
+#' @param dur_ICase Mean duration from symptom onset to hospitil admission
+#' (days).
 #'   Default = 4.5
 #' @param dur_get_ox_survive Mean duration of oxygen given survive. Default = 5
 #' @param dur_get_ox_die Mean duration of oxygen given death. Default = 5
@@ -62,10 +63,14 @@
 #' @param dur_not_get_mv_die Mean duration without ventilation given
 #'   death. Default = 1
 #' @param dur_rec Duration of recovery after coming off ventilation. Default = 2
-#' @param hosp_bed_capacity General bed capacity. Can be single number or vector if capacity time-varies.
-#' @param ICU_bed_capacity ICU bed capacity. Can be single number or vector if capacity time-varies.
-#' @param tt_hosp_beds Times at which hospital bed capacity changes (Default = 0 = doesn't change)
-#' @param tt_ICU_beds Times at which ICU bed capacity changes (Default = 0 = doesn't change)
+#' @param hosp_bed_capacity General bed capacity. Can be single number or vector
+#' if capacity time-varies.
+#' @param ICU_bed_capacity ICU bed capacity. Can be single number or vector if
+#'  capacity time-varies.
+#' @param tt_hosp_beds Times at which hospital bed capacity changes (Default = 0
+#' = doesn't change)
+#' @param tt_ICU_beds Times at which ICU bed capacity changes (Default = 0
+#' = doesn't change)
 #'
 #' @return Paramater List
 #' @export
@@ -94,8 +99,10 @@ parameters_explicit_SEIR <- function(
   # probabilities
   prob_hosp = squire:::probs$prob_hosp,
   prob_severe = squire:::probs$prob_severe,
-  prob_non_severe_death_treatment = squire:::probs$prob_non_severe_death_treatment,
-  prob_non_severe_death_no_treatment = squire:::probs$prob_non_severe_death_no_treatment,
+  prob_non_severe_death_treatment =
+    squire:::probs$prob_non_severe_death_treatment,
+  prob_non_severe_death_no_treatment =
+    squire:::probs$prob_non_severe_death_no_treatment,
   prob_severe_death_treatment = squire:::probs$prob_severe_death_treatment,
   prob_severe_death_no_treatment = squire:::probs$prob_severe_death_no_treatment,
   p_dist = squire:::probs$p_dist,
@@ -127,8 +134,8 @@ parameters_explicit_SEIR <- function(
 
   # Handle country population args
   cpm <- squire:::parse_country_population_mixing_matrix(country = country,
-                                                population = population,
-                                                contact_matrix_set = contact_matrix_set)
+         population = population,
+         contact_matrix_set = contact_matrix_set)
   country <- cpm$country
   population <- cpm$population
   contact_matrix_set <- cpm$contact_matrix_set
@@ -153,7 +160,8 @@ parameters_explicit_SEIR <- function(
     if (!is.null(country)) {
       beds <- squire::get_healthcare_capacity(country)
       hosp_beds <- beds$hosp_beds
-      hosp_bed_capacity <- rep(round(hosp_beds * sum(population)/1000), length(tt_hosp_beds))
+      hosp_bed_capacity <- rep(round(hosp_beds * sum(population)/1000),
+                               length(tt_hosp_beds))
     } else {
       hosp_bed_capacity <- round(5 * sum(population)/1000)
     }
@@ -162,7 +170,8 @@ parameters_explicit_SEIR <- function(
     if (!is.null(country)) {
       beds <- squire::get_healthcare_capacity(country)
       ICU_beds <- beds$ICU_beds
-      ICU_bed_capacity <- rep(round(ICU_beds * sum(population)/1000), length(tt_ICU_beds))
+      ICU_bed_capacity <- rep(round(ICU_beds * sum(population)/1000),
+                              length(tt_ICU_beds))
     } else {
       ICU_bed_capacity <- round(3 * hosp_bed_capacity/100)
     }
@@ -189,8 +198,10 @@ parameters_explicit_SEIR <- function(
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
-  tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt), squire:::check_time_change, time_period/dt)
-  tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt), squire:::check_time_change, time_period/dt)
+  tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt),
+               squire:::check_time_change, time_period/dt)
+  tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt),
+                squire:::check_time_change, time_period/dt)
 
   squire:::assert_pos(dt)
   squire:::assert_pos(dur_E)
@@ -273,7 +284,8 @@ parameters_explicit_SEIR <- function(
   pgamma_rec  <- 1 - exp(-1.0*( gamma_rec * dt))
 
   if (is.null(beta_set)) {
-    baseline_matrix <- squire:::process_contact_matrix_scaled_age(contact_matrix_set[[1]], population)
+    baseline_matrix <- squire:::process_contact_matrix_scaled_age(
+      contact_matrix_set[[1]], population)
     beta_set <- squire:::beta_est_explicit(dur_IMild = dur_IMild,
                                   dur_ICase = dur_ICase,
                                   prob_hosp = prob_hosp,
@@ -338,8 +350,10 @@ parameters_explicit_SEIR <- function(
                pgamma_rec = pgamma_rec,
                prob_hosp = prob_hosp,
                prob_severe = prob_severe,
-               prob_non_severe_death_treatment = prob_non_severe_death_treatment,
-               prob_non_severe_death_no_treatment = prob_non_severe_death_no_treatment,
+               prob_non_severe_death_treatment =
+                 prob_non_severe_death_treatment,
+               prob_non_severe_death_no_treatment =
+                 prob_non_severe_death_no_treatment,
                prob_severe_death_treatment = prob_severe_death_treatment,
                prob_severe_death_no_treatment = prob_severe_death_no_treatment,
                p_dist = p_dist,

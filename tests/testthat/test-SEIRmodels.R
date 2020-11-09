@@ -1,4 +1,5 @@
-test_that("test individual model with 10000 humans with immunity, age and location effects", {
+test_that("test individual model with 10000 humans with immunity, age and
+          location effects", {
   # Use hypatia::displaythemodel to plot
 
   pars <- hypatia::get_parameters_for_sirstochastic()
@@ -39,7 +40,8 @@ test_that("test individual model with 10000 humans with immunity, age and locati
 
 })
 
-test_that("test individual model with 10000 humans with immunity, age and location effects", {
+test_that("test individual model with 10000 humans with immunity, age and
+          location effects", {
 
   # Use hypatia::displaythemodel to plot
   pars <- hypatia::get_parameters_for_sirstochastic()
@@ -86,7 +88,8 @@ test_that("test individual model with 10000 humans with immunity, age and locati
 
 })
 
-test_that("test individual model with 10000 humans with immunity, age and location effects", {
+test_that("test individual model with 10000 humans with immunity, age and
+          location effects", {
   # Use hypatia::displaythemodel to plot
 
   pars <- hypatia::get_parameters_for_sirstochastic()
@@ -132,7 +135,8 @@ test_that("test individual model with 10000 humans with immunity, age and locati
 
 })
 
-test_that("test individual model with 10000 humans with immunity, age and location effects switched off", {
+test_that("test individual model with 10000 humans with immunity, age and
+          location effects switched off", {
 
 # Use hypatia::displaythemodel to plot
 
@@ -173,7 +177,8 @@ expect_true(is.data.frame(df))
 })
 
 # #TEST not working - I2 not being calculated
-# test_that("test individual model with 10000 humans with immunity, age and location with different states", {
+# test_that("test individual model with 10000 humans with immunity, age and
+#location with different states", {
 # #   # I is infected, I2 is severely infected, D is dead
 # #   # Use hypatia:::displaythemodel2(df) to plot
 #
@@ -202,27 +207,34 @@ expect_true(is.data.frame(df))
 #   rate=1/pars$average_age
 #   age <- individual::Variable$new('age', rexp(population, rate))
 #   location <- individual::Variable$new('location', runif(population, 0, .2))
-#   human <- individual::Individual$new('human', list(S, I, I2, D, R), variables = list(immunity, age, location))
+#   human <- individual::Individual$new('human', list(S, I, I2, D, R), variables
+# = list(immunity, age, location))
 #
 #   processes <- list(
-#     hypatia::individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location, pars),
-#     # hypatia::individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age, location, pars),
+#     hypatia::individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location,
+# pars),
+#     # hypatia::individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
+# location, pars),
 #     # hypatia::individual_R_to_S(R, S, human, immunity, age, location, pars),
 #     hypatia::render_state_sizes2(S, I, R, I2, D, human)
 #   )
 #
-#   output <- individual::simulate(human, processes, timestep , parameters = list(immunity_level = .2, age_level=0.3, location_level = 0.4))
+#   output <- individual::simulate(human, processes, timestep , parameters
+#= list(immunity_level = .2, age_level=0.3, location_level = 0.4))
 #
-#   df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
-#                      I2 = output$severelyinfected_counts, R = output$recovered_counts,
-#                      D = output$dead_counts, time = output$time, type = "Individual",
+#   df <- data.frame(S = output$susceptable_counts, I = output$infected_counts,
+#                      I2 = output$severelyinfected_counts,
+#R = output$recovered_counts,
+#                      D = output$dead_counts, time = output$time,
+#type = "Individual",
 #                      legend = "Individual", stringsAsFactors = FALSE)
 #
 #   expect_true(is.data.frame(df))
 #
 # })
 
-# test_that("test individual model with 10000 humans with immunity, age and location siwtched off and with different states", {
+# test_that("test individual model with 10000 humans with immunity, age and
+#location siwtched off and with different states", {
 #   # I is infected, I2 is severely infected, D is dead
 #   # Use hypatia:::displaythemodel2(df) to plot
 #
@@ -245,21 +257,27 @@ expect_true(is.data.frame(df))
 #   immunity <- individual::Variable$new('immunity',  rep(0, pars$N))
 #   age  <- individual::Variable$new('age', rep(0, pars$N))
 #   location <- individual::Variable$new('location', rep(0, pars$N))
-#   human <- individual::Individual$new('human', list(S, I, I2, D, R), variables = list(immunity, age, location))
+#   human <- individual::Individual$new('human', list(S, I, I2, D, R),
+#variables = list(immunity, age, location))
 #
 #   processes <- list(
-#     hypatia::individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location, pars),
-#     hypatia::individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age, location, pars),
+#     hypatia::individual_S_to_I_and_I2(S, I, I2, human, immunity, age,
+#location, pars),
+#     hypatia::individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
+#location, pars),
 #     hypatia::individual_R_to_S(R, S, human, immunity, age, location, pars),
 #     hypatia::render_state_sizes2(S, I, R, I2, D, human)
 #   )
 #
 #   output <- individual::simulate(human, processes, timestep)
-#   #, parameters = list(immunity_level = .2, age_level=0.3, location_level = 0.4))
+#   #, parameters = list(immunity_level = .2, age_level=0.3,
+#location_level = 0.4))
 #
-#   df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
-#                      I2 = output$severelyinfected_counts, R = output$recovered_counts,
-#                      D = output$dead_counts, time = output$time, type = "Individual",
+#   df <- data.frame(S = output$susceptable_counts, I = output$infected_counts,
+#                      I2 = output$severelyinfected_counts,
+#R = output$recovered_counts,
+#                      D = output$dead_counts, time = output$time,
+#type = "Individual",
 #                      legend = "Individual", stringsAsFactors = FALSE)
 #
 #   expect_true(is.data.frame(df))
@@ -267,7 +285,8 @@ expect_true(is.data.frame(df))
 # })
 
 
-test_that("test individual model with SQUIRE states and probabilities for 2nd age group, 5-9", {
+test_that("test individual model with SQUIRE states and probabilities for 2nd
+          age group, 5-9", {
   # Use hypatia:::displaythemodel3(df) to plot
   warnings()
   pars <- hypatia::get_parameters_for_sirstochastic()
@@ -349,7 +368,8 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd ag
       "human", S$name, E1$name, 0.1),
     individual::fixed_probability_state_change_process(
       "human", E1$name, E2$name, psq$pgamma_E),
-    hypatia::E2_IMild(human, IMild, E2, ICase1, psq$pgamma_E, psq$prob_hosp[ind]),
+    hypatia::E2_IMild(human, IMild, E2, ICase1,
+                      psq$pgamma_E, psq$prob_hosp[ind]),
     individual::fixed_probability_state_change_process(
       "human", IMild$name, R$name, psq$pgamma_IMild),
     individual::fixed_probability_state_change_process(

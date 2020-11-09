@@ -114,11 +114,13 @@ displaythemodel <- function(df) {
     numdatapoints <- paste(length(df$time))
     numruns <- 1
     df <- list(df)
-    subtitle <- paste("Simulation for", numruns, "run and", numdatapoints, "data points")
+    subtitle <- paste("Simulation for", numruns, "run and", numdatapoints,
+                      "data points")
   } else {
     numruns <- length(df)
     numdatapoints <- length(df[[1]][[1]])-1
-    subtitle <- paste("Simulation for", numruns, "runs,", numdatapoints, "data points per run")
+    subtitle <- paste("Simulation for", numruns, "runs,", numdatapoints,
+                      "data points per run")
   }
 
   # Create group id for data
@@ -312,8 +314,8 @@ individual_S_to_I <- function(
         "human", S$name, I$name, prob)
     }
     if (pars$includelocation) {
-      # Get the location for susceptible humans and use the complement to modify the
-      # infection rate
+      # Get the location for susceptible humans and use the complement to modify
+      # the infection rate
       rate_modifier <- 1 - api$get_variable(human, location, susceptible)
       prob <- pars$location_rate * rate_modifier
       individual::fixed_probability_state_change_process(
@@ -638,26 +640,45 @@ render_state_sizes2 <- function(S, I, R, I2, D, human) {
 #' @param S susceptible
 #' @param E1 First of the latent infection compartments
 #' @param E2 Second of the latent infection compartments
-#' @param IMild rest of the infections, which we consider to be mild and not require hospitalisation
-#' @param ICase1 First of the compartments for infections that will require hospitalisation
-#' @param ICase2 Second of the compartments for infections that will require hospitalisation
+#' @param IMild rest of the infections, which we consider to be mild and not
+#'  require hospitalisation
+#' @param ICase1 First of the compartments for infections that will require
+#' hospitalisation
+#' @param ICase2 Second of the compartments for infections that will require
+#' hospitalisation
 #' @param cum_hosp_inc Those requiring hospitalisation
-#' @param IOxGetLive1 First of the compartments for infections that will require oxygen, get it, and who survive
-#' @param IOxGetLive2 Second of the compartments for infections that will require oxygen, get it, and who survive
-#' @param IOxNotGetLive1 First of the compartments for infections that will require oxygen, do NOT get it, and live
-#' @param IOxNotGetLive2 Second of the compartments for infections that will require oxygen, do NOT get it, and live
-#' @param IOxGetDie1 First of the compartments for infections that will require oxygen, get it, and die
-#' @param IOxGetDie2 Second of the compartments for infections that will require oxygen, get it, and die
-#' @param IOxNotGetDie1 First of the compartments for infections that will require oxygen, do NOT get it, and die
-#' @param IOxNotGetDie2 Second of the compartments for infections that will require oxygen, do NOT get it, and die
-#' @param IMVGetLive1 First of the compartments for infections that will require mechanical ventilation, get it, and who survive
-#' @param IMVGetLive2 Second of the compartments for infections that will require mechanical ventilation, get it, and who survive
-#' @param IMVNotGetLive1 First of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive
-#' @param IMVNotGetLive2 Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and survive
-#' @param IMVGetDie1 First of the compartments for infections that will require mechanical ventilation, get it, and die
-#' @param IMVGetDie2 Second of the compartments for infections that will require mechanical ventilation, get it, and die
-#' @param IMVNotGetDie1 First of the compartments for infections that will require mechanical ventilation, do NOT get it, and die
-#' @param IMVNotGetDie2 Second of the compartments for infections that will require mechanical ventilation, do NOT get it, and die
+#' @param IOxGetLive1 First of the compartments for infections that will require
+#' oxygen, get it, and who survive
+#' @param IOxGetLive2 Second of the compartments for infections that will
+#' require oxygen, get it, and who survive
+#' @param IOxNotGetLive1 First of the compartments for infections that will
+#' require oxygen, do NOT get it, and live
+#' @param IOxNotGetLive2 Second of the compartments for infections that will
+#'  require oxygen, do NOT get it, and live
+#' @param IOxGetDie1 First of the compartments for infections that will
+#' require oxygen, get it, and die
+#' @param IOxGetDie2 Second of the compartments for infections that will
+#' require oxygen, get it, and die
+#' @param IOxNotGetDie1 First of the compartments for infections that will
+#' require oxygen, do NOT get it, and die
+#' @param IOxNotGetDie2 Second of the compartments for infections that will
+#'  require oxygen, do NOT get it, and die
+#' @param IMVGetLive1 First of the compartments for infections that will
+#' require mechanical ventilation, get it, and who survive
+#' @param IMVGetLive2 Second of the compartments for infections that will
+#' require mechanical ventilation, get it, and who survive
+#' @param IMVNotGetLive1 First of the compartments for infections that will
+#'  require mechanical ventilation, do NOT get it, and survive
+#' @param IMVNotGetLive2 Second of the compartments for infections that will
+#'  require mechanical ventilation, do NOT get it, and survive
+#' @param IMVGetDie1 First of the compartments for infections that will
+#'  require mechanical ventilation, get it, and die
+#' @param IMVGetDie2 Second of the compartments for infections that will
+#'  require mechanical ventilation, get it, and die
+#' @param IMVNotGetDie1 First of the compartments for infections that will
+#'  require mechanical ventilation, do NOT get it, and die
+#' @param IMVNotGetDie2 Second of the compartments for infections that will
+#'  require mechanical ventilation, do NOT get it, and die
 #' @param IRec1 First of the compartments for those recovering from ICU
 #' @param IRec2 Second of the compartments for those recovering from ICU
 #' @param R Recovered
@@ -666,7 +687,11 @@ render_state_sizes2 <- function(S, I, R, I2, D, human) {
 #'
 #' @export
 #' @examples
-#' render_state_sizes3(S, E1, E2, IMildICase1, ICase2, cum_hosp_inc, IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1, IOxGetDie2, IOxNotGetDie1, IOxNotGetDie2, IMVGetLive1, IMVGetLive2, IMVNotGetLive1, IMVNotGetLive2, IMVGetDie1, IMVGetDie2, IMVNotGetDie1, IMVNotGetDie2, IRec1, IRec2, R, D, human)
+#' render_state_sizes3(S, E1, E2, IMildICase1, ICase2, cum_hosp_inc,
+#'  IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1,
+#'  IOxGetDie2, IOxNotGetDie1, IOxNotGetDie2, IMVGetLive1, IMVGetLive2,
+#'   IMVNotGetLive1, IMVNotGetLive2, IMVGetDie1, IMVGetDie2, IMVNotGetDie1,
+#'    IMVNotGetDie2, IRec1, IRec2, R, D, human)
 render_state_sizes3 <- function(S, E1, E2, IMild, ICase1, ICase2,
                                 cum_hosp_inc, IOxGetLive1, IOxGetLive2,
                                 IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1,
