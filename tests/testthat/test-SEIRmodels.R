@@ -1,8 +1,23 @@
+test_that("check that Validated_state_update is working as expected", {
+
+  human <- mockery::mock()
+  S <- mockery::mock()
+
+  api <- list(
+    queue_state_update = mockery::mock()
+  )
+
+  expect_error(hypatia::Validated_state_update(api, human, S, 10001, 10000), "*")
+  expect_error(hypatia::Validated_state_update(api, human, S, 933.5, 10000), "*")
+  expect_error(hypatia::Validated_state_update(api, human, S, -10, 10000), "*")
+  expect_error(hypatia::Validated_state_update(api, human, S, NA, 10000), "*")
+})
+
 test_that("test individual model with 10000 humans with immunity, age and
           location effects", {
   # Use hypatia::displaythemodel to plot
 
-  pars <- hypatia::get_parameters_for_sirstochastic()
+  pars <- hypatia::Get_parameters_for_sirstochastic()
 
   population <- pars$N
   NI <- pars$I0
@@ -21,10 +36,10 @@ test_that("test individual model with 10000 humans with immunity, age and
                                       variables = list(immunity, age, location))
 
   processes <- list(
-    hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
-    hypatia::individual_I_to_R_2(I, R, human, immunity, age, location, pars),
-    hypatia::individual_R_to_S_2(S, R, human, immunity, age, location, pars),
-    hypatia::render_state_sizes_2(S, I, R, human)
+    hypatia::Individual_R_to_S_2(S, I, human, immunity, age, location, pars),
+    hypatia::Individual_I_to_R_2(I, R, human, immunity, age, location, pars),
+    hypatia::Individual_R_to_S_2(S, R, human, immunity, age, location, pars),
+    hypatia::Render_state_sizes_2(S, I, R, human)
   )
 
   output <- individual::simulate(human, processes, timestep,
@@ -44,7 +59,7 @@ test_that("test individual model with 10000 humans with immunity, age and
           location effects", {
 
   # Use hypatia::displaythemodel to plot
-  pars <- hypatia::get_parameters_for_sirstochastic()
+  pars <- hypatia::Get_parameters_for_sirstochastic()
   pars[["includeimmune"]] <- TRUE
   pars[["includeage"]] <- TRUE
   pars[["includelocation"]] <- TRUE
@@ -68,10 +83,10 @@ test_that("test individual model with 10000 humans with immunity, age and
                                       variables = list(immunity, age, location))
 
   processes <- list(
-    hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
-    hypatia::individual_I_to_R_2(I, R, human, immunity, age, location, pars),
-    hypatia::individual_R_to_S_2(S, R, human, immunity, age, location, pars),
-    hypatia::render_state_sizes_2(S, I, R, human)
+    hypatia::Individual_S_to_I_2(S, I, human, immunity, age, location, pars),
+    hypatia::Individual_I_to_R_2(I, R, human, immunity, age, location, pars),
+    hypatia::Individual_R_to_S_2(S, R, human, immunity, age, location, pars),
+    hypatia::Render_state_sizes_2(S, I, R, human)
   )
 
   output <- individual::simulate(human, processes, timestep,
@@ -92,7 +107,7 @@ test_that("test individual model with 10000 humans with immunity, age and
           location effects", {
   # Use hypatia::displaythemodel to plot
 
-  pars <- hypatia::get_parameters_for_sirstochastic()
+  pars <- hypatia::Get_parameters_for_sirstochastic()
   pars[["includeimmune"]] <- TRUE
   pars[["includeage"]] <- TRUE
   pars[["includelocation"]] <- TRUE
@@ -116,10 +131,10 @@ test_that("test individual model with 10000 humans with immunity, age and
                                       variables = list(immunity, age, location))
 
   processes <- list(
-    hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
-    hypatia::individual_I_to_R_2(I, R, human, immunity, age, location, pars),
-    hypatia::individual_R_to_S_2(S, R, human, immunity, age, location, pars),
-    hypatia::render_state_sizes_2(S, I, R, human)
+    hypatia::Individual_S_to_I_2(S, I, human, immunity, age, location, pars),
+    hypatia::Individual_I_to_R_2(I, R, human, immunity, age, location, pars),
+    hypatia::Individual_R_to_S_2(S, R, human, immunity, age, location, pars),
+    hypatia::Render_state_sizes_2(S, I, R, human)
   )
 
   output <- individual::simulate(human, processes, timestep,
@@ -140,7 +155,7 @@ test_that("test individual model with 10000 humans with immunity, age and
 
 # Use hypatia::displaythemodel to plot
 
-pars <- hypatia::get_parameters_for_sirstochastic()
+pars <- hypatia::Get_parameters_for_sirstochastic()
 
 population <- pars$N
 NI <- pars$I0
@@ -159,10 +174,10 @@ human <- individual::Individual$new("human", list(S, I, R),
                                     variables = list(immunity, age, location))
 
 processes <- list(
-  hypatia::individual_S_to_I_2(S, I, human, immunity, age, location, pars),
-  hypatia::individual_I_to_R_2(I, R, human, immunity, age, location, pars),
-  hypatia::individual_R_to_S_2(S, R, human, immunity, age, location, pars),
-  hypatia::render_state_sizes_2(S, I, R, human)
+  hypatia::Individual_S_to_I_2(S, I, human, immunity, age, location, pars),
+  hypatia::Individual_I_to_R_2(I, R, human, immunity, age, location, pars),
+  hypatia::Individual_R_to_S_2(S, R, human, immunity, age, location, pars),
+  hypatia::Render_state_sizes_2(S, I, R, human)
 )
 
 output <- individual::simulate(human, processes, timestep)
@@ -180,9 +195,9 @@ expect_true(is.data.frame(df))
 # test_that("test individual model with 10000 humans with immunity, age and
 #location with different states", {
 # #   # I is infected, I2 is severely infected, D is dead
-# #   # Use hypatia:::displaythemodel2(df) to plot
+# #   # Use hypatia::displaythemodel2(df) to plot
 #
-#   pars <- hypatia::get_parameters_for_sirstochastic()
+#   pars <- hypatia::Get_parameters_for_sirstochastic()
 #   pars[["includeimmune"]] <- TRUE
 #   pars[["includeage"]] <- TRUE
 #   pars[["includelocation"]] <- TRUE
@@ -211,12 +226,12 @@ expect_true(is.data.frame(df))
 # = list(immunity, age, location))
 #
 #   processes <- list(
-#     hypatia::individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location,
+#     hypatia::Individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location,
 # pars),
-#     # hypatia::individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
+#     # hypatia::Individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
 # location, pars),
-#     # hypatia::individual_R_to_S(R, S, human, immunity, age, location, pars),
-#     hypatia::render_state_sizes2(S, I, R, I2, D, human)
+#     # hypatia::Individual_R_to_S_2(R, S, human, immunity, age, location, pars),
+#     hypatia::Render_state_sizes2(S, I, R, I2, D, human)
 #   )
 #
 #   output <- individual::simulate(human, processes, timestep , parameters
@@ -236,9 +251,9 @@ expect_true(is.data.frame(df))
 # test_that("test individual model with 10000 humans with immunity, age and
 #location siwtched off and with different states", {
 #   # I is infected, I2 is severely infected, D is dead
-#   # Use hypatia:::displaythemodel2(df) to plot
+#   # Use hypatia::displaythemodel2(df) to plot
 #
-#   pars <- hypatia::get_parameters_for_sirstochastic()
+#   pars <- hypatia::Get_parameters_for_sirstochastic()
 #
 #   population <- pars$N
 #   NI <- pars$I0
@@ -261,12 +276,12 @@ expect_true(is.data.frame(df))
 #variables = list(immunity, age, location))
 #
 #   processes <- list(
-#     hypatia::individual_S_to_I_and_I2(S, I, I2, human, immunity, age,
+#     hypatia::Individual_S_to_I_and_I2(S, I, I2, human, immunity, age,
 #location, pars),
-#     hypatia::individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
+#     hypatia::Individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
 #location, pars),
-#     hypatia::individual_R_to_S(R, S, human, immunity, age, location, pars),
-#     hypatia::render_state_sizes2(S, I, R, I2, D, human)
+#     hypatia::Individual_R_to_S_2(R, S, human, immunity, age, location, pars),
+#     hypatia::Render_state_sizes2(S, I, R, I2, D, human)
 #   )
 #
 #   output <- individual::simulate(human, processes, timestep)
@@ -287,13 +302,13 @@ expect_true(is.data.frame(df))
 
 test_that("test individual model with SQUIRE states and probabilities for 2nd
           age group, 5-9", {
-  # Use hypatia:::displaythemodel3(df) to plot
+  # Use hypatia::displaythemodel3(df) to plot
   warnings()
-  pars <- hypatia::get_parameters_for_sirstochastic()
+  pars <- hypatia::Get_parameters_for_sirstochastic()
 
-  population <- squire:::get_population("Afghanistan", simple_SEIR = FALSE)
+  population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
-  psq <- hypatia::parameters_explicit_SEIR(
+  psq <- hypatia::Parameters_explicit_SEIR(
     population = population$n,
     dt = 1,
     R0 = 2,
@@ -363,7 +378,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
   processes <- list(
     hypatia::SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc,
                                     ind, population$n[2], lambda, problambda,
-                                    beta, psq$mix_mat_set[1,ind,]),
+                                    beta, psq$mix_mat_set[1,ind,], psq$dt),
     individual::fixed_probability_state_change_process(
       "human", S$name, E1$name, 0.1),
     individual::fixed_probability_state_change_process(
@@ -419,7 +434,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     individual::fixed_probability_state_change_process(
       "human", IRec2$name, R$name, psq$pgamma_rec),
 
-    hypatia::render_state_sizes3(S, E1, E2, IMild, ICase1, ICase2, cum_hosp_inc,
+    hypatia::Render_state_sizes3(S, E1, E2, IMild, ICase1, ICase2, cum_hosp_inc,
                                  IOxGetLive1, IOxGetLive2, IOxNotGetLive1,
                                  IOxNotGetLive2, IOxGetDie1, IOxGetDie2,
                                  IOxNotGetDie1, IOxNotGetDie2,IMVGetLive1,

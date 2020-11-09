@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @importFrom stats rbinom
-infections <- function(I, S, pars) {
+Infections <- function(I, S, pars) {
 
   # SIR: two types of events for S, so competing hazards. A fraction of
   # S events are deaths and the rest are infections.
@@ -32,7 +32,7 @@ infections <- function(I, S, pars) {
   list(n_deaths_S = n_deaths_S, n_infections_S = n_infections_S)
 }
 
-recoveries <- function(I, pars) {
+Recoveries <- function(I, pars) {
   # SIR: two types of events for I, so competing hazards and a fraction of
   # I events are deaths and the rest are recoveries
   coeff <- pars$nu + pars$mu
@@ -50,7 +50,7 @@ recoveries <- function(I, pars) {
 }
 
 #' @importFrom stats rbinom
-births <- function(R, pars) {
+Births <- function(R, pars) {
 
   coeffdt <- pars$mu * pars$dt
   prob <- 1.0 - exp(-1.0 * coeffdt)
@@ -60,7 +60,7 @@ births <- function(R, pars) {
   list(n_deaths_R = n_deaths_R, n_births = n_births)
 }
 
-update <- function(S, I, R, pars){
+Update <- function(S, I, R, pars){
 
   news <- S - pars$n_deaths_S - pars$n_infections_S + pars$n_births
   newi <- I + pars$n_infections_S  - pars$n_recoveries_I  - pars$n_deaths_I
@@ -78,7 +78,7 @@ update <- function(S, I, R, pars){
 #' @param parallel execute runs in parallel, TRUE or FALSE
 #' @return dataframe
 #' @export
-run_with_repetitions <- function(
+Run_with_repetitions <- function(
   end_time,
   repetitions,
   pars,
@@ -101,7 +101,7 @@ run_with_repetitions <- function(
   do.call("rbind", dfs)
 }
 
-displaythemodel <- function(df) {
+Displaythemodel <- function(df) {
 
   # This function displays data in a list. df must be in the form of a list.
 
@@ -152,7 +152,7 @@ displaythemodel <- function(df) {
       axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 }
 
-displaythemodel2 <- function(df) {
+Displaythemodel2 <- function(df) {
 
   # This function displays data in a list. df must be in the form of a list.
 
@@ -204,7 +204,7 @@ displaythemodel2 <- function(df) {
       axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 }
 
-displaythemodel3 <- function(df) {
+Displaythemodel3 <- function(df) {
 
   # This function displays data in a list. df must be in the form of a list.
 
@@ -278,16 +278,16 @@ displaythemodel3 <- function(df) {
 #' @export
 #'
 #' @examples
-#' individual_S_to_I(S, I, immunity, age, location, pars)
+#' Individual_S_to_I(S, I, immunity, age, location, pars)
 #' @importFrom stats runif
-individual_S_to_I <- function(
+Individual_S_to_I <- function(
   S, I, human, immunity, age, location, pars = NULL) {
   function(api) {
 
-    pars <- get_parameters_for_sirstochastic(pars)
+    pars <- Get_parameters_for_sirstochastic(pars)
 
     # calculate information for infections, recoveries and births
-    inf <- infections(length(api$get_state(human, I)),
+    inf <- Infections(length(api$get_state(human, I)),
                       length(api$get_state(human, S)), pars)
 
     n_to_infect <- inf$n_infections_S
@@ -338,16 +338,16 @@ individual_S_to_I <- function(
 #' @export
 #'
 #' @examples
-#' individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location, pars)
+#' Individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location, pars)
 #' @importFrom stats runif
-individual_S_to_I_and_I2 <- function(
+Individual_S_to_I_and_I2 <- function(
   S, I, I2, human, immunity, age, location, pars = NULL) {
   function(api) {
     warnings()
 
-    pars <- get_parameters_for_sirstochastic(pars)
+    pars <- Get_parameters_for_sirstochastic(pars)
     # calculate information for infections, recoveries and births
-    inf <- infections(
+    inf <- Infections(
       length(api$get_state(human, I)) + length(api$get_state(human, I2)),
       length(api$get_state(human, S)), pars)
 
@@ -363,11 +363,11 @@ individual_S_to_I_and_I2 <- function(
         severelyinfected <- as.integer(infected - infected1)
 
         if (length(infected1) != 0 && infected1 !=0 ) {
-          validated_state_update(api, human, I, infected1, pars$N)
+          Validated_state_update(api, human, I, infected1, pars$N)
         }
 
         if (length(severelyinfected) != 0 && severelyinfected !=0 ) {
-          validated_state_update(api, human, I2, severelyinfected, pars$N)
+          Validated_state_update(api, human, I2, severelyinfected, pars$N)
         }
       }
     }
@@ -433,14 +433,14 @@ individual_S_to_I_and_I2 <- function(
 #' @export
 #'
 #' @examples
-#' individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age, location, pars)
-individual_I_to_R_I2_to_D <- function(
+#' Individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age, location, pars)
+Individual_I_to_R_I2_to_D <- function(
   I, R, I2, D, human, immunity, age, location, pars = NULL) {
   function(api) {
     warnings()
 
-    pars <- get_parameters_for_sirstochastic(pars)
-    rec <- recoveries(
+    pars <- Get_parameters_for_sirstochastic(pars)
+    rec <- Recoveries(
       length(api$get_state(human, I)) + length(api$get_state(human, I2)), pars)
 
     n_to_recover <- rec$n_recoveries_I
@@ -455,7 +455,7 @@ individual_I_to_R_I2_to_D <- function(
           round(infected[sample.int(length(infected), n_to_recover)]))
 
         if (length(recovered) != 0 && recovered != 0) {
-          validated_state_update(api, human, R, recovered, pars$N)
+          Validated_state_update(api, human, R, recovered, pars$N)
         }
       }
 
@@ -463,7 +463,7 @@ individual_I_to_R_I2_to_D <- function(
       {
         dead <- severelyinfected[sample.int(length(severelyinfected), n_to_die)]
         if (length(dead) != 0 && dead != 0 && !(any(is.na(dead)))) {
-          validated_state_update(api, human, D, dead, pars$N)
+          Validated_state_update(api, human, D, dead, pars$N)
         }
       }
     }
@@ -479,7 +479,7 @@ individual_I_to_R_I2_to_D <- function(
                      as.integer(abs(pars$age_rate * rate_modifier_infected)))]))
 
         if (length(recovered) != 0) {
-          validated_state_update(api, human, R, recovered, pars$N)
+          Validated_state_update(api, human, R, recovered, pars$N)
         }
       }
 
@@ -488,7 +488,7 @@ individual_I_to_R_I2_to_D <- function(
         as.integer(abs(pars$age_rate * rate_modifier_severelyinfected)))]))
 
       if (length(dead) != 0 && dead != 0 && !(any(is.na(dead)))) {
-        validated_state_update(api, human, D, dead, pars$N)
+        Validated_state_update(api, human, D, dead, pars$N)
       }
     }
     if (pars$includelocation) {
@@ -503,7 +503,7 @@ individual_I_to_R_I2_to_D <- function(
 
         if (length(recovered) != 0 && recovered != 0)
         {
-          validated_state_update(api, human, R, recovered, pars$N)
+          Validated_state_update(api, human, R, recovered, pars$N)
         }
       }
 
@@ -511,7 +511,7 @@ individual_I_to_R_I2_to_D <- function(
         sample.int(length(severelyinfected),
         as.integer(abs(pars$location_rate * rate_modifier_severelyinfected)))]))
       if (length(dead) != 0 && dead != 0 && !(any(is.na(dead)))) {
-        validated_state_update(api, human, D, dead, pars$N)
+        Validated_state_update(api, human, D, dead, pars$N)
       }
     }
   }
@@ -530,14 +530,14 @@ individual_I_to_R_I2_to_D <- function(
 #' @export
 #'
 #' @examples
-#' individual_R_to_S(R, S, human, immunity, age, location, pars)
+#' Individual_R_to_S(R, S, human, immunity, age, location, pars)
 #' @importFrom stats runif
-individual_R_to_S <- function(
+Individual_R_to_S <- function(
   S, R, human, immunity, age, location, pars = NULL) {
   function(api) {
 
-    pars <- get_parameters_for_sirstochastic(pars)
-    bir <- births(length(api$get_state(human, R)), pars)
+    pars <- Get_parameters_for_sirstochastic(pars)
+    bir <- Births(length(api$get_state(human, R)), pars)
     n_to_susceptible <- bir$n_births
     from_state <- api$get_state(human, R)
 
@@ -605,9 +605,9 @@ E2_IMild <- function(human, IMild, E2, ICase1, p_E2_I, prob_hosp){
 #' @param human human
 #' @export
 #' @examples
-#' render_state_sizes(S, I, R, human)
+#' Render_state_sizes(S, I, R, human)
 #'
-render_state_sizes <- function(S, I, R, human) {
+Render_state_sizes <- function(S, I, R, human) {
   function(api) {
     api$render("susceptable_counts", length(api$get_state(human, S)))
     api$render("infected_counts", length(api$get_state(human, I)))
@@ -624,8 +624,8 @@ render_state_sizes <- function(S, I, R, human) {
 #' @param human human
 #' @export
 #' @examples
-#' render_state_sizes2(S, I, R, I2, D, human)
-render_state_sizes2 <- function(S, I, R, I2, D, human) {
+#' Render_state_sizes2(S, I, R, I2, D, human)
+Render_state_sizes2 <- function(S, I, R, I2, D, human) {
   function(api) {
     api$render("susceptable_counts", length(api$get_state(human, S)))
     api$render("infected_counts", length(api$get_state(human, I)))
@@ -687,12 +687,12 @@ render_state_sizes2 <- function(S, I, R, I2, D, human) {
 #'
 #' @export
 #' @examples
-#' render_state_sizes3(S, E1, E2, IMildICase1, ICase2, cum_hosp_inc,
+#' Render_state_sizes3(S, E1, E2, IMildICase1, ICase2, cum_hosp_inc,
 #'  IOxGetLive1, IOxGetLive2, IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1,
 #'  IOxGetDie2, IOxNotGetDie1, IOxNotGetDie2, IMVGetLive1, IMVGetLive2,
 #'   IMVNotGetLive1, IMVNotGetLive2, IMVGetDie1, IMVGetDie2, IMVNotGetDie1,
 #'    IMVNotGetDie2, IRec1, IRec2, R, D, human)
-render_state_sizes3 <- function(S, E1, E2, IMild, ICase1, ICase2,
+Render_state_sizes3 <- function(S, E1, E2, IMild, ICase1, ICase2,
                                 cum_hosp_inc, IOxGetLive1, IOxGetLive2,
                                 IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1,
                                 IOxGetDie2, IOxNotGetDie1, IOxNotGetDie2,
@@ -739,9 +739,8 @@ render_state_sizes3 <- function(S, E1, E2, IMild, ICase1, ICase2,
 #' @param human human
 #' @export
 #' @examples
-#' render_state_sizes4(S, E1, E2, I, human)
-#'
-render_state_sizes4 <- function(S, E1, E2, I, human) {
+#' Render_state_sizes4(S, E1, E2, I, human)
+Render_state_sizes4 <- function(S, E1, E2, I, human) {
   function(api) {
     api$render("S", length(api$get_state(human, S)))
     api$render("E1", length(api$get_state(human, E1)))
@@ -759,7 +758,7 @@ render_state_sizes4 <- function(S, E1, E2, I, human) {
 #' @param population_size population size
 #'
 #' @export
-validated_state_update <- function(api, i, state, ix, population_size) {
+Validated_state_update <- function(api, i, state, ix, population_size) {
 
   if (any(ix > population_size)) {
     stop(paste0("Your ix ", ix, " for ", i$name, ":", state$name,

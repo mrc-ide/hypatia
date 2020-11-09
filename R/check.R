@@ -1,9 +1,9 @@
 #' Check dimensions of inputs
 #'
-#' @inheritParams parameters_explicit_SEIR
+#' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Null if checks pass
-matrix_check <- function(population, contact_matrix_set){
+Matrix_check <- function(population, contact_matrix_set){
 
   dims <- c(length(population),
             sapply(contact_matrix_set, dim))
@@ -16,10 +16,10 @@ matrix_check <- function(population, contact_matrix_set){
 
 #' Check and set up initial values
 #'
-#' @inheritParams parameters_explicit_SEIR
+#' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Checked initial values data.frame
-init_check <- function(init, population){
+Init_check <- function(init, population){
   if(is.null(init)){
     init = data.frame(
       S = population - 1,
@@ -46,10 +46,10 @@ init_check <- function(init, population){
 
 #' Check and set up initial values for explicit model
 #'
-#' @inheritParams parameters_explicit_SEIR
+#' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Checked initial values data.frame
-init_check_explicit <- function(init, population, seeding_cases = 20){
+Init_check_explicit <- function(init, population, seeding_cases = 20){
 
   if (length(population) != 17) {
     stop("population must be divided up into 17x 5-year age bands spanning 0 to 80+")
@@ -128,10 +128,10 @@ init_check_explicit <- function(init, population, seeding_cases = 20){
 #' Check time change inputs are correct
 #'
 #' @param tt Time change points
-#' @inheritParams parameters_explicit_SEIR
+#' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Nothing if check pass
-check_time_change <- function(tt, time_period){
+Check_time_change <- function(tt, time_period){
   if(any(tt > time_period) | any(tt < 0)){
     stop("Time change points must all be < time period
          and > 0")
@@ -145,7 +145,7 @@ check_time_change <- function(tt, time_period){
 #' @param name Name of argument
 #'
 #' @return Nothing if check pass
-pos_num <- function(x, name = deparse(substitute(x))){
+Pos_num <- function(x, name = deparse(substitute(x))){
   if(length(x) > 1){
     stop(name, " must have length = 1")
   }

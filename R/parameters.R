@@ -20,7 +20,7 @@
 #' @param dt Time Step. Default = 0.1
 #' @param init Data.frame of initial conditions. Default = NULL
 #' @param seeding_cases Initial number of cases seeding the epidemic
-#' @param probs = default_probs()
+#' @param probs = Default_probs()
 #' @param prob_hosp probability of hospitalisation by age.
 #'   Default = c(0.001127564, 0.000960857, 0.001774408, 0.003628171,
 #'   0.008100662, 0.015590734, 0.024597885, 0.035377529,
@@ -77,7 +77,7 @@
 #' @return Paramater List
 #' @export
 #'
-parameters_explicit_SEIR <- function(
+Parameters_explicit_SEIR <- function(
 
   # demography
   country = NULL,
@@ -95,7 +95,7 @@ parameters_explicit_SEIR <- function(
   dt = 0.1,
   init = NULL,
   seeding_cases = NULL,
-  probs = default_probs(),
+  probs = Default_probs(),
   # parameters
   # probabilities
   # probabilities
@@ -186,25 +186,25 @@ parameters_explicit_SEIR <- function(
   # Initialise initial conditions
   if (!is.null(seeding_cases)) {
     assert_int(seeding_cases)
-    mod_init <- init_check_explicit(init, population, seeding_cases)
+    mod_init <- Init_check_explicit(init, population, seeding_cases)
   } else {
-    mod_init <- init_check_explicit(init, population)
+    mod_init <- Init_check_explicit(init, population)
   }
 
   # Convert contact matrices to input matrices
-  matrices_set <- matrix_set_explicit(contact_matrix_set, population)
+  matrices_set <- Matrix_set_explicit(contact_matrix_set, population)
 
   # Input checks
   # ----------------------------------------------------------------------------
-  mc <- matrix_check(population[-1], contact_matrix_set)
+  mc <- Matrix_check(population[-1], contact_matrix_set)
   stopifnot(length(R0) == length(tt_R0))
   stopifnot(length(contact_matrix_set) == length(tt_contact_matrix))
   stopifnot(length(hosp_bed_capacity) == length(tt_hosp_beds))
   stopifnot(length(ICU_bed_capacity) == length(tt_ICU_beds))
   tc <- lapply(list(tt_R0/dt, tt_contact_matrix/dt),
-               check_time_change, time_period/dt)
+               Check_time_change, time_period/dt)
   tc2 <- lapply(list(tt_hosp_beds/dt, tt_ICU_beds/dt),
-                check_time_change, time_period/dt)
+                Check_time_change, time_period/dt)
 
   assert_pos(dt)
   assert_pos(dur_E)
@@ -287,7 +287,7 @@ parameters_explicit_SEIR <- function(
   pgamma_rec  <- 1 - exp(-1.0*( gamma_rec * dt))
 
   if (is.null(beta_set)) {
-    baseline_matrix <- process_contact_matrix_scaled_age(
+    baseline_matrix <- Process_contact_matrix_scaled_age(
       contact_matrix_set[[1]], population)
     beta_set <- squire::beta_est_explicit(dur_IMild = dur_IMild,
                                   dur_ICase = dur_ICase,
@@ -416,7 +416,7 @@ parameters_explicit_SEIR <- function(
 #'
 #' @return list
 #' @export
-get_parameters_for_sirstochastic <- function(overrides = list()) {
+Get_parameters_for_sirstochastic <- function(overrides = list()) {
 
   pars <- sir_model_parameters_defaults()
 
@@ -553,7 +553,7 @@ sir_model_parameters_defaults <- function() {
 
 #' Return the default probabilities for modelling
 #' @return list of default probabilities
-default_probs <- function() {
+Default_probs <- function() {
   prob_hosp <- c(
     0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
     0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042 ,

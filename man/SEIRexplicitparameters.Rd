@@ -15,17 +15,21 @@ SEIRexplicitparameters(
   lambda,
   problambda,
   beta,
-  m
+  m,
+  dt
 )
 }
 \arguments{
 \item{human, }{human}
 
-\item{IMild}{rest of the infections, which we consider to be mild and not require hospitalisation}
+\item{IMild}{rest of the infections, which we consider to be mild and not
+require hospitalisation}
 
-\item{ICase1}{First of the compartments for infections that will require hospitalisation}
+\item{ICase1}{First of the compartments for infections that will require
+hospitalisation}
 
-\item{ICase2}{Second of the compartments for infections that will require hospitalisation}
+\item{ICase2}{Second of the compartments for infections that will require
+hospitalisation}
 
 \item{cum_hosp_inc}{cumulative hosptal incidences}
 
@@ -40,10 +44,13 @@ SEIRexplicitparameters(
 \item{beta}{beta}
 
 \item{m}{m}
+
+\item{dt}{dt}
 }
 \description{
 Calculating the FOI
 }
 \examples{
-SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,lambda, problambda, beta, m)
+SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc, i, N_age,
+lambda, problambda, beta, m, dt)
 }

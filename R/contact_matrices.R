@@ -4,18 +4,18 @@
 #' @param population Vector of populaion by age
 #'
 #' @return Processed set of mixing matrices
-matrix_set <- function(contact_matrix_set, population){
-  contact <- lapply(contact_matrix_set, process_contact_matrix,
+Matrix_set <- function(contact_matrix_set, population){
+  contact <- lapply(contact_matrix_set, Process_contact_matrix,
                     population = population)
-  mixing <- lapply(contact, div_pop, population = population)
+  mixing <- lapply(contact, Div_pop, population = population)
 
   aperm(array(unlist(mixing), dim = c(dim(mixing[[1]]), length(mixing))), c(3, 1, 2))
 }
 
-matrix_set_explicit <- function(contact_matrix_set, population){
-  contact <- lapply(contact_matrix_set, process_contact_matrix_scaled_age,
+Matrix_set_explicit <- function(contact_matrix_set, population){
+  contact <- lapply(contact_matrix_set, Process_contact_matrix_scaled_age,
                     population = population)
-  mixing <- lapply(contact, div_pop, population = population)
+  mixing <- lapply(contact, Div_pop, population = population)
 
   aperm(array(unlist(mixing), dim = c(dim(mixing[[1]]), length(mixing))), c(3, 1, 2))
 }
@@ -26,7 +26,7 @@ matrix_set_explicit <- function(contact_matrix_set, population){
 #' @param population Population vector
 #'
 #' @return Matrix
-div_pop <- function(contact, population){
+Div_pop <- function(contact, population){
   t(t(contact) / population)
 }
 
@@ -37,7 +37,7 @@ div_pop <- function(contact, population){
 #'
 #' @return Processed matrix
 #'
-process_contact_matrix_scaled_age <- function(contact_matrix, population) {
+Process_contact_matrix_scaled_age <- function(contact_matrix, population) {
   # Convert Unbalanced Matrix of Per-Capita Rates to Total Number of Contacts
   # Between Diff Age Groups and Balance By Taking the Mean of i->j and j->i
 
@@ -73,7 +73,7 @@ process_contact_matrix_scaled_age <- function(contact_matrix, population) {
 #' @param population Vector of population by age
 #'
 #' @return Processed matrix
-process_contact_matrix <- function(contact_matrix, population) {
+Process_contact_matrix <- function(contact_matrix, population) {
   # Convert Unbalanced Matrix of Per-Capita Rates to Total Number of Contacts
   # Between Diff Age Groups and Balance By Taking the Mean of i->j and j->i
   MIJ <- t(sapply(seq(population),function(x){
