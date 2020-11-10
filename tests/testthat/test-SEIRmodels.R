@@ -310,7 +310,9 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
 
   population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
-  psq <- hypatia::Parameters_explicit_SEIR(
+  dt <- 1
+
+  psq <- squire::parameters_explicit_SEEIR(
     population = population$n,
     dt = 1,
     R0 = 2,
@@ -372,6 +374,22 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
                                           IMVNotGetDie2, IRec1, IRec2,
                                           R, D))
 
+  pgamma_E <- 1 - exp(-1.0 * (psq$gamma_E * dt))
+  pgamma_IMild <- 1 - exp(-psq$gamma_IMild * dt)
+  pgamma_ICase <- 1 - exp(-1.0 * (psq$gamma_ICase * dt))
+  pgamma_get_ox_survive <- 1 - exp(-1.0 * (psq$gamma_get_ox_survive * dt))
+  pgamma_not_get_ox_survive <-
+    1 - exp(-1.0 * (psq$gamma_not_get_ox_survive * dt))
+  pgamma_get_ox_die <- 1 - exp(-1.0 * (psq$gamma_get_ox_die * dt))
+  pgamma_not_get_ox_die <- 1 - exp(-1.0 * (psq$gamma_not_get_ox_die * dt))
+  pgamma_get_mv_survive <- 1 - exp(-1.0 * (psq$gamma_get_mv_survive * dt))
+  pgamma_not_get_mv_survive <-
+    1 - exp(-1.0 * (psq$gamma_not_get_mv_survive * dt))
+  pgamma_get_mv_die <- 1 - exp(-1.0 * (psq$gamma_get_mv_die * dt))
+  pgamma_not_get_mv_die  <- 1 - exp(-1.0 * (psq$gamma_not_get_mv_die * dt))
+  pgamma_rec  <- 1 - exp(-1.0 * (psq$gamma_rec * dt))
+
+
 
   problamda <- 0.1
   lambda <- 0.1
@@ -384,57 +402,57 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     individual::fixed_probability_state_change_process(
       "human", S$name, E1$name, 0.1),
     individual::fixed_probability_state_change_process(
-      "human", E1$name, E2$name, psq$pgamma_E),
+      "human", E1$name, E2$name, pgamma_E[2]),
     hypatia::E2_IMild(human, IMild, E2, ICase1,
-                      psq$pgamma_E, psq$prob_hosp[ind]),
+                      pgamma_E, psq$prob_hosp[ind]),
     individual::fixed_probability_state_change_process(
-      "human", IMild$name, R$name, psq$pgamma_IMild),
+      "human", IMild$name, R$name, pgamma_IMild),
     individual::fixed_probability_state_change_process(
       "human", E2$name, ICase1$name, psq$prob_hosp[ind]),
     individual::fixed_probability_state_change_process(
-      "human", ICase1$name, ICase2$name, psq$pgamma_ICase),
+      "human", ICase1$name, ICase2$name, pgamma_ICase),
     individual::fixed_probability_state_change_process(
-      "human", ICase2$name, cum_hosp_inc$name, psq$pgamma_ICase),
+      "human", ICase2$name, cum_hosp_inc$name, pgamma_ICase),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetLive1$name, IOxGetLive2$name, psq$pgamma_get_ox_survive),
+      "human", IOxGetLive1$name, IOxGetLive2$name, pgamma_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetLive2$name, R$name, psq$pgamma_get_ox_survive),
+      "human", IOxGetLive2$name, R$name, pgamma_get_ox_survive),
     individual::fixed_probability_state_change_process(
       "human", IOxNotGetLive1$name, IOxNotGetLive2$name,
-      psq$pgamma_not_get_ox_survive),
+      pgamma_not_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxNotGetLive2$name, R$name, psq$pgamma_not_get_ox_survive),
+      "human", IOxNotGetLive2$name, R$name, pgamma_not_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetDie1$name, IOxGetDie2$name, psq$pgamma_get_ox_die),
+      "human", IOxGetDie1$name, IOxGetDie2$name, pgamma_get_ox_die),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetDie2$name, D$name, psq$pgamma_get_ox_die),
+      "human", IOxGetDie2$name, D$name, pgamma_get_ox_die),
     individual::fixed_probability_state_change_process(
       "human", IOxNotGetDie1$name, IOxNotGetDie2$name,
-      psq$pgamma_not_get_ox_die),
+      pgamma_not_get_ox_die),
     individual::fixed_probability_state_change_process(
-      "human", IOxNotGetDie2$name, D$name, psq$pgamma_not_get_ox_die),
+      "human", IOxNotGetDie2$name, D$name, pgamma_not_get_ox_die),
     individual::fixed_probability_state_change_process(
-      "human", IMVGetLive1$name, IMVGetLive2$name, psq$pgamma_get_mv_survive),
+      "human", IMVGetLive1$name, IMVGetLive2$name, pgamma_get_mv_survive),
     individual::fixed_probability_state_change_process(
-      "human", IMVGetLive2$name, IRec1$name, psq$pgamma_get_mv_survive),
+      "human", IMVGetLive2$name, IRec1$name, pgamma_get_mv_survive),
     individual::fixed_probability_state_change_process(
       "human", IMVNotGetLive1$name, IMVNotGetLive2$name,
-      psq$pgamma_not_get_mv_survive),
+      pgamma_not_get_mv_survive),
     individual::fixed_probability_state_change_process(
-      "human", IMVNotGetLive2$name, R$name, psq$pgamma_not_get_mv_survive),
+      "human", IMVNotGetLive2$name, R$name, pgamma_not_get_mv_survive),
     individual::fixed_probability_state_change_process(
-      "human", IMVGetDie1$name, IMVGetDie2$name, psq$pgamma_get_mv_die),
+      "human", IMVGetDie1$name, IMVGetDie2$name, pgamma_get_mv_die),
     individual::fixed_probability_state_change_process(
-      "human", IMVGetDie2$name, D$name, psq$pgamma_get_mv_die),
+      "human", IMVGetDie2$name, D$name, pgamma_get_mv_die),
     individual::fixed_probability_state_change_process(
       "human", IMVNotGetDie1$name, IMVNotGetDie2$name,
-      psq$pgamma_not_get_mv_die),
+      pgamma_not_get_mv_die),
     individual::fixed_probability_state_change_process(
-      "human", IMVNotGetDie2$name, D$name, psq$pgamma_not_get_mv_die),
+      "human", IMVNotGetDie2$name, D$name, pgamma_not_get_mv_die),
     individual::fixed_probability_state_change_process(
-      "human", IRec1$name, IRec2$name, psq$pgamma_rec),
+      "human", IRec1$name, IRec2$name, pgamma_rec),
     individual::fixed_probability_state_change_process(
-      "human", IRec2$name, R$name, psq$pgamma_rec),
+      "human", IRec2$name, R$name, pgamma_rec),
 
     hypatia::Render_state_sizes3(S, E1, E2, IMild, ICase1, ICase2, cum_hosp_inc,
                                  IOxGetLive1, IOxGetLive2, IOxNotGetLive1,
