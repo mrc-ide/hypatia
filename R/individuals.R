@@ -12,7 +12,6 @@
 Create_states <- function(psq) {
 
   # initial_counts <- calculate_initial_counts(psq)
-  print(psq$S_0)
   states <- list(
     # Human states
     S <- individual::State$new("S", psq$S_0),
@@ -92,3 +91,44 @@ Create_individuals <- function(
   list(human = human)
 }
 
+#' @title probabilities of the states
+#'
+#' @param dt time step
+#'
+#' @return states
+#' @export
+#'
+#' @examples
+#' Probabilities_of_states(dt)
+Probabilities_of_states <- function(dt) {
+
+  # durations
+  gamma_E = 2 * 1/dur_E
+  gamma_IMild = 1/dur_IMild
+  gamma_ICase = 2 * 1/dur_ICase
+  gamma_get_ox_survive = 2 * 1/dur_get_ox_survive
+  gamma_get_ox_die = 2 * 1/dur_get_ox_die
+  gamma_not_get_ox_survive = 2 * 1/dur_not_get_ox_survive
+  gamma_not_get_ox_die = 2 * 1/dur_not_get_ox_die
+  gamma_get_mv_survive = 2 * 1/dur_get_mv_survive
+  gamma_get_mv_die = 2 * 1/dur_get_mv_die
+  gamma_not_get_mv_survive = 2 * 1/dur_not_get_mv_survive
+  gamma_not_get_mv_die = 2 * 1/dur_not_get_mv_die
+  gamma_rec = 2 * 1/dur_rec
+
+  # probabilities
+  pstates = list(pgamma_E = 1 - exp(-1.0 * (gamma_E * dt)),
+    pgamma_IMild = 1 - exp(-gamma_IMild * dt),
+    pgamma_ICase = 1 - exp(-1.0 * (gamma_ICase * dt)),
+    pgamma_get_ox_survive = 1 - exp(-1.0 * (gamma_get_ox_survive * dt)),
+    pgamma_not_get_ox_survive = 1 - exp(-1.0 * (gamma_not_get_ox_survive * dt)),
+    pgamma_get_ox_die = 1 - exp(-1.0 * (gamma_get_ox_die * dt)),
+    pgamma_not_get_ox_die = 1 - exp(-1.0 * (gamma_not_get_ox_die * dt)),
+    pgamma_get_mv_survive = 1 - exp(-1.0 * (gamma_get_mv_survive * dt)),
+    pgamma_not_get_mv_survive = 1 - exp(-1.0 * (gamma_not_get_mv_survive * dt)),
+    pgamma_get_mv_die = 1 - exp(-1.0 * (gamma_get_mv_die * dt)),
+    pgamma_not_get_mv_die  = 1 - exp(-1.0 * ( gamma_not_get_mv_die * dt)),
+    pgamma_rec  = 1 - exp(-1.0*( gamma_rec * dt)))
+
+  pstates
+}

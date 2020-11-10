@@ -113,7 +113,7 @@ Displaythemodel_1 <- function(df) {
   }
   else{
     numruns <- length(df)
-    numdatapoints <- length(df[[1]][[1]])-1
+    numdatapoints <- length(df[[1]][[1]]) - 1
     subtitle <- paste('Simulation for', numruns, 'runs,', numdatapoints,
                       'data points per run')
   }

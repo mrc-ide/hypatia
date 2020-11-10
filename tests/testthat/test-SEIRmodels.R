@@ -44,7 +44,7 @@ test_that("test individual model with 10000 humans with immunity, age and
 
   output <- individual::simulate(human, processes, timestep,
                                  parameters = list(immunity_level = .2,
-                                 age_level=0.3, location_level = 0.4))
+                                 age_level = 0.3, location_level = 0.4))
 
   df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
                      R = output$recovered_counts,
@@ -76,7 +76,7 @@ test_that("test individual model with 10000 humans with immunity, age and
   R <- individual::State$new('R', NR)
 
   immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
-  rate=1/pars$average_age
+  rate = 1 / pars$average_age
   age <- individual::Variable$new("age", rexp(pars$N, rate))
   location <- individual::Variable$new("location", runif(population, 0, .2))
   human <- individual::Individual$new("human", list(S, I, R),
@@ -91,7 +91,7 @@ test_that("test individual model with 10000 humans with immunity, age and
 
   output <- individual::simulate(human, processes, timestep,
                                  parameters = list(immunity_level = .2,
-                                                   age_level=0.3,
+                                                   age_level = 0.3,
                                                    location_level = 0.4))
 
   df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
@@ -124,7 +124,7 @@ test_that("test individual model with 10000 humans with immunity, age and
   R <- individual::State$new('R', NR)
 
   immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
-  rate=1/pars$average_age
+  rate = 1 / pars$average_age
   age <- individual::Variable$new("age", rexp(pars$N, rate))
   location <- individual::Variable$new("location", runif(population, 0, .2))
   human <- individual::Individual$new("human", list(S, I, R),
@@ -139,7 +139,7 @@ test_that("test individual model with 10000 humans with immunity, age and
 
   output <- individual::simulate(human, processes, timestep,
                                  parameters = list(immunity_level = .2,
-                                 age_level=0.3, location_level = 0.4))
+                                 age_level = 0.3, location_level = 0.4))
 
   df <-   data.frame(S = output$susceptable_counts, I = output$infected_counts,
                      R = output$recovered_counts, time = output$time,
@@ -235,7 +235,7 @@ expect_true(is.data.frame(df))
 #   )
 #
 #   output <- individual::simulate(human, processes, timestep , parameters
-#= list(immunity_level = .2, age_level=0.3, location_level = 0.4))
+#= list(immunity_level = .2, age_level = 0.3, location_level = 0.4))
 #
 #   df <- data.frame(S = output$susceptable_counts, I = output$infected_counts,
 #                      I2 = output$severelyinfected_counts,
@@ -285,7 +285,7 @@ expect_true(is.data.frame(df))
 #   )
 #
 #   output <- individual::simulate(human, processes, timestep)
-#   #, parameters = list(immunity_level = .2, age_level=0.3,
+#   #, parameters = list(immunity_level = .2, age_level = 0.3,
 #location_level = 0.4))
 #
 #   df <- data.frame(S = output$susceptable_counts, I = output$infected_counts,
@@ -314,7 +314,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     R0 = 2,
     tt_contact_matrix = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
     time_period = 1000,
-    contact_matrix_set=squire::contact_matrices[[1]])
+    contact_matrix_set = squire::contact_matrices[[1]])
 
   NR <- 0
   newpopulation <- population$n[2]
@@ -468,7 +468,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
                    IMVGetDie2 = out$IMVGetDie2,
                    IMVNotGetDie1 = out$IMVNotGetDie1,
                    IMVNotGetDie2 = out$IMVNotGetDie2,
-                   IRec1 = out$IRec1, IRec2= out$IRec2,
+                   IRec1 = out$IRec1, IRec2 = out$IRec2,
                    R = out$R, D = out$D, time = out$time, type = "Individual",
                    legend = "Individual", stringsAsFactors = FALSE)
 

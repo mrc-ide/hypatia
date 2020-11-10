@@ -118,7 +118,7 @@ Displaythemodel <- function(df) {
                       "data points")
   } else {
     numruns <- length(df)
-    numdatapoints <- length(df[[1]][[1]])-1
+    numdatapoints <- length(df[[1]][[1]]) - 1
     subtitle <- paste("Simulation for", numruns, "runs,", numdatapoints,
                       "data points per run")
   }
@@ -169,7 +169,7 @@ Displaythemodel2 <- function(df) {
       "Simulation for", numruns, "run and", numdatapoints, "data points")
   } else {
     numruns <- length(df)
-    numdatapoints <- length(df[[1]][[1]])-1
+    numdatapoints <- length(df[[1]][[1]]) - 1
     subtitle <- paste(
       "Simulation for", numruns, "runs,", numdatapoints, "data points per run")
   }
@@ -221,7 +221,7 @@ Displaythemodel3 <- function(df) {
       "Simulation for", numruns, "run and", numdatapoints, "data points")
   } else {
     numruns <- length(df)
-    numdatapoints <- length(df[[1]][[1]])-1
+    numdatapoints <- length(df[[1]][[1]]) - 1
     subtitle <- paste(
       "Simulation for", numruns, "runs,", numdatapoints, "data points per run")
   }

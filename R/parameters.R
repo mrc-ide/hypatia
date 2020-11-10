@@ -273,17 +273,17 @@ Parameters_explicit_SEIR <- function(
   gamma_rec = 2 * 1 / dur_rec
 
   # probabilities
-  pgamma_E <- 1 - exp(-1.0*(gamma_E * dt))
+  pgamma_E <- 1 - exp(-1.0 * (gamma_E * dt))
   pgamma_IMild <- 1 - exp(-gamma_IMild * dt)
-  pgamma_ICase <- 1 - exp(-1.0*(gamma_ICase * dt))
-  pgamma_get_ox_survive <- 1 - exp(-1.0*(gamma_get_ox_survive * dt))
-  pgamma_not_get_ox_survive <- 1 - exp(-1.0*(gamma_not_get_ox_survive * dt))
-  pgamma_get_ox_die <- 1 - exp(-1.0*(gamma_get_ox_die * dt))
-  pgamma_not_get_ox_die <- 1 - exp(-1.0*(gamma_not_get_ox_die * dt))
-  pgamma_get_mv_survive <- 1 - exp(-1.0*(gamma_get_mv_survive * dt))
-  pgamma_not_get_mv_survive <- 1 - exp(-1.0*(gamma_not_get_mv_survive * dt))
-  pgamma_get_mv_die <- 1 - exp(-1.0*(gamma_get_mv_die * dt))
-  pgamma_not_get_mv_die  <- 1 - exp(-1.0*( gamma_not_get_mv_die * dt))
+  pgamma_ICase <- 1 - exp(-1.0 * (gamma_ICase * dt))
+  pgamma_get_ox_survive <- 1 - exp(-1.0 * (gamma_get_ox_survive * dt))
+  pgamma_not_get_ox_survive <- 1 - exp(-1.0 * (gamma_not_get_ox_survive * dt))
+  pgamma_get_ox_die <- 1 - exp(-1.0 * (gamma_get_ox_die * dt))
+  pgamma_not_get_ox_die <- 1 - exp(-1.0 * (gamma_not_get_ox_die * dt))
+  pgamma_get_mv_survive <- 1 - exp(-1.0 * (gamma_get_mv_survive * dt))
+  pgamma_not_get_mv_survive <- 1 - exp(-1.0 * (gamma_not_get_mv_survive * dt))
+  pgamma_get_mv_die <- 1 - exp(-1.0 * (gamma_get_mv_die * dt))
+  pgamma_not_get_mv_die  <- 1 - exp(-1.0 * ( gamma_not_get_mv_die * dt))
   pgamma_rec  <- 1 - exp(-1.0*( gamma_rec * dt))
 
   if (is.null(beta_set)) {
@@ -427,7 +427,7 @@ Get_parameters_for_sirstochastic <- function(overrides = list()) {
 
   for (name in names(overrides)) {
     if (!(name %in% names(pars))) {
-      stop(paste('unknown parameter', name, sep=' '))
+      stop(paste('unknown parameter', name, sep = ' '))
     }
     pars[[name]] <- overrides[[name]]
   }

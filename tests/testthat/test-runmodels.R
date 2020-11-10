@@ -7,7 +7,7 @@ r1 <- squire::run_explicit_SEEIR_model(population = pop$n,
                                R0 = 2,
                                time_period = 1000,
                                replicates = 10,
-                               contact_matrix_set=squire::contact_matrices[[1]])
+                               contact_matrix_set = squire::contact_matrices[[1]])
 expect_type(r1$output, "double")
 
 o1 <- squire::format_output(r1)
@@ -27,6 +27,6 @@ r2 <- squire::run_explicit_SEEIR_model(population = pop$n,
                                tt_R0 = c(0, 10),
                                time_period = 1000,
                                replicates = 10,
-                               contact_matrix_set=squire::contact_matrices[[1]])
+                               contact_matrix_set = squire::contact_matrices[[1]])
 expect_identical(r1$output, r2$output)
 })
