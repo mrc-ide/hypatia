@@ -143,11 +143,11 @@ assert_single_int <- function(x, name = deparse(substitute(x))) {
 assert_neg <- function(x, zero_allowed = TRUE, message1 = "%s must be less than or equal to zero", message2 = "%s must be greater than zero", name = deparse(substitute(x))) {
   assert_numeric(x, name = name)
   if (zero_allowed) {
-    if (!all(x<=0)) {
+    if (!all(x <= 0)) {
       stop(sprintf(message1, name), call. = FALSE)
     }
   } else {
-    if (!all(x<0)) {
+    if (!all(x < 0)) {
       stop(sprintf(message2, name), call. = FALSE)
     }
   }
@@ -160,11 +160,11 @@ assert_neg <- function(x, zero_allowed = TRUE, message1 = "%s must be less than 
 assert_pos <- function(x, zero_allowed = TRUE, message1 = "%s must be greater than or equal to zero", message2 = "%s must be greater than zero", name = deparse(substitute(x))) {
   assert_numeric(x, name = name)
   if (zero_allowed) {
-    if (!all(x>=0)) {
+    if (!all(x >= 0)) {
       stop(sprintf(message1, name), call. = FALSE)
     }
   } else {
-    if (!all(x>0)) {
+    if (!all(x > 0)) {
       stop(sprintf(message2, name), call. = FALSE)
     }
   }
@@ -352,7 +352,7 @@ assert_le <- function(x, y, message = "%s must be less than %s",
   assert_numeric(x, name = name_x)
   assert_numeric(y, name = name_y)
   assert_in(length(y), c(1,length(x)))
-  if (!all(x<y)) {
+  if (!all(x < y)) {
     stop(sprintf(message, name_x, name_y), call. = FALSE)
   }
   return(TRUE)
@@ -366,7 +366,7 @@ assert_leq <- function(x, y, message = "%s must be less than or equal to %s",
   assert_numeric(x, name = name_x)
   assert_numeric(y, name = name_y)
   assert_in(length(y), c(1,length(x)))
-  if (!all(x<=y)) {
+  if (!all(x <= y)) {
     stop(sprintf(message, name_x, name_y), call. = FALSE)
   }
   return(TRUE)
@@ -382,16 +382,16 @@ assert_bounded <- function(x, left = 0, right = 1, inclusive_left = TRUE, inclus
       stop(sprintf("%s must be greater than or equal to %s", name, left), call. = FALSE)
     }
   } else {
-    if (!all(x>left)) {
+    if (!all(x > left)) {
       stop(sprintf("%s must be greater than %s", name, left), call. = FALSE)
     }
   }
   if (inclusive_right) {
-    if (!all(x<=right)) {
+    if (!all(x <= right)) {
       stop(sprintf("%s must be less than or equal to %s", name, right), call. = FALSE)
     }
   } else {
-    if (!all(x<right)) {
+    if (!all(x < right)) {
       stop(sprintf("%s must be less than %s", name, right), call. = FALSE)
     }
   }

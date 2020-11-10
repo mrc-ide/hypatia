@@ -64,37 +64,6 @@ Update2 <- function(S, I, R, pars) {
   list(news = news, newi = newi, newr = newr)
 }
 
-#' @title Run the simulation with repetitions
-#'
-#' @param end_time end time for run
-#' @param repetitions n times to run the simulation
-#' @param pars parameter list
-#' @param parallel execute runs in parallel, TRUE or FALSE
-#' @return dataframe
-#' @export
-Run_with_repetitions2 <- function(
-  end_time,
-  repetitions,
-  pars,
-  parallel = FALSE
-) {
-  if (parallel) {
-    fapply <- parallel::mclapply
-  } else {
-    fapply <- lapply
-  }
-  dfs <- fapply(
-    seq(repetitions),
-    function(repetition) {
-      #df <- compartmental_sirmodel(end_time, pars)
-      df$repetition <- repetition
-      df
-    }
-  )
-
-  do.call("rbind", dfs)
-}
-
 Displaythemodel_1 <- function(df) {
 
   # This function displays data in a list. df must be in the form of a list.
@@ -128,10 +97,10 @@ Displaythemodel_1 <- function(df) {
 
   ggplot2::ggplot(df, ggplot2::aes(x = df$time, y = df$value,
                   group = interaction(df$group, df$name), colour = df$name)) +
-    ggplot2::geom_line(size=0.5) +
+    ggplot2::geom_line(size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
-    ggplot2::labs(y ="S, I, & R", x="time") +
+    ggplot2::labs(y ="S, I, & R", x = "time") +
     ggplot2::theme(
       legend.justification = c("right", "top"),
       legend.box = c("horizontal", "vertical")

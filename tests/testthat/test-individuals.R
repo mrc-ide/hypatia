@@ -9,7 +9,7 @@ test_that("test Create_states with S for 1st age group", {
     population = population$n,
     dt = 1,
     R0 = 2,
-    tt_contact_matrix = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+    tt_contact_matrix = 0,
     time_period = 1000,
     contact_matrix_set = squire::contact_matrices[[1]])
 
@@ -39,7 +39,7 @@ test_that("test Probabilities_of_states", {
     population = population$n,
     dt = dt,
     R0 = 2,
-    tt_contact_matrix = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+    tt_contact_matrix = 0,
     time_period = 1000,
     contact_matrix_set = squire::contact_matrices[[1]])
 

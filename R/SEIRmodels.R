@@ -70,37 +70,6 @@ Update <- function(S, I, R, pars) {
   list(news = news, newi = newi, newr = newr)
 }
 
-#' @title Run the simulation with repetitions
-#'
-#' @param end_time end time for run
-#' @param repetitions n times to run the simulation
-#' @param pars parameter list
-#' @param parallel execute runs in parallel, TRUE or FALSE
-#' @return dataframe
-#' @export
-Run_with_repetitions <- function(
-  end_time,
-  repetitions,
-  pars,
-  parallel = FALSE
-) {
-  if (parallel) {
-    fapply <- parallel::mclapply
-  } else {
-    fapply <- lapply
-  }
-  dfs <- fapply(
-    seq(repetitions),
-    function(repetition) {
-      #df <- compartmental_sirmodel(end_time, pars)
-      df$repetition <- repetition
-      df
-    }
-  )
-
-  do.call("rbind", dfs)
-}
-
 Displaythemodel <- function(df) {
 
   # This function displays data in a list. df must be in the form of a list.

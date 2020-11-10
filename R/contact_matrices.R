@@ -55,15 +55,15 @@ Process_contact_matrix_scaled_age <- function(contact_matrix, population) {
   # Between Diff Age Groups and Balance By Taking the Mean of i->j and j->i
 
   contact_matrix <- rbind(contact_matrix, contact_matrix[16,])
-  contact_matrix <- cbind(contact_matrix, contact_matrix[,16]*population[17] / sum(population[16:17]))
-  contact_matrix[,16] <- contact_matrix[,16]*population[16] / sum(population[16:17])
+  contact_matrix <- cbind(contact_matrix, contact_matrix[,16] * population[17] / sum(population[16:17]))
+  contact_matrix[,16] <- contact_matrix[,16] * population[16] / sum(population[16:17])
 
 
   MIJ <- t(vapply(seq(population),function(x) {
     contact_matrix[x,] * population[x]
   }, FUN.VALUE = numeric(length(population))))
 
-  adjust_mat <- (MIJ + t(MIJ))/2 # symmetric and balanced
+  adjust_mat <- (MIJ + t(MIJ)) / 2 # symmetric and balanced
 
 
   # Convert to New Per-Capita Rates By Dividing By Population
@@ -94,7 +94,7 @@ Process_contact_matrix <- function(contact_matrix, population) {
   MIJ <- t(sapply(seq(population),function(x) {
     contact_matrix[x,] * population[x]
   }))
-  adjust_mat <- (MIJ + t(MIJ))/2 # symmetric and balanced
+  adjust_mat <- (MIJ + t(MIJ)) / 2 # symmetric and balanced
 
   # Convert to New Per-Capita Rates By Dividing By Population
   # Resulting Matrix Is Asymmetric But Balanced

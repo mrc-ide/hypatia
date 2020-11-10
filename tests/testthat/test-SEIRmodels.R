@@ -390,20 +390,20 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     individual::fixed_probability_state_change_process(
       "human", E2$name, ICase1$name, psq$prob_hosp[ind]),
     individual::fixed_probability_state_change_process(
-      "human", ICase1$name,ICase2$name, psq$pgamma_ICase),
+      "human", ICase1$name, ICase2$name, psq$pgamma_ICase),
     individual::fixed_probability_state_change_process(
-      "human", ICase2$name,cum_hosp_inc$name, psq$pgamma_ICase),
+      "human", ICase2$name, cum_hosp_inc$name, psq$pgamma_ICase),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetLive1$name,IOxGetLive2$name, psq$pgamma_get_ox_survive),
+      "human", IOxGetLive1$name, IOxGetLive2$name, psq$pgamma_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetLive2$name,R$name, psq$pgamma_get_ox_survive),
+      "human", IOxGetLive2$name, R$name, psq$pgamma_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxNotGetLive1$name,IOxNotGetLive2$name,
+      "human", IOxNotGetLive1$name, IOxNotGetLive2$name,
       psq$pgamma_not_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxNotGetLive2$name,R$name, psq$pgamma_not_get_ox_survive),
+      "human", IOxNotGetLive2$name, R$name, psq$pgamma_not_get_ox_survive),
     individual::fixed_probability_state_change_process(
-      "human", IOxGetDie1$name,IOxGetDie2$name, psq$pgamma_get_ox_die),
+      "human", IOxGetDie1$name, IOxGetDie2$name, psq$pgamma_get_ox_die),
     individual::fixed_probability_state_change_process(
       "human", IOxGetDie2$name, D$name, psq$pgamma_get_ox_die),
     individual::fixed_probability_state_change_process(
@@ -423,12 +423,12 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     individual::fixed_probability_state_change_process(
       "human", IMVGetDie1$name, IMVGetDie2$name, psq$pgamma_get_mv_die),
     individual::fixed_probability_state_change_process(
-      "human", IMVGetDie2$name, D$name,  psq$pgamma_get_mv_die),
+      "human", IMVGetDie2$name, D$name, psq$pgamma_get_mv_die),
     individual::fixed_probability_state_change_process(
       "human", IMVNotGetDie1$name, IMVNotGetDie2$name,
       psq$pgamma_not_get_mv_die),
     individual::fixed_probability_state_change_process(
-      "human", IMVNotGetDie2$name,D$name, psq$pgamma_not_get_mv_die),
+      "human", IMVNotGetDie2$name, D$name, psq$pgamma_not_get_mv_die),
     individual::fixed_probability_state_change_process(
       "human", IRec1$name, IRec2$name, psq$pgamma_rec),
     individual::fixed_probability_state_change_process(

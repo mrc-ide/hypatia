@@ -11,7 +11,6 @@
 #' @return states
 Create_states <- function(psq) {
 
-  # initial_counts <- calculate_initial_counts(psq)
   states <- list(
     # Human states
     S <- individual::State$new("S", sum(psq$S_0)),
