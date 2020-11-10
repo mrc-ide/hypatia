@@ -38,7 +38,7 @@ SEIRexplicitparameters <- function(human, IMild, ICase1, ICase2, cum_hosp_inc,
     else {
 
       lambda <- beta * length(temp) * mean(m)
-      if (!isEmpty(lambda) && lambda != numeric(0) && !is.na(lambda) == FALSE){
+      if (!isEmpty(lambda) && lambda != numeric(0) && !is.na(lambda) == FALSE) {
         problambda <- 1 - exp(-lambda * dt)
       }
       else{

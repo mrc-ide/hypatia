@@ -1,5 +1,5 @@
 #' @importFrom stats rbinom
-Infections2 <- function(I, S, pars){
+Infections2 <- function(I, S, pars) {
 
   # SIR: two types of events for S, so competing hazards. A fraction of
   # S events are deaths and the rest are infections.
@@ -26,7 +26,7 @@ Infections2 <- function(I, S, pars){
   list(n_deaths_S = n_deaths_S, n_infections_S = n_infections_S)
 }
 
-Recoveries2 <- function(I, pars){
+Recoveries2 <- function(I, pars) {
   # SIR: two types of events for I, so competing hazards and a fraction of
   # I events are deaths and the rest are recoveries
   coeff <- pars$nu + pars$mu
@@ -44,7 +44,7 @@ Recoveries2 <- function(I, pars){
 }
 
 #' @importFrom stats rbinom
-Births2 <- function(R, pars){
+Births2 <- function(R, pars) {
 
   coeffdt <- pars$mu * pars$dt
   prob <- 1.0 - exp(-1.0 * coeffdt)
@@ -54,7 +54,7 @@ Births2 <- function(R, pars){
   list(n_deaths_R = n_deaths_R, n_births = n_births)
 }
 
-Update2 <- function(S, I, R, pars){
+Update2 <- function(S, I, R, pars) {
 
   news <- S - pars$n_deaths_S - pars$n_infections_S + pars$n_births
   newi <- I + pars$n_infections_S  - pars$n_recoveries_I  - pars$n_deaths_I
@@ -108,14 +108,14 @@ Displaythemodel_1 <- function(df) {
     numdatapoints <- paste(length(df$time))
     numruns <- 1
     df <- list(df)
-    subtitle <- paste('Simulation for', numruns, 'run and', numdatapoints,
-                      'data points')
+    subtitle <- paste("Simulation for", numruns, "run and", numdatapoints,
+                      "data points")
   }
   else{
     numruns <- length(df)
     numdatapoints <- length(df[[1]][[1]]) - 1
-    subtitle <- paste('Simulation for', numruns, 'runs,', numdatapoints,
-                      'data points per run')
+    subtitle <- paste("Simulation for", numruns, "runs,", numdatapoints,
+                      "data points per run")
   }
 
   # Create group id for data
@@ -318,15 +318,6 @@ Render_state_sizes_2 <- function(S, I, R, human) {
     api$render("recovered_counts", length(api$get_state(human, R)))
   }
 }
-
-
-
-
-
-
-
-
-
 
 
 

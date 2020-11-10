@@ -153,7 +153,7 @@ Parameters_explicit_SEIR <- function(
   if (length(contact_matrix_set) == 1) {
     baseline <- contact_matrix_set[[1]]
     contact_matrix_set <- vector("list", length(tt_contact_matrix))
-    for(i in seq_along(tt_contact_matrix)) {
+    for (i in seq_along(tt_contact_matrix)) {
       contact_matrix_set[[i]] <- baseline
     }
   }
@@ -259,18 +259,18 @@ Parameters_explicit_SEIR <- function(
   # ----------------------------------------------------------------------------
 
   # durations
-  gamma_E = 2 * 1 / dur_E
-  gamma_IMild = 1 / dur_IMild
-  gamma_ICase = 2 * 1 / dur_ICase
-  gamma_get_ox_survive = 2 * 1/dur_get_ox_survive
-  gamma_get_ox_die = 2 * 1/dur_get_ox_die
-  gamma_not_get_ox_survive = 2 * 1 / dur_not_get_ox_survive
-  gamma_not_get_ox_die = 2 * 1 / dur_not_get_ox_die
-  gamma_get_mv_survive = 2 * 1 / dur_get_mv_survive
-  gamma_get_mv_die = 2 * 1 / dur_get_mv_die
-  gamma_not_get_mv_survive = 2 * 1 / dur_not_get_mv_survive
-  gamma_not_get_mv_die = 2 * 1 / dur_not_get_mv_die
-  gamma_rec = 2 * 1 / dur_rec
+  gamma_E <- 2 * 1 / dur_E
+  gamma_IMild <- 1 / dur_IMild
+  gamma_ICase <- 2 * 1 / dur_ICase
+  gamma_get_ox_survive <- 2 * 1/dur_get_ox_survive
+  gamma_get_ox_die <- 2 * 1/dur_get_ox_die
+  gamma_not_get_ox_survive <- 2 * 1 / dur_not_get_ox_survive
+  gamma_not_get_ox_die <- 2 * 1 / dur_not_get_ox_die
+  gamma_get_mv_survive <- 2 * 1 / dur_get_mv_survive
+  gamma_get_mv_die <- 2 * 1 / dur_get_mv_die
+  gamma_not_get_mv_survive <- 2 * 1 / dur_not_get_mv_survive
+  gamma_not_get_mv_die <- 2 * 1 / dur_not_get_mv_die
+  gamma_rec <- 2 * 1 / dur_rec
 
   # probabilities
   pgamma_E <- 1 - exp(-1.0 * (gamma_E * dt))
@@ -283,8 +283,8 @@ Parameters_explicit_SEIR <- function(
   pgamma_get_mv_survive <- 1 - exp(-1.0 * (gamma_get_mv_survive * dt))
   pgamma_not_get_mv_survive <- 1 - exp(-1.0 * (gamma_not_get_mv_survive * dt))
   pgamma_get_mv_die <- 1 - exp(-1.0 * (gamma_get_mv_die * dt))
-  pgamma_not_get_mv_die  <- 1 - exp(-1.0 * ( gamma_not_get_mv_die * dt))
-  pgamma_rec  <- 1 - exp(-1.0*( gamma_rec * dt))
+  pgamma_not_get_mv_die  <- 1 - exp(-1.0 * (gamma_not_get_mv_die * dt))
+  pgamma_rec  <- 1 - exp(-1.0 * (gamma_rec * dt))
 
   if (is.null(beta_set)) {
     baseline_matrix <- Process_contact_matrix_scaled_age(
@@ -422,12 +422,12 @@ Get_parameters_for_sirstochastic <- function(overrides = list()) {
 
   # Override pars with any client specified ones
   if (!is.list(overrides) && !is.null(overrides)) {
-    stop('overrides must be a list')
+    stop("overrides must be a list")
   }
 
   for (name in names(overrides)) {
     if (!(name %in% names(pars))) {
-      stop(paste('unknown parameter', name, sep = ' '))
+      stop(paste("unknown parameter", name, sep = ' '))
     }
     pars[[name]] <- overrides[[name]]
   }
@@ -574,8 +574,4 @@ Default_probs <- function() {
     prob_severe_death_no_treat = rep(0.95, length(prob_hosp)),
     p_dist = rep(1, length(prob_hosp))
   )
-
 }
-
-
-

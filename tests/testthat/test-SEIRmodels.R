@@ -212,17 +212,17 @@ expect_true(is.data.frame(df))
 #   pops <- population - NI - NR - NI2 - ND
 #   timestep <- pars$num/pars$dt
 #
-#   S <- individual::State$new('S', pops)
-#   I <- individual::State$new('I', NI)
-#   I2 <- individual::State$new('I2', NI2)
-#   D <- individual::State$new('D', ND)
-#   R <- individual::State$new('R', NR)
+#   S <- individual::State$new("S", pops)
+#   I <- individual::State$new("I", NI)
+#   I2 <- individual::State$new("I2", NI2)
+#   D <- individual::State$new("D", ND)
+#   R <- individual::State$new("R", NR)
 #
-#   immunity <- individual::Variable$new('immunity', runif(population, 0, .1))
-#   rate=1/pars$average_age
-#   age <- individual::Variable$new('age', rexp(population, rate))
-#   location <- individual::Variable$new('location', runif(population, 0, .2))
-#   human <- individual::Individual$new('human', list(S, I, I2, D, R), variables
+#   immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
+#   rate <- 1 / pars$average_age
+#   age <- individual::Variable$new("age", rexp(population, rate))
+#   location <- individual::Variable$new("location", runif(population, 0, .2))
+#   human <- individual::Individual$new("human", list(S, I, I2, D, R), variables
 # = list(immunity, age, location))
 #
 #   processes <- list(
@@ -272,7 +272,7 @@ expect_true(is.data.frame(df))
 #   immunity <- individual::Variable$new('immunity',  rep(0, pars$N))
 #   age  <- individual::Variable$new('age', rep(0, pars$N))
 #   location <- individual::Variable$new('location', rep(0, pars$N))
-#   human <- individual::Individual$new('human', list(S, I, I2, D, R),
+#   human <- individual::Individual$new("human", list(S, I, I2, D, R),
 #variables = list(immunity, age, location))
 #
 #   processes <- list(

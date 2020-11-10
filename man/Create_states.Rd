@@ -13,5 +13,5 @@ Create_states(psq)
 states
 }
 \description{
-Create_states creates the human and mosquito states for the model
+Create_states creates and initialises the human states for the model
 }

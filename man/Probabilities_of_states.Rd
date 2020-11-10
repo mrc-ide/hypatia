@@ -4,17 +4,16 @@
 \alias{Probabilities_of_states}
 \title{probabilities of the states}
 \usage{
-Probabilities_of_states(dt)
+Probabilities_of_states(dt, psq)
 }
 \arguments{
 \item{dt}{time step}
+
+\item{psq}{parameters}
 }
 \value{
 states
 }
 \description{
 probabilities of the states
-}
-\examples{
-Probabilities_of_states(dt)
 }

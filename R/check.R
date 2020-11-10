@@ -3,7 +3,7 @@
 #' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Null if checks pass
-Matrix_check <- function(population, contact_matrix_set){
+Matrix_check <- function(population, contact_matrix_set) {
 
   dims <- c(length(population),
             sapply(contact_matrix_set, dim))
@@ -19,7 +19,7 @@ Matrix_check <- function(population, contact_matrix_set){
 #' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Checked initial values data.frame
-Init_check <- function(init, population){
+Init_check <- function(init, population) {
   if (is.null(init)) {
     init = data.frame(
       S = population - 1,
@@ -60,7 +60,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20) {
   if (is.null(init)) {
     raw_seeding_cases <- rep(0, length(population))
     raw_seeding_cases[age_group_indices] <- as.vector(stats::rmultinom(1, size = seeding_cases, prob = rep(0.25, 4)))
-    init = data.frame(
+    init <- data.frame(
       S = population - raw_seeding_cases,
       E1 = raw_seeding_cases,
       E2 = 0,
@@ -103,7 +103,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20) {
                              "IOxNotGetDie2","IMVGetLive1","IMVGetLive2",
                              "IMVGetDie1","IMVGetDie2","IMVNotGetLive1",
                              "IMVNotGetLive2","IMVNotGetDie1","IMVNotGetDie2",
-                             "IRec1","IRec2","R","D"))){
+                             "IRec1","IRec2","R","D"))) {
       stop("If specified, names of init must be identical to:
       S, E1, E2, ICase1, ICase2, IOxGetLive1, IOxGetLive2,
       IOxGetDie1, IOxGetDie2, IOxNotGetLive1, IOxNotGetLive2,
@@ -131,7 +131,7 @@ Init_check_explicit <- function(init, population, seeding_cases = 20) {
 #' @inheritParams Parameters_explicit_SEIR
 #'
 #' @return Nothing if check pass
-Check_time_change <- function(tt, time_period){
+Check_time_change <- function(tt, time_period) {
   if (any(tt > time_period) | any(tt < 0)) {
     stop("Time change points must all be < time period
          and > 0")
