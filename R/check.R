@@ -97,13 +97,14 @@ Init_check_explicit <- function(init, population, seeding_cases = 20) {
       IMVGetDie1, IMVGetDie2, IMVNotGetLive1, IMVNotGetLive2,
       IMVNotGetDie1, IMVNotGetDie2, IRec1, IRec2, R, D and rows 1:age_groups")
     }
-    if (!all(names(init) == c("S","E1","E2","IMild","ICase1","ICase2","IOxGetLive1",
-                             "IOxGetLive2","IOxGetDie1","IOxGetDie2",
-                             "IOxNotGetLive1","IOxNotGetLive2","IOxNotGetDie1",
-                             "IOxNotGetDie2","IMVGetLive1","IMVGetLive2",
-                             "IMVGetDie1","IMVGetDie2","IMVNotGetLive1",
-                             "IMVNotGetLive2","IMVNotGetDie1","IMVNotGetDie2",
-                             "IRec1","IRec2","R","D"))) {
+    if (!all(names(init) == c("S", "E1", "E2", "IMild", "ICase1", "ICase2",
+                            "IOxGetLive1", "IOxGetLive2", "IOxGetDie1",
+                             "IOxGetDie2", "IOxNotGetLive1","IOxNotGetLive2",
+                             "IOxNotGetDie1", "IOxNotGetDie2", "IMVGetLive1",
+                             "IMVGetLive2", "IMVGetDie1", "IMVGetDie2",
+                             "IMVNotGetLive1", "IMVNotGetLive2",
+                             "IMVNotGetDie1", "IMVNotGetDie2",
+                             "IRec1", "IRec2", "R", "D"))) {
       stop("If specified, names of init must be identical to:
       S, E1, E2, ICase1, ICase2, IOxGetLive1, IOxGetLive2,
       IOxGetDie1, IOxGetDie2, IOxNotGetLive1, IOxNotGetLive2,
