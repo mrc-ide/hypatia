@@ -104,11 +104,13 @@ Probabilities_of_states <- function(dt, psq) {
     pgamma_IMild = 1 - exp(-psq$gamma_IMild * dt),
     pgamma_ICase = 1 - exp(-1.0 * (psq$gamma_ICase * dt)),
     pgamma_get_ox_survive = 1 - exp(-1.0 * (psq$gamma_get_ox_survive * dt)),
-    pgamma_not_get_ox_survive = 1 - exp(-1.0 * (psq$gamma_not_get_ox_survive * dt)),
+    pgamma_not_get_ox_survive =
+      1 - exp(-1.0 * (psq$gamma_not_get_ox_survive * dt)),
     pgamma_get_ox_die = 1 - exp(-1.0 * (psq$gamma_get_ox_die * dt)),
     pgamma_not_get_ox_die = 1 - exp(-1.0 * (psq$gamma_not_get_ox_die * dt)),
     pgamma_get_mv_survive = 1 - exp(-1.0 * (psq$gamma_get_mv_survive * dt)),
-    pgamma_not_get_mv_survive = 1 - exp(-1.0 * (psq$gamma_not_get_mv_survive * dt)),
+    pgamma_not_get_mv_survive =
+      1 - exp(-1.0 * (psq$gamma_not_get_mv_survive * dt)),
     pgamma_get_mv_die = 1 - exp(-1.0 * (psq$gamma_get_mv_die * dt)),
     pgamma_not_get_mv_die  = 1 - exp(-1.0 * (psq$gamma_not_get_mv_die * dt)),
     pgamma_rec  = 1 - exp(-1.0 * (psq$gamma_rec * dt)))

@@ -147,8 +147,8 @@ Individual_S_to_I_2 <- function(S, I, human, immunity, age, location,
       api$queue_state_update(human, I, infected)
     }
     if (pars$includeimmune) {
-      # Get the immunity for susceptible humans and use the complement to modify the
-      # infection rate
+      # Get the immunity for susceptible humans and use the complement to modify
+      # the infection rate
       rate_modifier <- 1 - api$get_variable(human, immunity, susceptible)
       infected <- susceptible[runif(length(susceptible)) <
                                 (pars$infection_rate * rate_modifier)]
@@ -163,8 +163,8 @@ Individual_S_to_I_2 <- function(S, I, human, immunity, age, location,
       api$queue_state_update(human, I, infected)
     }
     if (pars$includelocation) {
-      # Get the location for susceptible humans and use the complement to modify the
-      # infection rate
+      # Get the location for susceptible humans and use the complement to modify
+      # the infection rate
       rate_modifier <- 1 - api$get_variable(human, location, susceptible)
       infected <- susceptible[runif(length(susceptible)) <
                                 (pars$location_rate * rate_modifier)]

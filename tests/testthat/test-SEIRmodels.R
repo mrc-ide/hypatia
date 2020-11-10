@@ -7,8 +7,10 @@ test_that("check that Validated_state_update is working as expected", {
     queue_state_update = mockery::mock()
   )
 
-  expect_error(hypatia::Validated_state_update(api, human, S, 10001, 10000), "*")
-  expect_error(hypatia::Validated_state_update(api, human, S, 933.5, 10000), "*")
+  expect_error(
+    hypatia::Validated_state_update(api, human, S, 10001, 10000), "*")
+  expect_error(
+    hypatia::Validated_state_update(api, human, S, 933.5, 10000), "*")
   expect_error(hypatia::Validated_state_update(api, human, S, -10, 10000), "*")
   expect_error(hypatia::Validated_state_update(api, human, S, NA, 10000), "*")
 })
@@ -226,11 +228,11 @@ expect_true(is.data.frame(df))
 # = list(immunity, age, location))
 #
 #   processes <- list(
-#     hypatia::Individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location,
+#   hypatia::Individual_S_to_I_and_I2(S, I, I2, human, immunity, age, location,
 # pars),
 #     # hypatia::Individual_I_to_R_I2_to_D(I, R, I2, D, human, immunity, age,
 # location, pars),
-#     # hypatia::Individual_R_to_S_2(R, S, human, immunity, age, location, pars),
+#   # hypatia::Individual_R_to_S_2(R, S, human, immunity, age, location, pars),
 #     hypatia::Render_state_sizes2(S, I, R, I2, D, human)
 #   )
 #
@@ -312,7 +314,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     population = population$n,
     dt = 1,
     R0 = 2,
-    tt_contact_matrix = c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
+    tt_contact_matrix = 0,
     time_period = 1000,
     contact_matrix_set = squire::contact_matrices[[1]])
 
@@ -437,9 +439,9 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
     hypatia::Render_state_sizes3(S, E1, E2, IMild, ICase1, ICase2, cum_hosp_inc,
                                  IOxGetLive1, IOxGetLive2, IOxNotGetLive1,
                                  IOxNotGetLive2, IOxGetDie1, IOxGetDie2,
-                                 IOxNotGetDie1, IOxNotGetDie2,IMVGetLive1,
-                                 IMVGetLive2,IMVNotGetLive1,IMVNotGetLive2,
-                                 IMVGetDie1,IMVGetDie2, IMVNotGetDie1,
+                                 IOxNotGetDie1, IOxNotGetDie2, IMVGetLive1,
+                                 IMVGetLive2, IMVNotGetLive1, IMVNotGetLive2,
+                                 IMVGetDie1, IMVGetDie2, IMVNotGetDie1,
                                  IMVNotGetDie2, IRec1, IRec2, R, D, human)
   )
 

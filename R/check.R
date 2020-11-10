@@ -34,7 +34,8 @@ Init_check <- function(init, population) {
            and rows 1:age_groups")
     }
     if (!all(names(init) == c("S", "E", "E2", "I", "R"))) {
-      stop("Names of init must be identical to S, E, E2, I, R if sepecified manually")
+      stop("Names of init must be identical to S, E, E2, I, R if sepecified
+           manually")
     }
   }
   if (!all(rowSums(init) == population)) {
@@ -52,14 +53,18 @@ Init_check <- function(init, population) {
 Init_check_explicit <- function(init, population, seeding_cases = 20) {
 
   if (length(population) != 17) {
-    stop("population must be divided up into 17x 5-year age bands spanning 0 to 80+")
+    stop("population must be divided up into 17x 5-year age bands spanning 0 to
+         80+")
   }
   assert_int(seeding_cases)
-  age_group_indices <- c(8, 9, 10, 11) # age_group indices corresponding to middle-aged travellers
+
+  # age_group indices corresponding to middle-aged travellers
+  age_group_indices <- c(8, 9, 10, 11)
 
   if (is.null(init)) {
     raw_seeding_cases <- rep(0, length(population))
-    raw_seeding_cases[age_group_indices] <- as.vector(stats::rmultinom(1, size = seeding_cases, prob = rep(0.25, 4)))
+    raw_seeding_cases[age_group_indices] <- as.vector(stats::rmultinom(1,
+                                     size = seeding_cases, prob = rep(0.25, 4)))
     init <- data.frame(
       S = population - raw_seeding_cases,
       E1 = raw_seeding_cases,
