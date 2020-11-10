@@ -24,7 +24,7 @@ test_that("SQUIRE SEEIR model runs", {
   # Multiple R0s
   r2 <- squire::run_explicit_SEEIR_model(population = pop$n,
                                  dt = 1,
-                                 R0 = c(2,2),
+                                 R0 = c(2, 2),
                                  tt_R0 = c(0, 10),
                                  time_period = 1000,
                                  replicates = 10,

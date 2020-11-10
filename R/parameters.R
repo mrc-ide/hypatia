@@ -118,12 +118,12 @@ Parameters_explicit_SEIR <- function(
 
   dur_get_ox_survive = 9.5,
   dur_get_ox_die = 7.6,
-  dur_not_get_ox_survive = 9.5*0.5,
-  dur_not_get_ox_die = 7.6*0.5,
+  dur_not_get_ox_survive = 9.5 * 0.5,
+  dur_not_get_ox_die = 7.6 * 0.5,
 
   dur_get_mv_survive = 11.3,
   dur_get_mv_die = 10.1,
-  dur_not_get_mv_survive = 11.3*0.5,
+  dur_not_get_mv_survive = 11.3 * 0.5,
   dur_not_get_mv_die = 1,
 
   dur_rec = 3.4,
@@ -263,7 +263,7 @@ Parameters_explicit_SEIR <- function(
   gamma_IMild <- 1 / dur_IMild
   gamma_ICase <- 2 * 1 / dur_ICase
   gamma_get_ox_survive <- 2 * 1/dur_get_ox_survive
-  gamma_get_ox_die <- 2 * 1/dur_get_ox_die
+  gamma_get_ox_die <- 2 * 1 / dur_get_ox_die
   gamma_not_get_ox_survive <- 2 * 1 / dur_not_get_ox_survive
   gamma_not_get_ox_die <- 2 * 1 / dur_not_get_ox_die
   gamma_get_mv_survive <- 2 * 1 / dur_get_mv_survive
@@ -553,8 +553,8 @@ sir_model_parameters_defaults <- function() {
 
 Default_probs <- function() {
   prob_hosp <- c(
-    0.000744192, 0.000634166,0.001171109, 0.002394593, 0.005346437 ,
-    0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042 ,
+    0.000744192, 0.000634166, 0.001171109, 0.002394593, 0.005346437,
+    0.010289885, 0.016234604, 0.023349169, 0.028944623, 0.038607042,
     0.057734879, 0.072422135, 0.101602458, 0.116979814, 0.146099064,
     0.176634654 ,0.180000000)
   list(
@@ -562,7 +562,7 @@ Default_probs <- function() {
     prob_severe = c(
       0.05022296,	0.05022296,	0.05022296,	0.05022296,	0.05022296,
       0.05022296,	0.05022296,	0.053214942, 0.05974426,	0.074602879,
-      0.103612417, 0.149427991, 0.223777304,	0.306985918,
+      0.103612417, 0.149427991, 0.223777304, 0.306985918,
       0.385779555, 0.461217861, 0.709444444),
     prob_non_severe_death_treat = c(
       0.0125702,	0.0125702,	0.0125702,	0.0125702,

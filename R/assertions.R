@@ -8,7 +8,7 @@ nice_format <- function(x) {
   if (is.null(x)) {
     return("")
   }
-  if (length(x)==1) {
+  if (length(x) == 1) {
     ret <- as.character(x)
   } else {
     ret <- paste0("{", paste(x, collapse = ", "), "}")
@@ -353,7 +353,7 @@ assert_gr <- function(x, y, message = "%s must be greater than %s",
   assert_numeric(x, name = name_x)
   assert_numeric(y, name = name_y)
   assert_in(length(y), c(1, length(x)))
-  if (!all(x>y)) {
+  if (!all(x > y)) {
     stop(sprintf(message, name_x, name_y), call. = FALSE)
   }
   return(TRUE)
@@ -369,7 +369,7 @@ assert_greq <- function(x, y,
   assert_numeric(x, name = name_x)
   assert_numeric(y, name = name_y)
   assert_in(length(y), c(1, length(x)))
-  if (!all(x>=y)) {
+  if (!all(x >= y)) {
     stop(sprintf(message, name_x, name_y), call. = FALSE)
   }
   return(TRUE)

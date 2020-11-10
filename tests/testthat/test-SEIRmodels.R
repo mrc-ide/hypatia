@@ -76,7 +76,7 @@ test_that("test individual model with 10000 humans with immunity, age and
   R <- individual::State$new('R', NR)
 
   immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
-  rate = 1 / pars$average_age
+  rate <- 1 / pars$average_age
   age <- individual::Variable$new("age", rexp(pars$N, rate))
   location <- individual::Variable$new("location", runif(population, 0, .2))
   human <- individual::Individual$new("human", list(S, I, R),
@@ -124,7 +124,7 @@ test_that("test individual model with 10000 humans with immunity, age and
   R <- individual::State$new('R', NR)
 
   immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
-  rate = 1 / pars$average_age
+  rate <- 1 / pars$average_age
   age <- individual::Variable$new("age", rexp(pars$N, rate))
   location <- individual::Variable$new("location", runif(population, 0, .2))
   human <- individual::Individual$new("human", list(S, I, R),
@@ -378,7 +378,7 @@ test_that("test individual model with SQUIRE states and probabilities for 2nd
   processes <- list(
     hypatia::SEIRexplicitparameters(human, IMild, ICase1, ICase2, cum_hosp_inc,
                                     ind, population$n[2], lambda, problambda,
-                                    beta, psq$mix_mat_set[1,ind,], psq$dt),
+                                    beta, psq$mix_mat_set[1, ind ,], psq$dt),
     individual::fixed_probability_state_change_process(
       "human", S$name, E1$name, 0.1),
     individual::fixed_probability_state_change_process(

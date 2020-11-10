@@ -16,9 +16,7 @@ Infections2 <- function(I, S, pars) {
   if (n_events_S > 0) {
     n_deaths_S <- rbinom(1, n_events_S, prob2)
     n_infections_S <- n_events_S - n_deaths_S
-  }
-  else
-  {
+  } else {
     n_deaths_S <- 0
     n_infections_S <- 0
   }
@@ -100,7 +98,7 @@ Displaythemodel_1 <- function(df) {
     ggplot2::geom_line(size = 0.5) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
-    ggplot2::labs(y ="S, I, & R", x = "time") +
+    ggplot2::labs(y = "S, I, & R", x = "time") +
     ggplot2::theme(
       legend.justification = c("right", "top"),
       legend.box = c("horizontal", "vertical")
@@ -287,12 +285,6 @@ Render_state_sizes_2 <- function(S, I, R, human) {
     api$render("recovered_counts", length(api$get_state(human, R)))
   }
 }
-
-
-
-
-
-
 
 
 

@@ -56,7 +56,7 @@ Process_contact_matrix_scaled_age <- function(contact_matrix, population) {
   # Convert Unbalanced Matrix of Per-Capita Rates to Total Number of Contacts
   # Between Diff Age Groups and Balance By Taking the Mean of i->j and j->i
 
-  contact_matrix <- rbind(contact_matrix, contact_matrix[16,])
+  contact_matrix <- rbind(contact_matrix, contact_matrix[16, ])
   contact_matrix <- cbind(contact_matrix,
                 contact_matrix[, 16] * population[17] / sum(population[16:17]))
   contact_matrix[, 16] <- contact_matrix[, 16] * population[16]
@@ -76,7 +76,7 @@ Process_contact_matrix_scaled_age <- function(contact_matrix, population) {
   # Asymmetric in that c_ij != c_ji BUT Total Number of Contacts i->j and j->i
   # Is Balanced (so when we divide by pop at end, will be balanced)
   processed_matrix <- t(vapply(seq(population), function(x) {
-    adjust_mat[x,  ] / population[x]
+    adjust_mat[x, ] / population[x]
   }, FUN.VALUE = numeric(length(population))))
 
   # Adjusting to create input for model i.e. per capita rates divided by
