@@ -48,3 +48,36 @@ test_that("test Probabilities_of_states", {
   expect_equal(pstates$pgamma_E, 1 - exp(-1.0 * (psq$gamma_E * dt)))
 
 })
+
+test_that("test Create_age_variable", {
+
+  warnings()
+  pars <- hypatia::Get_parameters_for_sirstochastic()
+
+  pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
+
+  age_cont <- Create_age_variable(pop)
+
+
+
+
+
+
+
+
+
+  dt <- 1
+
+  psq <- squire::parameters_explicit_SEEIR(
+    population = population$n,
+    dt = dt,
+    R0 = 2,
+    tt_contact_matrix = 0,
+    time_period = 1000,
+    contact_matrix_set = squire::contact_matrices[[1]])
+
+  pstates <- Probabilities_of_states(dt, psq)
+
+  expect_equal(pstates$pgamma_E, 1 - exp(-1.0 * (psq$gamma_E * dt)))
+
+})

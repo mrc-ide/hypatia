@@ -73,9 +73,9 @@ test_that("test individual model with 10000 humans with immunity, age and
   pops <- population - NI - NR
   timestep <- pars$num/pars$dt
 
-  S <- individual::State$new('S', pops)
-  I <- individual::State$new('I', NI)
-  R <- individual::State$new('R', NR)
+  S <- individual::State$new("S", pops)
+  I <- individual::State$new("I", NI)
+  R <- individual::State$new("R", NR)
 
   immunity <- individual::Variable$new("immunity", runif(population, 0, .1))
   rate <- 1 / pars$average_age

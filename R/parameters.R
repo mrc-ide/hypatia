@@ -427,7 +427,7 @@ Get_parameters_for_sirstochastic <- function(overrides = list()) {
 
   for (name in names(overrides)) {
     if (!(name %in% names(pars))) {
-      stop(paste("unknown parameter", name, sep = ' '))
+      stop(paste("unknown parameter", name, sep = " " ))
     }
     pars[[name]] <- overrides[[name]]
   }

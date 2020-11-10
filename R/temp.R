@@ -285,7 +285,3 @@ Render_state_sizes_2 <- function(S, I, R, human) {
     api$render("recovered_counts", length(api$get_state(human, R)))
   }
 }
-
-
-
-

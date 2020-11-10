@@ -100,7 +100,7 @@ Create_individuals <- function(
 Probabilities_of_states <- function(dt, psq) {
 
   # probabilities
-  pstates = list(pgamma_E = 1 - exp(-1.0 * (psq$gamma_E * dt)),
+  pstates <- list(pgamma_E = 1 - exp(-1.0 * (psq$gamma_E * dt)),
     pgamma_IMild = 1 - exp(-psq$gamma_IMild * dt),
     pgamma_ICase = 1 - exp(-1.0 * (psq$gamma_ICase * dt)),
     pgamma_get_ox_survive = 1 - exp(-1.0 * (psq$gamma_get_ox_survive * dt)),
@@ -116,4 +116,31 @@ Probabilities_of_states <- function(dt, psq) {
     pgamma_rec  = 1 - exp(-1.0 * (psq$gamma_rec * dt)))
 
   pstates
+}
+
+#' @title Continuous age variable
+#' @description Create a continuous age variable for the population
+#'
+#' @param pop
+#'
+#' @return age variable
+#' @export
+#'
+#' @examples
+#' Create_age_variable(pop)
+Create_age_variable <- function(pop) {
+
+  r <- list()
+  for(i in 1:(85/5)){
+    r[[i]] <- (1 + ((i-1) * 5)) : (5*i)
+  }
+
+  ages <- list()
+  for(i in 1:17) {
+    ages[[i]] <- sample(r[[i]], pop[i], replace = TRUE,
+                        prob = dexp(r[[i]], 1/(21)))
+  }
+
+  ages <- unlist(ages)
+  return(ages)
 }

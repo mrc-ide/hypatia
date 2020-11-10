@@ -21,12 +21,12 @@ Matrix_check <- function(population, contact_matrix_set) {
 #' @return Checked initial values data.frame
 Init_check <- function(init, population) {
   if (is.null(init)) {
-    init = data.frame(
-      S = population - 1,
-      E = 0,
-      E2 = 0,
-      I = 1,
-      R = 0
+    init <- data.frame(
+      S <- population - 1,
+      E <- 0,
+      E2 <- 0,
+      I <- 1,
+      R <- 0
     )
   } else {
     if (!is.data.frame(init)) {
