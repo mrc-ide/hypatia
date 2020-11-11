@@ -17,7 +17,7 @@ test_that("test Create_states with S for 1st age group", {
 
   Snew <- individual::State$new("S", sum(psq$S_0))
 
-  states <- Create_states(psq)
+  states <- create_states(psq)
 
   expect_equal(Snew$initial_size, states[[1]]$initial_size[1])
 
@@ -37,26 +37,27 @@ test_that("test Probabilities_of_states", {
     time_period = 1000,
     contact_matrix_set = squire::contact_matrices[[1]])
 
-  pstates <- Probabilities_of_states(dt, psq)
+  pstates <- probabilities_of_states(dt, psq)
 
   expect_equal(pstates$pgamma_E, 1 - exp(-1.0 * (psq$gamma_E * dt)))
 
 })
 
-test_that("test Create_continuous_age_variable", {
+test_that("test create_continuous_age_variable", {
 
   pop <- squire::get_population("France", simple_SEIR = FALSE)
 
-  age_cont <- Create_continuous_age_variable(pop)
+  age_cont <- create_continuous_age_variable(pop)
 
   expect_equal(length(age_cont), sum(pop$n))
 
 })
 
-test_that("test Create_discrete_age_variable", {
+test_that("test create_discrete_age_variable", {
 
+  # TO BE DONE LATER
   pop <- squire::get_population("France", simple_SEIR = FALSE)
 
-  age_disc <- Create_discrete_age_variable(pop)
+  expect_error(hypatia:::create_discrete_age_variable(pop), "*")
 
 })

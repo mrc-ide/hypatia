@@ -22,6 +22,3 @@ E2_IMild(human, IMild, E2, ICase1, p_E2_I, prob_hosp)
 \description{
 Function for transition from E2 to IMild
 }
-\examples{
-E2_IMild(human, IMild, E2, ICase1, p_E2_I, prob_hosp)
-}

@@ -4,12 +4,10 @@
 #'
 #' @title Create and initialise states
 #'
-#' @export
-#'
 #' @param psq the model parameters
 #'
 #' @return states
-Create_states <- function(psq) {
+create_states <- function(psq) {
 
   states <- list(
     # Human states
@@ -64,9 +62,7 @@ Create_states <- function(psq) {
 #' @param events available events to assign
 #' @param parameters model parameters
 #'
-#' @export
-#'
-Create_individuals <- function(
+create_individuals <- function(
   states,
   variables,
   events,
@@ -74,34 +70,37 @@ Create_individuals <- function(
 ) {
   human <- individual::Individual$new(
     "human",
-    states = list(states$S,
-                  states$E1,
-                  states$E2,
-                  states$IMild,
-                  states$ICase1,
-                  states$ICase2,
-                  states$cum_hosp_inc,
-                  states$IOxGetLive1,
-                  states$IOxGetLive2,
-                  states$IOxGetDie1,
-                  states$IOxGetDie2,
-                  states$IOxNotGetLive1,
-                  states$IOxNotGetLive2,
-                  states$IOxNotGetDie1,
-                  states$IOxNotGetDie2,
-                  states$IMVGetLive1,
-                  states$IMVGetLive2,
-                  states$IMVGetDie1,
-                  states$IMVGetDie2,
-                  states$IMVNotGetLive1,
-                  states$IMVNotGetLive2,
-                  states$IMVNotGetDie1,
-                  states$IMVNotGetDie2,
-                  states$IRec1,
-                  states$IRec2,
-                  states$R,
-                  states$D),
+    states = list(
+      states$S,
+      states$E1,
+      states$E2,
+      states$IMild,
+      states$ICase1,
+      states$ICase2,
+      states$cum_hosp_inc,
+      states$IOxGetLive1,
+      states$IOxGetLive2,
+      states$IOxGetDie1,
+      states$IOxGetDie2,
+      states$IOxNotGetLive1,
+      states$IOxNotGetLive2,
+      states$IOxNotGetDie1,
+      states$IOxNotGetDie2,
+      states$IMVGetLive1,
+      states$IMVGetLive2,
+      states$IMVGetDie1,
+      states$IMVGetDie2,
+      states$IMVNotGetLive1,
+      states$IMVNotGetLive2,
+      states$IMVNotGetDie1,
+      states$IMVNotGetDie2,
+      states$IRec1,
+      states$IRec2,
+      states$R,
+      states$D),
+
     variables = list(),
+
     events = list()
   )
 
@@ -114,8 +113,7 @@ Create_individuals <- function(
 #' @param psq parameters
 #'
 #' @return states
-#' @export
-Probabilities_of_states <- function(dt, psq) {
+probabilities_of_states <- function(dt, psq) {
 
   # probabilities
   pstates <- list(pgamma_E = 1 - exp(-1.0 * (psq$gamma_E * dt)),
@@ -142,10 +140,8 @@ Probabilities_of_states <- function(dt, psq) {
 #' @param pop population list
 #'
 #' @return continuous age variable
-#' @export
-#'
 #' @importFrom stats dexp
-Create_continuous_age_variable <- function(pop) {
+create_continuous_age_variable <- function(pop) {
 
   r <- list()
   for(i in 1:(85/5)){
@@ -169,17 +165,13 @@ Create_continuous_age_variable <- function(pop) {
 #' @param pop population list
 #'
 #' @return discrete age variable
-#' @export
-Create_discrete_age_variable <- function(pop) {
+create_discrete_age_variable <- function(pop) {
 
-  age_cont <- Create_continuous_age_variable(pop)
+  age_cont <- create_continuous_age_variable(pop)
 
   age_bins <- levels(cut(age_cont, breaks = c(seq(0, 80, 5), 999),
                          include.lowest = TRUE))
 
   # TO DO
-
-  ages <- NULL
-
-  return(ages)
+  stop("Not yet implemented")
 }
