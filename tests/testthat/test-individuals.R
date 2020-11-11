@@ -1,8 +1,5 @@
 test_that("test Create_states with S for 1st age group", {
 
-  warnings()
-  pars <- hypatia::Get_parameters_for_sirstochastic()
-
   population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
   psq <- squire::parameters_explicit_SEEIR(
@@ -28,9 +25,6 @@ test_that("test Create_states with S for 1st age group", {
 
 test_that("test Probabilities_of_states", {
 
-  warnings()
-  pars <- hypatia::Get_parameters_for_sirstochastic()
-
   population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
   dt <- 1
@@ -51,13 +45,18 @@ test_that("test Probabilities_of_states", {
 
 test_that("test Create_continuous_age_variable", {
 
-  warnings()
-  pars <- hypatia::Get_parameters_for_sirstochastic()
-
   pop <- squire::get_population("France", simple_SEIR = FALSE)
 
   age_cont <- Create_continuous_age_variable(pop)
 
   expect_equal(length(age_cont), sum(pop$n))
+
+})
+
+test_that("test Create_discrete_age_variable", {
+
+  pop <- squire::get_population("France", simple_SEIR = FALSE)
+
+  age_disc <- Create_discrete_age_variable(pop)
 
 })

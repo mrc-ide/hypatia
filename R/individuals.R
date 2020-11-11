@@ -19,7 +19,7 @@ Create_states <- function(psq) {
     IMild = individual::State$new("IMild", sum(psq$IMild_0)),
     ICase1 = individual::State$new("ICase1", sum(psq$ICase1_0)),
     ICase2 = individual::State$new("ICase2", sum(psq$ICase2_0)),
-    # cum_hosp_inc = individual::State$new("cum_hosp_inc", NR)),
+    cum_hosp_inc = individual::State$new("cum_hosp_inc", sum(psq$ICase2_0)),
     # cum_ICU_inc = individual::State$new("cum_ICU_inc", NR)
     IOxGetLive1 = individual::State$new("IOxGetLive1", sum(psq$IOxGetLive1_0)),
     IOxGetLive2 = individual::State$new("IOxGetLive2", sum(psq$IOxGetLive2_0)),
@@ -74,12 +74,32 @@ Create_individuals <- function(
 ) {
   human <- individual::Individual$new(
     "human",
-    states = list(states$S, states$E1, states$E1, states$IMild, states$ICase1,
-                  states$ICase2, states$IOxGetLive1, states$IOxGetLive2,
-                  states$IOxGetDie1, states$IOxGetDie2, states$IOxNotGetLive1,
-                  states$IOxNotGetLive2, states$IMVNotGetDie1,
-                  states$IMVNotGetDie2, states$IMVNotGetDie1,
-                  states$IMVNotGetDie2, states$IRec1, states$IRec2, states$R,
+    states = list(states$S,
+                  states$E1,
+                  states$E2,
+                  states$IMild,
+                  states$ICase1,
+                  states$ICase2,
+                  states$cum_hosp_inc,
+                  states$IOxGetLive1,
+                  states$IOxGetLive2,
+                  states$IOxGetDie1,
+                  states$IOxGetDie2,
+                  states$IOxNotGetLive1,
+                  states$IOxNotGetLive2,
+                  states$IOxNotGetDie1,
+                  states$IOxNotGetDie2,
+                  states$IMVGetLive1,
+                  states$IMVGetLive2,
+                  states$IMVGetDie1,
+                  states$IMVGetDie2,
+                  states$IMVNotGetLive1,
+                  states$IMVNotGetLive2,
+                  states$IMVNotGetDie1,
+                  states$IMVNotGetDie2,
+                  states$IRec1,
+                  states$IRec2,
+                  states$R,
                   states$D),
     variables = list(),
     events = list()
@@ -121,7 +141,7 @@ Probabilities_of_states <- function(dt, psq) {
 #'
 #' @param pop population list
 #'
-#' @return age variable
+#' @return continuous age variable
 #' @export
 #'
 #' @importFrom stats dexp
@@ -133,11 +153,33 @@ Create_continuous_age_variable <- function(pop) {
   }
 
   ages <- list()
-  for(i in 1:length(pop$age_group)) {
+  for(i in seq_len(length(pop$age_group))) {
     ages[[i]] <- sample(r[[i]], pop$n[i], replace = TRUE,
                         prob = dexp(r[[i]], 1/(21)))
   }
 
   ages <- unlist(ages)
+  return(ages)
+}
+
+#' @title Discrete age variable
+#' @description Create a discrete age variable for each of the
+#' length(pop$age_group) distinct age groups
+#'
+#' @param pop population list
+#'
+#' @return discrete age variable
+#' @export
+Create_discrete_age_variable <- function(pop) {
+
+  age_cont <- Create_continuous_age_variable(pop)
+
+  age_bins <- levels(cut(age_cont, breaks = c(seq(0, 80, 5), 999),
+                         include.lowest = TRUE))
+
+  # TO DO
+
+  ages <- NULL
+
   return(ages)
 }

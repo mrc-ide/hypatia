@@ -10,7 +10,7 @@ Create_continuous_age_variable(pop)
 \item{pop}{population list}
 }
 \value{
-age variable
+continuous age variable
 }
 \description{
 Create a continuous age variable for the population
