@@ -17,8 +17,6 @@ create_states <- function(psq) {
     IMild = individual::State$new("IMild", sum(psq$IMild_0)),
     ICase1 = individual::State$new("ICase1", sum(psq$ICase1_0)),
     ICase2 = individual::State$new("ICase2", sum(psq$ICase2_0)),
-    cum_hosp_inc = individual::State$new("cum_hosp_inc", sum(psq$ICase2_0)),
-    # cum_ICU_inc = individual::State$new("cum_ICU_inc", NR)
     IOxGetLive1 = individual::State$new("IOxGetLive1", sum(psq$IOxGetLive1_0)),
     IOxGetLive2 = individual::State$new("IOxGetLive2", sum(psq$IOxGetLive2_0)),
     IOxGetDie1 = individual::State$new("IOxGetDie1", sum(psq$IOxGetDie1_0)),
@@ -61,7 +59,6 @@ create_states <- function(psq) {
 #' @param variables available variables to assign
 #' @param events available events to assign
 #' @param parameters model parameters
-#'
 create_individuals <- function(
   states,
   variables,
@@ -77,7 +74,6 @@ create_individuals <- function(
       states$IMild,
       states$ICase1,
       states$ICase2,
-      states$cum_hosp_inc,
       states$IOxGetLive1,
       states$IOxGetLive2,
       states$IOxGetDie1,
@@ -116,7 +112,8 @@ create_individuals <- function(
 probabilities_of_states <- function(dt, psq) {
 
   # probabilities
-  pstates <- list(pgamma_E = 1 - exp(-1.0 * (psq$gamma_E * dt)),
+  pstates <- list(
+    pgamma_E = 1 - exp(-1.0 * (psq$gamma_E * dt)),
     pgamma_IMild = 1 - exp(-psq$gamma_IMild * dt),
     pgamma_ICase = 1 - exp(-1.0 * (psq$gamma_ICase * dt)),
     pgamma_get_ox_survive = 1 - exp(-1.0 * (psq$gamma_get_ox_survive * dt)),

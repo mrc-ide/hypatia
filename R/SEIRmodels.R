@@ -6,20 +6,26 @@
 #' @param ICase1 ICase1
 #' @param p_E2_I p_E2_I
 #' @param prob_hosp prob_hosp
+#' @param population_size total population size
 #'
 #' @importFrom stats rbinom
-E2_IMild <- function(human, IMild, E2, ICase1, p_E2_I, prob_hosp) {
+E2_IMild <- function(human, IMild, E2, ICase1, p_E2_I, prob_hosp,
+                     population_size) {
   function(api) {
     E2 <- api$get_state(human, E2)
     E2_I <- rbinom(length(E2), 1, p_E2_I)
     E2_I_pos <- E2[as.logical(E2_I)]
 
-    n_E2_ICase1 <- rbinom(length(E2_I_pos), 1, prob_hosp)
-    new_ICase1 <- E2_I_pos[as.logical(n_E2_ICase1)]
-    new_IMild1 <- E2_I_pos[!as.logical(n_E2_ICase1)]
+    n_E2_ICase1 <- rbinom(length(E2_I_pos), 1, mean(prob_hosp))
+    new_ICase1 <- round(E2_I_pos[as.logical(n_E2_ICase1)])
+    new_IMild1 <- round(E2_I_pos[!as.logical(n_E2_ICase1)])
 
-    api$queue_state_update(human, ICase1, new_ICase1)
-    api$queue_state_update(human, IMild, new_IMild1)
+    if (length(new_ICase1) != 0) {
+      validated_state_update(api, human, ICase1, new_ICase1, sum(population_size))
+    }
+    if (length(new_IMild1) != 0) {
+      validated_state_update(api, human, IMild, new_IMild1, sum(population_size))
+    }
   }
 }
 
@@ -47,7 +53,6 @@ render_sir_state_sizes <- function(S, I, R, human) {
 #' hospitalisation
 #' @param ICase2 Second of the compartments for infections that will require
 #' hospitalisation
-#' @param cum_hosp_inc Those requiring hospitalisation
 #' @param IOxGetLive1 First of the compartments for infections that will require
 #' oxygen, get it, and who survive
 #' @param IOxGetLive2 Second of the compartments for infections that will
@@ -86,7 +91,7 @@ render_sir_state_sizes <- function(S, I, R, human) {
 #' @param D Dead
 #' @param human human
 render_all_state_sizes <- function(S, E1, E2, IMild, ICase1, ICase2,
-                                cum_hosp_inc, IOxGetLive1, IOxGetLive2,
+                                IOxGetLive1, IOxGetLive2,
                                 IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1,
                                 IOxGetDie2, IOxNotGetDie1, IOxNotGetDie2,
                                 IMVGetLive1, IMVGetLive2, IMVNotGetLive1,
@@ -100,7 +105,6 @@ render_all_state_sizes <- function(S, E1, E2, IMild, ICase1, ICase2,
     api$render("IMild", length(api$get_state(human, IMild)))
     api$render("ICase1", length(api$get_state(human, ICase1)))
     api$render("ICase2", length(api$get_state(human, ICase2)))
-    api$render("cum_hosp_inc", length(api$get_state(human, cum_hosp_inc)))
     api$render("IOxGetLive1", length(api$get_state(human, IOxGetLive1)))
     api$render("IOxGetLive2", length(api$get_state(human, IOxGetLive2)))
     api$render("IOxNotGetLive1", length(api$get_state(human, IOxNotGetLive1)))
@@ -134,21 +138,25 @@ render_all_state_sizes <- function(S, E1, E2, IMild, ICase1, ICase2,
 validated_state_update <- function(api, i, state, ix, population_size) {
 
   if (any(ix > population_size)) {
-    stop(sprintf("Your ix %d for %s:%s is greater than the population size",
-                 ix, i$name, state$name))
-  }
-  if (any(!is.integer(ix))) {
-    stop(sprintf("Your ix %d for %s:%s is not an integer",
+    stop(sprintf("Your ix %d for %s:%s is greater than the population size\n",
                  ix, i$name, state$name))
   }
   if (any(ix <= 0)) {
-    stop(sprintf("Your ix %d for %s:%s is less than or equal to 0 ",
+    stop(sprintf("Your ix %d for %s:%s is less than or equal to 0 \n",
                  ix, i$name, state$name))
   }
   if (any(is.na(ix))) {
-    stop(sprintf("Your ix %d for %s:%s is not a number ",
+    stop(sprintf("Your ix %d for %s:%s is not a number \n",
+                 ix, i$name, state$name))
+  }
+  if (any(!is_integer_like(ix))) {
+    stop(sprintf("Your ix %d for %s:%s is not an integer\n",
                  ix, i$name, state$name))
   }
 
   api$queue_state_update(i, state, ix)
+}
+
+is_integer_like <- function(x) {
+  abs(x - round(x)) < sqrt(.Machine$double.eps)
 }

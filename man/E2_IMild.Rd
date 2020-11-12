@@ -4,7 +4,7 @@
 \alias{E2_IMild}
 \title{Function for transition from E2 to IMild}
 \usage{
-E2_IMild(human, IMild, E2, ICase1, p_E2_I, prob_hosp)
+E2_IMild(human, IMild, E2, ICase1, p_E2_I, prob_hosp, population_size)
 }
 \arguments{
 \item{human}{human}
@@ -18,6 +18,8 @@ E2_IMild(human, IMild, E2, ICase1, p_E2_I, prob_hosp)
 \item{p_E2_I}{p_E2_I}
 
 \item{prob_hosp}{prob_hosp}
+
+\item{population_size}{total population size}
 }
 \description{
 Function for transition from E2 to IMild

@@ -11,15 +11,13 @@
 #'  hospitalisation
 #' @param S Susceptible
 #' @param E1 First of the latent infection compartments
-#' @param i index
-#' @param N_age number of points for a particular age
+#' @param population_size population_size
 #' @param beta_set beta_set
 #' @param m m
 #' @param dt dt
-#'
 #' @importFrom stats runif
 infection_process <- function(human, IMild, ICase1, ICase2,
-                          S, E1, i, N_age, beta_set, m, dt) {
+                     S, E1, population_size, beta, m, dt) {
   function(api) {
 
     # Generating Force of Infection
@@ -29,8 +27,9 @@ infection_process <- function(human, IMild, ICase1, ICase2,
 
     get_3_states <- c(newImild, newICase1, newICase2)
 
-    beta <- beta_set
     probability_of_infection <- 0
+
+    bernoulli_multi_p <- function(size, p) runif(size, 0, 1) < p
 
     # If IMild = ICase1 = ICase2 = 0, FOI = 0, i.e. no infected individuals
     if (length(get_3_states) == 0) {
@@ -42,28 +41,20 @@ infection_process <- function(human, IMild, ICase1, ICase2,
 
       if (!isEmpty(lambda)) {
         probability_of_infection  <- 1 - exp(-lambda * dt)
+
+        #Transition from S to E1
+        susceptible <- api$get_state(human, S)
+
+        temp <- bernoulli_multi_p(length(susceptible),
+                                  probability_of_infection)
+
+        validated_state_update(api, human, E1, temp, sum(population_size))
+
       }
       else {
         probability_of_infection  <- 0.0
       }
     }
-
-    # Transition from S to E1
-    susceptible <- api$get_state(human, S)
-
-    api$queue_state_update(
-      human,
-      E1,
-      susceptible[runif(length(susceptible)) < probability_of_infection ]
-    )
-
-    # susceptible <- api$get_state(human, S)
-    #
-    # infected <- susceptible[sample.int(length(susceptible), n_to_infect)]
-    # api$queue_state_update(human, E1, infected)
-
-    probability_of_infection
-
   }
 }
 
