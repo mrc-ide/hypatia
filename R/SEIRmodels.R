@@ -29,19 +29,6 @@ E2_IMild <- function(human, IMild, E2, ICase1, p_E2_I, prob_hosp,
   }
 }
 
-#' @title Renders the sizes for S, I, R
-#' @param S S
-#' @param I I
-#' @param R R
-#' @param human human
-render_sir_state_sizes <- function(S, I, R, human) {
-  function(api) {
-    api$render("susceptable_counts", length(api$get_state(human, S)))
-    api$render("infected_counts", length(api$get_state(human, I)))
-    api$render("recovered_counts", length(api$get_state(human, R)))
-  }
-}
-
 #' Render sizes for SQUIRE states - note IMild is missing for now
 #'
 #' @param S Susceptible
