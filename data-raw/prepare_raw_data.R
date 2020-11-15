@@ -31,7 +31,8 @@ iso3c_ages <- read_html(url) %>%
                      "Saint Martin" = "MAF",
                      "Channel Islands" = "CHI",
                      "Micronesia" = "FSM"))) %>% 
-  filter(iso3c %in% squire::population$iso3c)
+  filter(iso3c %in% squire::population$iso3c) %>% 
+  mutate(age = as.numeric(age))
 usethis::use_data(iso3c_ages, overwrite = TRUE)
 
 # End --------------------------------------------------------------------------
