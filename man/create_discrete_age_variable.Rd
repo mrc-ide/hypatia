@@ -4,10 +4,11 @@
 \alias{create_discrete_age_variable}
 \title{Discrete age variable}
 \usage{
-create_discrete_age_variable(pop)
+create_discrete_age_variable(ages, pop)
 }
 \arguments{
-\item{pop}{population list}
+\item{pop}{Vector of integer ages created by
+\code{\link{create_continuous_age_variable}}}
 }
 \value{
 discrete age variable

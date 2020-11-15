@@ -4,10 +4,12 @@
 \alias{create_continuous_age_variable}
 \title{Continuous age variable}
 \usage{
-create_continuous_age_variable(pop)
+create_continuous_age_variable(pop, max_age = 100)
 }
 \arguments{
 \item{pop}{population list}
+
+\item{max_age}{maximum age to be drawn}
 }
 \value{
 continuous age variable

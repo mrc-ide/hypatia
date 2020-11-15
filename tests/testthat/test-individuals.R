@@ -45,7 +45,7 @@ test_that("test Probabilities_of_states", {
 
 test_that("test create_continuous_age_variable", {
 
-  pop <- squire::get_population("France", simple_SEIR = FALSE)
+  pop <- squire::get_population(iso3c = "ATG", simple_SEIR = FALSE)
 
   age_cont <- create_continuous_age_variable(pop)
 
@@ -54,10 +54,11 @@ test_that("test create_continuous_age_variable", {
 })
 
 test_that("test create_discrete_age_variable", {
-
-  # TO BE DONE LATER
-  pop <- squire::get_population("France", simple_SEIR = FALSE)
-
-  expect_error(hypatia:::create_discrete_age_variable(pop), "*")
-
+  
+  pop <- squire::get_population(iso3c = "ATG", simple_SEIR = FALSE)
+  ages <- create_continuous_age_variable(pop = pop, max_age = 100)
+  disc_ages <- create_discrete_age_variable(ages, pop)
+  
+  expect_true(all(as.numeric(table(disc_ages)) == pop$n))
+  
 })
