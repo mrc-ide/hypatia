@@ -20,6 +20,8 @@ create_hospitilisation_update_listener(
 \item{variables}{the available human variables}
 
 \item{parameters}{model parameters}
+
+\item{events}{a list of events in the model}
 }
 \description{
 Age dependent outcome of exposure

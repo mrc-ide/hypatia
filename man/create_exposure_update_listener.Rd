@@ -11,6 +11,8 @@ create_exposure_update_listener(human, states, events, variables, parameters)
 
 \item{states}{the available human states}
 
+\item{events}{a list of events in the model}
+
 \item{variables}{the available human variables}
 
 \item{parameters}{model parameters}
