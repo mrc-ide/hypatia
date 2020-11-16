@@ -4,18 +4,7 @@
 \alias{infection_process}
 \title{Calculating the FOI}
 \usage{
-infection_process(
-  human,
-  IMild,
-  ICase1,
-  ICase2,
-  S,
-  E1,
-  population_size,
-  beta,
-  m,
-  dt
-)
+infection_process(individuals, states, variables, events)
 }
 \arguments{
 \item{human, }{human}
@@ -35,11 +24,11 @@ hospitalisation}
 
 \item{population_size}{population_size}
 
+\item{beta_set}{beta_set}
+
 \item{m}{m}
 
 \item{dt}{dt}
-
-\item{beta_set}{beta_set}
 }
 \description{
 calculating the FOI and infection process
