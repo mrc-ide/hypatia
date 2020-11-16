@@ -19,7 +19,8 @@ Suggests:
     testthat,
     mockery,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tidyverse
 Imports:
     dplyr,    
     ggplot2,   

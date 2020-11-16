@@ -2,19 +2,10 @@
 #'
 #' @description calculating the FOI and infection process
 #'
-#' @param human, human
-#' @param IMild rest of the infections, which we consider to be mild and not
-#'  require hospitalisation
-#' @param ICase1 First of the compartments for infections that will require
-#'  hospitalisation
-#' @param ICase2 Second of the compartments for infections that will require
-#'  hospitalisation
-#' @param S Susceptible
-#' @param E1 First of the latent infection compartments
-#' @param population_size population_size
-#' @param beta_set beta_set
-#' @param m m
-#' @param dt dt
+#' @param individuals a list of individuals in the model
+#' @param states a list of states in the model
+#' @param variables list of variables in the model
+#' @param events a list of events in the model
 #' @importFrom stats runif
 infection_process <- function(individuals, states, variables, events) {
   

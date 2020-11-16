@@ -3,5 +3,6 @@
 export(run_simulation)
 importFrom(stats,dexp)
 importFrom(stats,rbinom)
+importFrom(stats,rexp)
 importFrom(stats,rgamma)
 importFrom(stats,runif)

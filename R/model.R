@@ -5,8 +5,11 @@
 #' dataframe with the number of individuals in each state at each timestep
 #'
 #' @param timesteps the number of timesteps to run the simulation for
-#' @param pop population. See \code{\link{squire::get_population}}
-#' @param ... Other parameters for \code{\link{squire::parameters_explicit_SEEIR}}
+#' @param pop population. See \code{\link[squire]{get_population}}
+#' @param parameters parameters list. 
+#'   See \code{\link[squire]{parameters_explicit_SEEIR}}
+#' @param ... Other parameters for 
+#'   \code{\link[squire]{parameters_explicit_SEEIR}}
 #' @export
 run_simulation <- function(timesteps, pop, parameters = NULL, ...) {
   events <- create_events()

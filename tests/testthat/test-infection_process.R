@@ -1,34 +1,43 @@
-test_that("check that probability_of_infection is 0 if lamdba is empty", {
+test_that("test infection process", {
 
-  warnings()
-  pars <- hypatia::get_parameters_for_sirstochastic()
-
-  population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
-
-  dt <- 1
-
+  # Create our population
+  pop <- squire::get_population(iso3c = "ATG")
+  
+  # Scale it for speed
+  pop$n <- round(pop$n / 10)
+  
+  # Create our equivalent parameters
   psq <- squire::parameters_explicit_SEEIR(
-    population = population$n,
-    dt = 1,
-    R0 = 2,
-    tt_contact_matrix = 0,
-    time_period = 1000,
-    contact_matrix_set = squire::contact_matrices[[1]])
-
-  NR <- 0
-  newpopulation <- population$n[2]
-  timestep <- 100
-  ind <- 2
-
+    population = pop$n,
+    country = "Antigua and Barbuda",
+    contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"),
+  )
+  
+  # create set up for model
   states <- create_states(psq)
+  events <- create_events()
+  parameters <- remove_non_numerics(psq)
+  states <- create_states(psq)
+  variables <- create_variables(pop = pop)
+  individuals <- create_individuals(states, variables, events, psq)
+  create_event_based_processes(individuals, states, variables, events, parameters)
 
-  indivs <- create_individuals(states, variables)
-
-  pstates <- probabilities_of_states(dt, psq)
-
-  infection_process(indivs$human, NULL, NULL, NULL, states$S, states$E1, ind,
-                    population$n[2], 0.0, psq$mix_mat_set[1, ind ,], psq$dt)
-  probability_of_infection <- 0
-  expect_equal(probability_of_infection, 0)
+  # mock api
+  # TODO: Giovanni: Could you explain how you do/recommend 
+  api <- list(
+    queue_state_update = mockery::mock(),
+    get_parameters = mockery::mock(),
+    get_state = mockery::mock()
+  )
+  
+  inf_process <-
+    infection_process(
+      individuals = individuals,
+      states = states,
+      variables = variables,
+      events = events
+    )
+  
+  inf_process(api)
 
 })

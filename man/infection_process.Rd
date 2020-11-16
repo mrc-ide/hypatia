@@ -7,28 +7,13 @@
 infection_process(individuals, states, variables, events)
 }
 \arguments{
-\item{human, }{human}
+\item{individuals}{a list of individuals in the model}
 
-\item{IMild}{rest of the infections, which we consider to be mild and not
-require hospitalisation}
+\item{states}{a list of states in the model}
 
-\item{ICase1}{First of the compartments for infections that will require
-hospitalisation}
+\item{variables}{list of variables in the model}
 
-\item{ICase2}{Second of the compartments for infections that will require
-hospitalisation}
-
-\item{S}{Susceptible}
-
-\item{E1}{First of the latent infection compartments}
-
-\item{population_size}{population_size}
-
-\item{beta_set}{beta_set}
-
-\item{m}{m}
-
-\item{dt}{dt}
+\item{events}{a list of events in the model}
 }
 \description{
 calculating the FOI and infection process

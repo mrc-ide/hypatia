@@ -9,9 +9,13 @@ run_simulation(timesteps, pop, parameters = NULL, ...)
 \arguments{
 \item{timesteps}{the number of timesteps to run the simulation for}
 
-\item{pop}{population. See \code{\link{squire::get_population}}}
+\item{pop}{population. See \code{\link[squire]{get_population}}}
 
-\item{...}{Other parameters for \code{\link{squire::parameters_explicit_SEEIR}}}
+\item{parameters}{parameters list.
+See \code{\link[squire]{parameters_explicit_SEEIR}}}
+
+\item{...}{Other parameters for
+\code{\link[squire]{parameters_explicit_SEEIR}}}
 }
 \description{
 The main entrypoint for the simulation. run_simulation puts together the

@@ -7,6 +7,8 @@
 create_discrete_age_variable(ages, pop)
 }
 \arguments{
+\item{ages}{Vector of ages from \code{\link{create_continuous_age_variable}}}
+
 \item{pop}{Vector of integer ages created by
 \code{\link{create_continuous_age_variable}}}
 }
