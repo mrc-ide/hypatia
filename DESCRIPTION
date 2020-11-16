@@ -10,14 +10,16 @@ Description: Implements an individual-based model of COVID-19 transmission.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Remotes:  
+Remotes: 
     mrc-ide/individual@0.0.8,
     mrc-ide/squire@v0.5.3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests:
     testthat,
-    mockery
+    mockery,
+    knitr,
+    rmarkdown
 Imports:
     dplyr,    
     ggplot2,   
@@ -26,3 +28,6 @@ Imports:
     individual,
     reshape2,
     squire
+Depends: 
+    R (>= 2.10)
+VignetteBuilder: knitr

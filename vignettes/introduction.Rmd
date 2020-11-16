@@ -1,0 +1,96 @@
+---
+title: "Introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  fig.width = 9, 
+  fig.height = 9
+)
+```
+
+```{r setup}
+library(hypatia)
+library(ggplot2)
+library(tidyverse)
+```
+
+```{r basic use}
+
+# Create our population
+pop <- squire::get_population(iso3c = "ATG")
+
+# Scale it for speed
+pop$n <- round(pop$n/10)
+
+# Create our equivalent parameters
+parameters <- squire::parameters_explicit_SEEIR(
+  population = pop$n, 
+  country = "Antigua and Barbuda", 
+  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"), 
+  )
+
+# run our simulation
+output <- run_simulation(200, pop, parameters)
+
+# plotting function
+plot_states <- function(output) {
+  ggplot(
+    reshape2::melt(output, 'timestep'),
+    aes(x = timestep, y = value, group = variable)
+  ) + geom_line(aes(color = variable))
+}
+
+plot_states(output)
+```
+
+Does it look similar to the squire output:
+
+```{r squire}
+
+out <- squire::run_explicit_SEEIR_model(
+  population = pop$n, 
+  country = "Antigua and Barbuda", 
+  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"),
+  time_period = 200, 
+  replicates = 1,
+  day_return = TRUE, 
+  dt = 0.01
+  )
+
+plot(out)
+
+```
+
+Get the actual comparative outputs. 
+
+```{r comparisons}
+
+hyp <- tidyr::pivot_longer(output, -1) %>% 
+  rename(t = timestep, compartment = name, y = value) %>% 
+  mutate(compartment = gsub("(^human_)(\\w*)(_count)", "\\2", compartment),
+         model = "hypatia") %>% 
+  select(c("t", "compartment", "y", "model"))
+
+sq <- squire::format_output(out, unique(hyp$compartment)) %>% 
+  mutate(model = "squire") %>% 
+  select(c("t", "compartment", "y", "model"))
+
+ggplot(rbind(sq, hyp), aes(t, y, color = model)) + 
+  geom_line() + 
+  facet_wrap(~compartment, scales = "free")
+
+
+
+```
+
+Really pretty close! Need to finish the correct allocation of the ages. 
+`individual` appears to allocate all states in chunks, and so need to align the
+ages created accordingly to get equivalent seeding
