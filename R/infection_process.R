@@ -16,48 +16,72 @@
 #' @param m m
 #' @param dt dt
 #' @importFrom stats runif
-infection_process <- function(human, IMild, ICase1, ICase2,
-                     S, E1, population_size, beta, m, dt) {
+infection_process <- function(individuals, states, variables, events) {
+  
   function(api) {
-
+    
+    pars <- api$get_parameters()
+    
     # Generating Force of Infection
-    newImild <- api$get_state(human, IMild)
-    newICase1 <- api$get_state(human, ICase1)
-    newICase2 <- api$get_state(human, ICase2)
-
-    get_3_states <- c(newImild, newICase1, newICase2)
-
-    probability_of_infection <- 0
-
-    bernoulli_multi_p <- function(size, p) runif(size, 0, 1) < p
-
-    # If IMild = ICase1 = ICase2 = 0, FOI = 0, i.e. no infected individuals
-    if (length(get_3_states) == 0) {
-      probability_of_infection  <- 0.0
-    }
-    else {
-      # Calculate FoI and use to create probability
-      lambda <- beta * length(get_3_states) * mean(m)
-
-      if (!isEmpty(lambda)) {
-        probability_of_infection  <- 1 - exp(-lambda * dt)
-
-        #Transition from S to E1
-        susceptible <- api$get_state(human, S)
-
-        temp <- bernoulli_multi_p(length(susceptible),
-                                  probability_of_infection)
-
-        validated_state_update(api, human, E1, temp, sum(population_size))
-
+    IMild <- api$get_state(individuals$human, states$IMild)
+    ICase <- api$get_state(individuals$human, states$ICase)
+    inf_states <- c(IMild, ICase)
+    
+    # If IMild = ICase = 0, FOI = 0, i.e. no infected individuals
+    if (length(inf_states) > 0) {
+      
+      # Group infection by age
+      ages <- api$get_variable(individuals$human, variables$discrete_age, inf_states)
+      inf_ages <- tabulate(ages, nbins = pars$N_age)
+      
+      # Calculate FoI and use to create probability for each age group
+      lambda <- pars$beta * rowSums(pars$mix_mat_set[1,,] %*% diag(inf_ages))
+      
+      # Transition from S to E1
+      susceptible <- api$get_state(individuals$human, states$S)
+      ages <- api$get_variable(individuals$human, variables$discrete_age, susceptible)
+      
+      # FOI for each susceptible person
+      lambda <- lambda[as.integer(ages)]
+      prob_infection  <- 1 - exp(-lambda)
+      
+      # infected
+      infected <- bernoulli_multi_p(length(susceptible), prob_infection)
+      
+      # if infections then 
+      if(length(infected) > 0) {
+        api$schedule(
+          event = events$exposure, 
+          target = susceptible[infected],
+          delay = 0 # i.e. happens now
+        )
       }
-      else {
-        probability_of_infection  <- 0.0
-      }
+      
     }
   }
 }
 
-isEmpty <- function(x) {
-  return(length(x) == 0)
+
+
+
+create_processes <- function(
+  individuals,
+  states,
+  events,
+  variables
+) {
+  
+  processes <- list(
+    
+    infection_process(individuals, states, variables, events),
+    
+    individual::state_count_renderer_process(
+      individuals$human$name,
+      unlist(lapply(states, "[[", "name"))
+    )
+    
+  )
+  
+  processes
+  
 }
