@@ -15,10 +15,6 @@ test_that("test create_states for all available states", {
     time_period = time_period,
     contact_matrix_set = squire::contact_matrices[[1]])
 
-  beta <- squire::beta_est_explicit(psq$dur_IMild, psq$dur_ICase,
-                                    psq$prob_hosp,
-                                    psq$mix_mat_set[1, , ], R0 = R0)
-
   states <- create_states(psq)
 
   pe <- sum(psq$E1_0) + sum(psq$E2_0)
