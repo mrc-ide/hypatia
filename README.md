@@ -21,6 +21,7 @@ You can install the released version of hypatia from
 
 ``` r
 install.packages("hypatia")
+devtools::install_github("ggplot2")
 ```
 
 And the development version from [GitHub](https://github.com/) with:
@@ -30,18 +31,10 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("mrc-ide/hypatia")
 ```
 
-## UNDER CONSTRUCTION
+## Example
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+This is an example showing you an hypatia run for Afghanistan on all 22
+states but with a simple model for the infection
 
 ## License
 

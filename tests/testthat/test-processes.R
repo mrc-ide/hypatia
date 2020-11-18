@@ -1,11 +1,4 @@
-test_that("test that create_processes works", {
-
-  human <- mockery::mock()
-  S <- mockery::mock()
-
-  api <- list(
-    queue_state_update = mockery::mock()
-  )
+test_that("test that create_processes and create_dataframes works", {
 
   pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
@@ -34,10 +27,7 @@ test_that("test that create_processes works", {
 
   states <- create_states(psq)
 
-  events <- create_events()
-  variables <- list()
-
-  indivs <- create_individuals(states, variables, events)
+  indivs <- create_individuals(states)
 
   pstates <- probabilities_of_states(dt, psq)
 
