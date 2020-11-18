@@ -84,34 +84,3 @@ test_that("test create_states for all available states", {
   expect_equal(states$D, D)
 
 })
-
-test_that("test probabilities_of_states", {
-
-  population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
-
-  dt <- 1
-
-  psq <- squire::parameters_explicit_SEEIR(
-    population = population$n,
-    dt = dt,
-    R0 = 2,
-    tt_contact_matrix = 0,
-    time_period = 1000,
-    contact_matrix_set = squire::contact_matrices[[1]])
-
-  pstates <- probabilities_of_states(dt, psq)
-
-  expect_equal(pstates$pgamma_E, 0.3525946, tolerance=1e-3)
-  expect_equal(pstates$pgamma_IMild, 0.3788548, tolerance=1e-3)
-  expect_equal(pstates$pgamma_ICase, 0.3588196, tolerance=1e-3)
-  expect_equal(pstates$pgamma_get_ox_survive, 0.1992626, tolerance=1e-3)
-  expect_equal(pstates$pgamma_not_get_ox_survive, 0.3588196, tolerance=1e-3)
-  expect_equal(pstates$pgamma_get_ox_die, 0.1992626, tolerance=1e-3)
-  expect_equal(pstates$pgamma_not_get_ox_die, 0.3588196, tolerance=1e-3)
-  expect_equal(pstates$pgamma_get_mv_survive, 0.1264022, tolerance=1e-3)
-  expect_equal(pstates$pgamma_not_get_mv_survive, 0.1264022, tolerance=1e-3)
-  expect_equal(pstates$pgamma_get_mv_die, pstates$pgamma_get_mv_die, tolerance=1e-3)
-  expect_equal(pstates$pgamma_not_get_mv_die, 0.8646647, tolerance=1e-3)
-  expect_equal(pstates$pgamma_rec, 0.4865829, tolerance=1e-3)
-
-})
