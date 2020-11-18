@@ -39,16 +39,22 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("mrc-ide/hypatia")
 ```
 
-## Example
-This is an example showing you an hypatia run for Afghanistan on all 22 states but
-with a simple model for the infection
+and packages:
 
-```{r, hypatia_example, echo = FALSE}
+``` r
+options(warn = - 1) 
 library('remotes')
 install_github('mrc-ide/individual')
 library(individual)
 library(ggplot2)
 library(reshape2)
+```
+
+## Example
+This is an example showing you an hypatia run for Afghanistan on all 22 states but
+with a simple model for the infection
+
+```{r, hypatia_example, echo = FALSE}
 options(warn = - 1) 
   R0 <- 2
   timestep <- 100
@@ -112,7 +118,7 @@ options(warn = - 1)
                               "IMVNotGetDie1", "IMVNotGetDie2", "IRec1",
                               "IRec2", "R", "D"))
 
-  strname <- paste("Individua SQUIRE Model Simulation")
+  strname <- paste("Individual SQUIRE Model Simulation")
 
   ggplot2::ggplot(
     df, ggplot2::aes(x = df$time, y = df$value,

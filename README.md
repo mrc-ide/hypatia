@@ -31,21 +31,21 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("mrc-ide/hypatia")
 ```
 
+and packages:
+
+``` r
+options(warn = - 1) 
+library('remotes')
+install_github('mrc-ide/individual')
+library(individual)
+library(ggplot2)
+library(reshape2)
+```
+
 ## Example
 
 This is an example showing you an hypatia run for Afghanistan on all 22
 states but with a simple model for the infection
-
-    #> Using github PAT from envvar GITHUB_PAT
-    #> Skipping install of 'individual' from a github remote, the SHA1 (386f6864) has not changed since last install.
-    #>   Use `force = TRUE` to force installation
-    #> 
-    #> Attaching package: 'individual'
-    #> The following object is masked from 'package:stats':
-    #> 
-    #>     simulate
-    #> Warning: package 'ggplot2' was built under R version 4.0.3
-    #> Warning: package 'reshape2' was built under R version 4.0.3
 
 <img src="man/figures/README-hypatia_example-1.png" width="100%" />
 
