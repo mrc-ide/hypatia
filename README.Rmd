@@ -29,6 +29,7 @@ You can install the released version of hypatia from [CRAN](https://CRAN.R-proje
 
 ``` r
 install.packages("hypatia")
+devtools::install_github("ggplot2")
 ```
 
 And the development version from [GitHub](https://github.com/) with:
@@ -37,19 +38,87 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("mrc-ide/hypatia")
 ```
-## UNDER CONSTRUCTION
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+## Example
+This is an example showing you an hypatia run for Afghanistan on all 22 states but
+with a simple model for the infection
 
+```{r, hypatia_example, include = FALSE}
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+  R0 <- 2
+  timestep <- 100
+  dt <- 1
+  time_period <- 1000
+  tt_contact_matrix <- 0
+  newpopulation <- 100000
+  numberof_days <- 5
 
-You can also embed plots, for example:
+  df <- hypatia::run_simulation("Afghanistan", R0, timestep, dt, time_period,
+                        tt_contact_matrix, newpopulation, numberof_days)
 
+``` 
 
+```{r}
+library('remotes')
+install_github('mrc-ide/individual')
+library(individual)
+library(ggplot2)
+library(reshape2)
+  # Check if df is a dataframe. If yes then turn it into a list
+  numruns <- 0
+  datapoints <- 0
+  subtitle <- ""
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+  if (is.data.frame(df)) {
+    numdatapoints <- paste(length(df$time))
+    numruns <- 1
+    df <- list(df)
+    subtitle <- paste(
+      "Simulation for", numruns, "run and", numdatapoints, "data points")
+  } else {
+    numruns <- length(df)
+    numdatapoints <- length(df[[1]][[1]]) - 1
+    subtitle <- paste(
+      "Simulation for", numruns, "runs,", numdatapoints, "data points per run")
+  }
 
+  # Create group id for data
+  df <- dplyr::bind_rows(df, .id = "group")
+
+  #Convert to long format
+  df <- tidyr::pivot_longer(tibble::as_tibble(df),
+                            c("S", "E", "IMild", "ICase1", "ICase2",
+                              "IOxGetLive1", "IOxGetLive2",
+                              "IOxNotGetLive1", "IOxNotGetLive2", "IOxGetDie1",
+                              "IOxGetDie2", "IOxNotGetDie1", "IOxNotGetDie2",
+                              "IMVGetLive1", "IMVGetLive2", "IMVNotGetLive1",
+                              "IMVNotGetLive2", "IMVGetDie1", "IMVGetDie2",
+                              "IMVNotGetDie1", "IMVNotGetDie2", "IRec1",
+                              "IRec2", "R", "D"))
+
+  #df <- tidyr::pivot_longer(tibble::as_tibble(df), cols = df$nameslist)
+
+  strname <- paste("SIR", df$type, "Model Simulation")
+
+  ggplot2::ggplot(
+    df, ggplot2::aes(x = df$time, y = df$value,
+                     group = interaction(df$group, df$name), colour = df$name)) +
+    ggplot2::geom_line(size = 0.5) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
+    ggplot2::labs(y = "States", x = "time") +
+    ggplot2::theme(
+      legend.justification = c("right", "top"),
+      legend.box = c("horizontal", "vertical")
+    ) +
+    ggplot2::theme(
+      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
+      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
+      plot.subtitle = ggplot2::element_text(size = 13),
+      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
+      axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
+
+```
 
 ## License
 
