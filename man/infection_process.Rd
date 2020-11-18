@@ -6,19 +6,31 @@
 \usage{
 infection_process(
   human,
-  IMild,
-  ICase1,
-  ICase2,
   S,
-  E1,
+  E,
   population_size,
   beta,
   m,
-  dt
+  dt,
+  IMild,
+  ICase1,
+  ICase2
 )
 }
 \arguments{
 \item{human, }{human}
+
+\item{S}{Susceptible}
+
+\item{E}{Infection compartments}
+
+\item{population_size}{population_size}
+
+\item{beta}{beta}
+
+\item{m}{m}
+
+\item{dt}{dt}
 
 \item{IMild}{rest of the infections, which we consider to be mild and not
 require hospitalisation}
@@ -28,19 +40,11 @@ hospitalisation}
 
 \item{ICase2}{Second of the compartments for infections that will require
 hospitalisation}
-
-\item{S}{Susceptible}
-
-\item{E1}{First of the latent infection compartments}
-
-\item{population_size}{population_size}
-
-\item{m}{m}
-
-\item{dt}{dt}
-
-\item{beta_set}{beta_set}
 }
 \description{
 calculating the FOI and infection process
 }
+\section{NOTE function is not being used and maybe superceded by OJs work}{
+###NOTE: # E_I not being used in E_IMild_ICase1_ICase2 for time being
+}
+

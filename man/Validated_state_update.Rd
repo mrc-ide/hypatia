@@ -4,11 +4,9 @@
 \alias{validated_state_update}
 \title{Check state update is valid}
 \usage{
-validated_state_update(api, i, state, ix, population_size)
+validated_state_update(i, state, ix, population_size)
 }
 \arguments{
-\item{api}{api}
-
 \item{i}{human etc}
 
 \item{state}{S, I, R, etc}

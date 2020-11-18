@@ -6,8 +6,7 @@
 \usage{
 render_all_state_sizes(
   S,
-  E1,
-  E2,
+  E,
   IMild,
   ICase1,
   ICase2,
@@ -37,9 +36,7 @@ render_all_state_sizes(
 \arguments{
 \item{S}{Susceptible}
 
-\item{E1}{First of the latent infection compartments}
-
-\item{E2}{Second of the latent infection compartments}
+\item{E}{Latent infection compartments}
 
 \item{IMild}{rest of the infections, which we consider to be mild and not
 require hospitalisation}

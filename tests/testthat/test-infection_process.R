@@ -1,8 +1,5 @@
 test_that("check that probability_of_infection is 0 if lamdba is empty", {
 
-  warnings()
-  pars <- hypatia::get_parameters_for_sirstochastic()
-
   population <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
   dt <- 1
@@ -21,13 +18,16 @@ test_that("check that probability_of_infection is 0 if lamdba is empty", {
   ind <- 2
 
   states <- create_states(psq)
+  events <- create_events()
+  variables <- list()
 
-  indivs <- create_individuals(states, variables)
+  indivs <- create_individuals(states, variables, events)
 
   pstates <- probabilities_of_states(dt, psq)
 
-  infection_process(indivs$human, NULL, NULL, NULL, states$S, states$E1, ind,
-                    population$n[2], 0.0, psq$mix_mat_set[1, ind ,], psq$dt)
+  infection_process(indivs$human, states$S, states$E,
+                    population, 0.0, psq$mix_mat_set[1, ind ,], psq$dt,
+                    NULL, NULL, NULL)
   probability_of_infection <- 0
   expect_equal(probability_of_infection, 0)
 

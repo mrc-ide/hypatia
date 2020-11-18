@@ -1,31 +1,69 @@
-#' @title Function for transition from E2 to IMild
-#'
+#' @title Function for transition from E to IMild and ICase1 and ICase2
+#' @description: NOTE function is not being used and maybe superceded by OJs work
+#' Scheduler not tested yet
 #' @param human human
 #' @param IMild IMild
-#' @param E2 E2
+#' @param E E
 #' @param ICase1 ICase1
+#' @param E_I list of individuals infected
 #' @param p_E2_I p_E2_I
 #' @param prob_hosp prob_hosp
 #' @param population_size total population size
+#' @param numberof_days number of days
 #'
 #' @importFrom stats rbinom
-E2_IMild <- function(human, IMild, E2, ICase1, p_E2_I, prob_hosp,
-                     population_size) {
+E_IMild_ICase1_ICase2 <- function(human, IMild, E, ICase1, E_I, p_E2_I,
+                                  prob_hosp, population_size, numberof_days) {
   function(api) {
-    E2 <- api$get_state(human, E2)
-    E2_I <- rbinom(length(E2), 1, p_E2_I)
-    E2_I_pos <- E2[as.logical(E2_I)]
+    E <- api$get_state(human, E)
 
-    n_E2_ICase1 <- rbinom(length(E2_I_pos), 1, mean(prob_hosp))
-    new_ICase1 <- round(E2_I_pos[as.logical(n_E2_ICase1)])
-    new_IMild1 <- round(E2_I_pos[!as.logical(n_E2_ICase1)])
+    # Use this temporary E_I as not working properly in infection_process - to
+    # be superceded by OJs work; E_I passed in as NULL
+    E_I <- rbinom(length(E), 1, p_E2_I) # will be from infection process
+    E_I_pos <- E[as.logical(E_I)]
 
-    if (length(new_ICase1) != 0) {
-      validated_state_update(api, human, ICase1, new_ICase1, sum(population_size))
-    }
-    if (length(new_IMild1) != 0) {
-      validated_state_update(api, human, IMild, new_IMild1, sum(population_size))
-    }
+    n_E_ICase1 <- rbinom(length(E_I_pos), 1, mean(prob_hosp))
+    new_ICase1 <- round(E_I_pos[as.logical(n_E_ICase1)]) # ok
+    new_IMild <- round(E_I_pos[!as.logical(n_E_ICase1)]) # ok
+
+    # For scheduler which is not working yet
+    # events <- create_events()
+    #
+    # events$imild_event$add_listener(function(api, target) {
+    #   api$queue_state_update(human, IMild, target)
+    # })
+    #
+    # events$icase1_event$add_listener(function(api, target) {
+    #   api$queue_state_update(human, iCase1, target)
+    # })
+
+    #if (length(new_ICase1) != 0) {
+      # scheduler will be used but just use queue_state_update for now
+      #infected_scheduler(human, E, numberof_days, events$icase1_event)
+      validated_state_update(human, ICase1, new_ICase1, sum(population_size))
+   # }
+   # if (length(new_IMild) != 0) {
+      # scheduler will be used but just use queue_state_update for now
+      #infected_scheduler(human, E, numberof_days, events$imild_event)
+      validated_state_update(human, IMild, new_IMild, sum(population_size))
+   # }
+  }
+}
+
+
+#' @title IMild scheduler
+#'
+#' @param human human
+#' @param E human
+#' @param numberof_days number of_days
+#' @param event number of_daysan event
+infected_scheduler <- function(human, E, numberof_days, event) {
+  function(api) {
+    infected <- api$get_state(human, E)
+    already_scheduled <- api$get_scheduled(event)
+    infected <- setdiff(infected, already_scheduled)
+    to_newI<- infected[runif(length(infected)) < .5]
+    api$schedule(event, to_newI, numberof_days)
   }
 }
 
@@ -45,8 +83,7 @@ render_sir_state_sizes <- function(S, I, R, human) {
 #' Render sizes for SQUIRE states - note IMild is missing for now
 #'
 #' @param S Susceptible
-#' @param E1 First of the latent infection compartments
-#' @param E2 Second of the latent infection compartments
+#' @param E Latent infection compartments
 #' @param IMild rest of the infections, which we consider to be mild and not
 #'  require hospitalisation
 #' @param ICase1 First of the compartments for infections that will require
@@ -90,7 +127,7 @@ render_sir_state_sizes <- function(S, I, R, human) {
 #' @param R Recovered
 #' @param D Dead
 #' @param human human
-render_all_state_sizes <- function(S, E1, E2, IMild, ICase1, ICase2,
+render_all_state_sizes <- function(S, E, IMild, ICase1, ICase2,
                                 IOxGetLive1, IOxGetLive2,
                                 IOxNotGetLive1, IOxNotGetLive2, IOxGetDie1,
                                 IOxGetDie2, IOxNotGetDie1, IOxNotGetDie2,
@@ -100,8 +137,7 @@ render_all_state_sizes <- function(S, E1, E2, IMild, ICase1, ICase2,
                                 D, human) {
   function(api) {
     api$render("S", length(api$get_state(human, S)))
-    api$render("E1", length(api$get_state(human, E1)))
-    api$render("E2", length(api$get_state(human, E2)))
+    api$render("E", length(api$get_state(human, E)))
     api$render("IMild", length(api$get_state(human, IMild)))
     api$render("ICase1", length(api$get_state(human, ICase1)))
     api$render("ICase2", length(api$get_state(human, ICase2)))
@@ -130,31 +166,36 @@ render_all_state_sizes <- function(S, E1, E2, IMild, ICase1, ICase2,
 
 #' @title Check state update is valid
 #'
-#' @param api api
 #' @param i human etc
 #' @param state S, I, R, etc
 #' @param ix index
 #' @param population_size population size
-validated_state_update <- function(api, i, state, ix, population_size) {
+validated_state_update <- function(i, state, ix, population_size) {
 
-  if (any(ix > population_size)) {
-    stop(sprintf("Your ix %d for %s:%s is greater than the population size\n",
-                 ix, i$name, state$name))
-  }
-  if (any(ix <= 0)) {
-    stop(sprintf("Your ix %d for %s:%s is less than or equal to 0 \n",
-                 ix, i$name, state$name))
-  }
-  if (any(is.na(ix))) {
-    stop(sprintf("Your ix %d for %s:%s is not a number \n",
-                 ix, i$name, state$name))
-  }
-  if (any(!is_integer_like(ix))) {
-    stop(sprintf("Your ix %d for %s:%s is not an integer\n",
-                 ix, i$name, state$name))
-  }
+  function(api) {
+    if (any(ix > population_size)) {
+      stop(sprintf("Your ix %d for %s:%s is greater than the population size\n",
+                   ix, i$name, state$name))
+    }
+    if (any(ix < 0)) {
+      stop(sprintf("Your ix %d for %s:%s is less than 0 \n",
+                   ix, i$name, state$name))
+    }
+    if (any(ix = 0 && length(ix) != 1L)) {
+      stop(sprintf("Your ix %d for %s:%s is equal to 0 \n",
+                   ix, i$name, state$name))
+    }
+    if (any(is.na(ix))) {
+      stop(sprintf("Your ix %d for %s:%s is not a number \n",
+                   ix, i$name, state$name))
+    }
+    if (any(!is_integer_like(ix))) {
+      stop(sprintf("Your ix %d for %s:%s is not an integer\n",
+                   ix, i$name, state$name))
+    }
 
-  api$queue_state_update(i, state, ix)
+    api$queue_state_update(i, state, ix)
+  }
 }
 
 is_integer_like <- function(x) {

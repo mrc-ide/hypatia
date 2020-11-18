@@ -9,11 +9,12 @@
 #' @return states
 create_states <- function(psq) {
 
+  pE <- sum(psq$E1_0) + sum(psq$E2_0)
+
   states <- list(
     # Human states
     S = individual::State$new("S", sum(psq$S_0)),
-    E1 =  individual::State$new("E1", sum(psq$E1_0)),
-    E2 = individual::State$new("E2", sum(psq$E2_0)),
+    E =  individual::State$new("E", pE),
     IMild = individual::State$new("IMild", sum(psq$IMild_0)),
     ICase1 = individual::State$new("ICase1", sum(psq$ICase1_0)),
     ICase2 = individual::State$new("ICase2", sum(psq$ICase2_0)),
@@ -56,21 +57,19 @@ create_states <- function(psq) {
 #' relevant states and variables to each individual.
 #'
 #' @param states available states to assign
-#' @param variables available variables to assign
-#' @param events available events to assign
-#' @param parameters model parameters
+#' @param variables is a list of variables
+#' @param events is a list of variables
+#' @param states list of states
 create_individuals <- function(
   states,
   variables,
-  events,
-  parameters
+  events
 ) {
   human <- individual::Individual$new(
     "human",
     states = list(
       states$S,
-      states$E1,
-      states$E2,
+      states$E,
       states$IMild,
       states$ICase1,
       states$ICase2,
@@ -95,12 +94,30 @@ create_individuals <- function(
       states$R,
       states$D),
 
-    variables = list(),
+      variables = variables,
 
-    events = list()
+      events = events
   )
 
   list(human = human)
+}
+
+
+#' @title Create events list
+#'
+#' @return list of events
+create_events <- function() {
+
+  events <- list(
+
+    # infection events
+    imild_event <- individual::Event$new('IMild'),
+    icase1_event <- individual::Event$new('ICase1')
+
+  )
+
+  events
+
 }
 
 #' @title probabilities of the states
