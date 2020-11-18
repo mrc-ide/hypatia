@@ -44,8 +44,9 @@ library(reshape2)
 
 ## Example
 
-This is an example showing you an hypatia run for Afghanistan on all 22
-states but with a simple model for the infection
+This is an example showing you an hypatia run for Afghanistan on all 24
+states but with a simple model for the infection and population set to
+100000
 
 <img src="man/figures/README-hypatia_example-1.png" width="100%" />
 
