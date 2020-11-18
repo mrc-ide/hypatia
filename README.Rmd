@@ -43,7 +43,7 @@ devtools::install_github("mrc-ide/hypatia")
 This is an example showing you an hypatia run for Afghanistan on all 22 states but
 with a simple model for the infection
 
-```{r, hypatia_example, include = FALSE}
+```{r, hypatia_example, echo = FALSE}
 library('remotes')
 install_github('mrc-ide/individual')
 library(individual)
@@ -84,7 +84,7 @@ options(warn = - 1)
    IMVNotGetDie1 = out$IMVNotGetDie1,
    IMVNotGetDie2 = out$IMVNotGetDie2,
    IRec1 = out$IRec1, IRec2 = out$IRec2,
-   R = out$R, D = out$D, time = out$time, type = "Individual",
+   R = out$R, D = out$D, time = out$time,
    legend = "Individual", stringsAsFactors = FALSE)
 
   # Check if df is a dataframe. If yes then turn it into a list
@@ -92,18 +92,11 @@ options(warn = - 1)
   datapoints <- 0
   subtitle <- ""
 
-  if (is.data.frame(df)) {
-    numdatapoints <- paste(length(df$time))
-    numruns <- 1
-    df <- list(df)
-    subtitle <- paste(
-      "Simulation for", numruns, "run and", numdatapoints, "data points")
-  } else {
-    numruns <- length(df)
-    numdatapoints <- length(df[[1]][[1]]) - 1
-    subtitle <- paste(
-      "Simulation for", numruns, "runs,", numdatapoints, "data points per run")
-  }
+  numdatapoints <- paste(length(df$time))
+  numruns <- 1
+  df <- list(df)
+  subtitle <- paste(
+    "Simulation for", numruns, "run and", numdatapoints, "data points")
 
   # Create group id for data
   df <- dplyr::bind_rows(df, .id = "group")
@@ -119,9 +112,7 @@ options(warn = - 1)
                               "IMVNotGetDie1", "IMVNotGetDie2", "IRec1",
                               "IRec2", "R", "D"))
 
-  #df <- tidyr::pivot_longer(tibble::as_tibble(df), cols = df$nameslist)
-
-  strname <- paste("SIR", df$type, "Model Simulation")
+  strname <- paste("Individua SQUIRE Model Simulation")
 
   ggplot2::ggplot(
     df, ggplot2::aes(x = df$time, y = df$value,
