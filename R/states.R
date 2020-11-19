@@ -4,6 +4,8 @@
 #'
 #' @title Create and initialise states
 #'
+#' @export
+#'
 #' @param psq the model parameters
 #'
 #' @return states

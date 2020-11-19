@@ -19,10 +19,4 @@ Suggests:
     testthat,
     mockery
 Imports:
-    dplyr,    
-    ggplot2,   
-    tibble,   
-    tidyr,
     individual,
-    reshape2,
-    squire
