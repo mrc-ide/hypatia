@@ -20,3 +20,4 @@ Suggests:
     mockery
 Imports:
     individual,
+    squire
