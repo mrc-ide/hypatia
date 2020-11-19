@@ -40,3 +40,8 @@ create_individuals <- function(
 
   list(human = human)
 }
+
+create_events <- () {
+
+
+}
