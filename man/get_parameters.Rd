@@ -7,12 +7,10 @@
 get_parameters(
   countryname,
   R0,
-  timestep,
   dt,
   time_period,
   tt_contact_matrix,
-  newpopulation = NULL,
-  numberof_days
+  contact_matrix_set
 )
 }
 \arguments{
@@ -20,17 +18,13 @@ get_parameters(
 
 \item{R0}{R0}
 
-\item{timestep}{tme step}
-
 \item{dt}{dt}
 
 \item{time_period}{time period}
 
 \item{tt_contact_matrix}{contact matrix time}
 
-\item{newpopulation}{population to use instead of actual one}
-
-\item{numberof_days}{number of days for the run}
+\item{contact_matrix_set}{contact_matrix_set}
 }
 \value{
 SQUIRE parameters

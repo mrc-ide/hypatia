@@ -1,4 +1,4 @@
-test_that("test get_parameters return the correct values from SQUIRE", {
+test_that("test get_parameters returns the correct values from SQUIRE", {
 
   R0 <- 2
   timestep <- 100
@@ -7,10 +7,11 @@ test_that("test get_parameters return the correct values from SQUIRE", {
   tt_contact_matrix <- 0
   newpopulation <- 100000
   numberof_days <- 5
+  contact_matrix_set <- squire::contact_matrices[[1]]
+  countryname <- "Afghanistan"
 
-  psq <- get_parameters("Afghanistan", R0, timestep, dt, time_period,
-                       tt_contact_matrix, newpopulation, numberof_days)
-
+  psq <- get_parameters(countryname, R0, dt, time_period,
+                        tt_contact_matrix, contact_matrix_set)
 
   expect_equal(psq$dt, 1)
   expect_equal(psq$dur_E, 4.6)
