@@ -25,25 +25,9 @@ The goal of hypatia is to enable SQUIRE to be run on an individual basis rather 
 
 ## Installation
 
-You can install the released version of hypatia from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("hypatia")
-devtools::install_github("ggplot2")
-```
-
-And the development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("mrc-ide/hypatia")
-```
-
-and packages:
-
 ``` r
 options(warn = - 1) 
-library('remotes')
+
 install_github('mrc-ide/individual')
 library(individual)
 ```
@@ -51,7 +35,7 @@ library(individual)
 ## Example
 This is an example showing how states are checked
 
-
+``` r
   pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
   dt <- 1
@@ -134,7 +118,7 @@ This is an example showing how states are checked
   expect_equal(states$IRec2, IRec2)
   expect_equal(states$R, R)
   expect_equal(states$D, D)
-
+```
 
 ## License
 
