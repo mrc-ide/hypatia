@@ -52,7 +52,7 @@ library(individual)
 This is an example showing how to run the simulation
 
 ```{r, simulation, echo = FALSE}
-
+options(warn = - 1) 
  pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
  dt <- 1
