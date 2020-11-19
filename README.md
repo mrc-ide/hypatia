@@ -16,26 +16,9 @@ rather than aggregate
 
 ## Installation
 
-You can install the released version of hypatia from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("hypatia")
-devtools::install_github("ggplot2")
-```
-
-And the development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("mrc-ide/hypatia")
-```
-
-and packages:
-
 ``` r
 options(warn = - 1) 
-library('remotes')
+
 install_github('mrc-ide/individual')
 library(individual)
 ```
@@ -132,6 +115,7 @@ This is an example showing how states are checked
 ## Example 2
 
 This is an example showing how to run the simulation
+
 
 ## License
 
