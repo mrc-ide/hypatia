@@ -14,3 +14,5 @@
 \.gcno$
 ^LICENSE\.md$
 ^\.github$
+^.*\.Rproj$
+^\.Rproj\.user$
