@@ -11,8 +11,6 @@
 #'
 #' @return SQUIRE parameters
 #' @export
-#'
-#' @examples
 get_parameters <- function(countryname, R0, timestep, dt, time_period,
                            tt_contact_matrix, newpopulation = NULL, numberof_days) {
 

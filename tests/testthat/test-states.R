@@ -1,50 +1,5 @@
+test_that("test create_states for all available states", {
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# hypatia
-
-<!-- badges: start -->
-
-[![R build
-status](https://github.com/mrc-ide/hypatia/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/hypatia/actions)
-[![CodeFactor](https://www.codefactor.io/repository/github/mrc-ide/hypatia/badge)](https://www.codefactor.io/repository/github/mrc-ide/hypatia)
-[![codecov.io](https://codecov.io/github/mrc-ide/hypatia/coverage.svg?branch=main)](https://codecov.io/github/mrc-ide/hypatia?branch=main)
-<!-- badges: end -->
-
-The goal of hypatia is to enable SQUIRE to be run on an individual basis
-rather than aggregate
-
-## Installation
-
-You can install the released version of hypatia from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("hypatia")
-devtools::install_github("ggplot2")
-```
-
-And the development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("mrc-ide/hypatia")
-```
-
-and packages:
-
-``` r
-options(warn = - 1) 
-library('remotes')
-install_github('mrc-ide/individual')
-library(individual)
-```
-
-## Example 1
-
-This is an example showing how states are checked
-
-``` r
   pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
   dt <- 1
@@ -59,10 +14,6 @@ This is an example showing how states are checked
     tt_contact_matrix = tt_contact_matrix,
     time_period = time_period,
     contact_matrix_set = squire::contact_matrices[[1]])
-
-  beta <- squire::beta_est_explicit(psq$dur_IMild, psq$dur_ICase,
-                                    psq$prob_hosp,
-                                    psq$mix_mat_set[1, , ], R0 = R0)
 
   states <- create_states(psq)
 
@@ -127,12 +78,5 @@ This is an example showing how states are checked
   expect_equal(states$IRec2, IRec2)
   expect_equal(states$R, R)
   expect_equal(states$D, D)
-```
 
-## Example 2
-
-This is an example showing how to run the simulation
-
-## License
-
-MIT © Imperial College of Science, Technology and Medicine
+})
