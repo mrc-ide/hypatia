@@ -75,9 +75,9 @@
 <span class="fu">install_github</span><span class="op">(</span><span class="st">'mrc-ide/individual'</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">individual</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="example-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<a href="#example-1" class="anchor"></a>Example 1</h2>
 <p>This is an example showing how states are checked</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu">squire</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/squire/man/get_population.html">get_population</a></span><span class="op">(</span><span class="st">"Afghanistan"</span>, simple_SEIR <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -162,6 +162,27 @@
   <span class="fu">expect_equal</span><span class="op">(</span><span class="va">states</span><span class="op">$</span><span class="va">IRec2</span>, <span class="va">IRec2</span><span class="op">)</span>
   <span class="fu">expect_equal</span><span class="op">(</span><span class="va">states</span><span class="op">$</span><span class="va">R</span>, <span class="va">R</span><span class="op">)</span>
   <span class="fu">expect_equal</span><span class="op">(</span><span class="va">states</span><span class="op">$</span><span class="va">D</span>, <span class="va">D</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="example-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-2" class="anchor"></a>Example 2</h2>
+<p>This is an example showing how to get SQUIRE parameters, psq</p>
+<pre><code> pop &lt;- squire::get_population("Afghanistan", simple_SEIR = FALSE)
+
+ dt &lt;- 1
+ R0 &lt;-2 
+ tt_contact_matrix &lt;- 0
+ time_period &lt;- 1000
+ newpopulation &lt;- 10000
+ timestep &lt;- 100
+ 
+  psq &lt;- squire::parameters_explicit_SEEIR(
+    population = pop$n,
+    dt = dt,
+    R0 = R0,
+    tt_contact_matrix = tt_contact_matrix,
+    time_period = time_period,
+    contact_matrix_set = squire::contact_matrices[[1]])</code></pre>
 </div>
 <div id="license" class="section level2">
 <h2 class="hasAnchor">
