@@ -121,9 +121,9 @@ This is an example showing how states are checked
 ```
 
 ## Example 2
-This is an example showing how to get SQUIRe parameters, psq
+This is an example showing how to get SQUIRE parameters, psq
 
-```{r, simulation, echo = FALSE}
+```
  pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
  dt <- 1

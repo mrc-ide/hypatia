@@ -114,8 +114,26 @@ This is an example showing how states are checked
 
 ## Example 2
 
-This is an example showing how to get SQUIRe parameters, psq
+This is an example showing how to get SQUIRE parameters, psq
 
+``` 
+ pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
+
+ dt <- 1
+ R0 <-2 
+ tt_contact_matrix <- 0
+ time_period <- 1000
+ newpopulation <- 10000
+ timestep <- 100
+ 
+  psq <- squire::parameters_explicit_SEEIR(
+    population = pop$n,
+    dt = dt,
+    R0 = R0,
+    tt_contact_matrix = tt_contact_matrix,
+    time_period = time_period,
+    contact_matrix_set = squire::contact_matrices[[1]])
+```
 
 ## License
 
