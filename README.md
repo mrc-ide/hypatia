@@ -131,7 +131,7 @@ This is an example showing how states are checked
 
 ## Example 2
 
-This is an example showing how to run the simulation
+This is an example showing how to get SQUIRe parameters, psq
 
 ## License
 

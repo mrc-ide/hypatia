@@ -138,7 +138,7 @@ This is an example showing how states are checked
 
 
 ## Example 2
-This is an example showing how to run the simulation
+This is an example showing how to get SQUIRe parameters, psq
 
 ```{r, simulation, echo = FALSE}
  pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
@@ -157,8 +157,6 @@ This is an example showing how to run the simulation
     tt_contact_matrix = tt_contact_matrix,
     time_period = time_period,
     contact_matrix_set = squire::contact_matrices[[1]])
-
-
 
 ```
 
