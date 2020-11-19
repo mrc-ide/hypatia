@@ -1,4 +1,1 @@
-library(testthat)
-library(hypatia)
-
-test_check("hypatia")
+testthat::test_check("hypatia")
