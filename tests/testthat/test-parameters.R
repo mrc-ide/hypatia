@@ -11,7 +11,6 @@ test_that("test get_parameters return the correct values from SQUIRE", {
   psq <- get_parameters("Afghanistan", R0, timestep, dt, time_period,
                        tt_contact_matrix, newpopulation, numberof_days)
 
-
   expect_equal(psq$dt, 1)
   expect_equal(psq$dur_E, 4.6)
   expect_equal(psq$N_age, 17)

@@ -2,3 +2,9 @@
 
 export(get_parameters)
 export(run_simulation)
+export(schedule_infections)
+importFrom(stats,rbinom)
+importFrom(stats,rexp)
+importFrom(stats,rgamma)
+importFrom(stats,rnorm)
+importFrom(stats,runif)

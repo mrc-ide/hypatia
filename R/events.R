@@ -1,8 +1,6 @@
 #' @ Create events
 #'
 #' @return events
-#'
-#' @examples
 create_events <- function() {
 
   events = list(
