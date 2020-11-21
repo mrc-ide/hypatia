@@ -11,17 +11,12 @@ infection_process <- function(individuals, states, variables, events) {
 
   function(api) {
 
-
-
-
-
-
     pars <- api$get_parameters()
 
     # Generating Force of Infection
     IMild <- api$get_state(individuals$human, states$IMild)
-    ICase <- api$get_state(individuals$human, states$ICase)
-    inf_states <- c(IMild, ICase)
+    ICase1 <- api$get_state(individuals$human, states$ICase1)
+    inf_states <- c(IMild, ICase1)
 
     # If IMild = ICase = 0, FOI = 0, i.e. no infected individuals
     if (length(inf_states) > 0) {

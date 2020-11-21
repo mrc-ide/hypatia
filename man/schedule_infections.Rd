@@ -4,7 +4,7 @@
 \alias{schedule_infections}
 \title{Schedule infections}
 \usage{
-schedule_infections(api, events, clinical_infections, treated, infections)
+schedule_infections(api, events, inf_process)
 }
 \arguments{
 \item{api}{api}

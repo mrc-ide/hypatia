@@ -58,3 +58,40 @@ tt_contact_matrix, newpopulation = NULL, numberof_days) {
   )
 
 }
+
+#' @title Run the simulation
+#' @description
+#' The main entrypoint for the simulation. run_simulation puts together the
+#' model components and runs the malaria simulation. This currently returns a
+#' dataframe with the number of individuals in each state at each timestep
+#'
+#' Warning: the columns of the output dataframe is likely to change as we figure
+#' out what kind of outputs we would like to report from the simulation.
+#'
+#' @param timesteps the number of timesteps to run the simulation for
+#' @param psq a named list of parameters to use
+#' @export
+run_simulation2 <- function(timesteps, psq) {
+
+  events <- create_events()
+  states <- create_states(psq)
+  variables <- create_variables(psq)
+browser()
+
+  individuals <- create_individuals(states, variables, events, psq)
+  create_event_based_processes(individuals, states, variables, events,
+                               psq)
+
+  processes <- list(
+    infection_process(individuals, states, variables, events)
+  )
+
+
+  individual::simulate(
+    individuals = individuals,
+    processes = processes,
+    end_timestep = timesteps,
+    parameters = parameters,
+    initialisation = create_setup_process(events)
+  )
+}

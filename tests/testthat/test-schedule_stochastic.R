@@ -1,104 +1,209 @@
 test_that("test scheduler", {
-
-  pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
-
-  dt <- 1
   R0 <- 2
+  timestep <- 100
+  dt <- 1
   time_period <- 1000
   tt_contact_matrix <- 0
+  newpopulation <- 100000
+  numberof_days <- 5
 
-  psq <- squire::parameters_explicit_SEEIR(
-    population = pop$n,
-    dt = dt,
-    R0 = R0,
-    tt_contact_matrix = tt_contact_matrix,
-    time_period = time_period,
-    contact_matrix_set = squire::contact_matrices[[1]])
+  parameters <- get_parameters("Afghanistan", R0, timestep, dt, time_period,
+                        tt_contact_matrix, newpopulation, numberof_days)
 
+  states <- create_states(parameters)
+  variables <- create_variables(parameters)
   events <- create_events()
-  states <- create_states(psq)
-  variables <- create_variables(psq)
-  parameters <- psq
   individuals <- create_individuals(states, variables, events, parameters)
 
-  new_infection_process <- create_infection_process(
-    individuals,
+  create_event_based_processes(individuals, states, variables, events,
+                               parameters)
+
+  api <- mock_api(list(), parameters = parameters)
+  events$mild_infection$listeners[[2]](api, 1)
+
+  mockery::expect_args(
+    create_infection_update_listener,
+    1,
+    individuals$human,
+    states$IMild,
+    c(api, 1)
+  )
+
+})
+
+test_that("test create_infection_update_listener", { # WORKING
+
+  human <- mockery::mock()
+  IMild <- mockery::mock()
+
+  ret <- create_infection_update_listener(
+    human,
+    IMild
+  )
+
+  api <- list(queue_state_update = mockery::mock())
+  to_move <- mockery::mock()
+  ret(api, to_move)
+  mockery::expect_args(api$queue_state_update, 1, human, IMild, to_move)
+
+})
+
+test_that("test create_progression_listener", { # NOT WORKING
+
+  events <- mockery::mock()
+  shift <- 0
+  duration <- mockery::mock()
+  #erlang_mock = mockery::mock(c(0,1) + 0)
+  func_mock <- mockery::mock(c(0,1))
+
+  ret <- create_progression_listener(
+    events,
+    duration,
+    shift,
+    func_mock
+  )
+  api <- list(schedule = mockery::mock())
+  target <- mockery::mock()
+  event <- mockery::mock()
+
+  ret(api, target)
+  mockery::expect_args(api$schedule, 1, event, target, func_mock)
+
+})
+
+
+test_that("test create_exposure_update_listener", { #FAILS
+
+  human <- mockery::mock()
+  states <- mockery::mock()
+  events <- mockery::mock()
+
+  ret <- create_exposure_update_listener(
+    human,
+    states,
+    events,
+    variables,
+    parameters
+  )
+
+  api <- list(get_variable = mockery::mock(), schedule = mockery::mock())
+  variables <- list(discrete_age = mockery::mock())
+  events <- list(severe_infection = mockery::mock(),
+                 mild_infection = mockery::mock())
+  problist <- seq(1,17,1)
+  parameters <- list(dur_E = mockery::mock(),
+                     prob_hosp = list(mockery::mock(problist)))
+  to_move <- mockery::mock()
+  discrete_age <- mockery::mock()
+  erlang_mock <- mockery::mock(c(1, 1))
+
+
+  ret(api, to_move)
+  #mockery::expect_args(erlang, 1, erlang_mock)
+  #mockery::expect_args(delay, 1, erlang_mock)
+  mockery::expect_args(api$get_variable, 1, human, variables$discrete_age,
+                       to_move)
+  mockery::expect_args(api$schedule, 1, events$severe_infection, to_move, erlang_mock)
+
+})
+
+test_that("test create_hospitilisation_update_listener", { #FAILS
+
+  human <- mockery::mock()
+  states <- mockery::mock()
+  events <- mockery::mock()
+  variables <- mockery::mock()
+  parameters <- mockery::mock()
+
+  ret <- create_hospitilisation_update_listener(
+    human,
     states,
     variables,
+    parameters,
     events
   )
 
-  #parameters$severe_enabled = 1
+  api <- list()
+  ret(api, to_move)
+  to_move <- mockery::mock()
+  mockery::expect_args(hospitilisation_flow_process, 1, api,
+                       to_move,
+                       human,
+                       states,
+                       variables,
+                       parameters,
+                       events)
+})
 
-  api <- mock_api(
-    list(
-      human = list(
-        S = mockery::mock(),
-        E = mockery::mock(),
-        IMild = mockery::mock(),
-        ICase1 = mockery::mock(),
-      )
-    ),
-    timestep = 5,
-    parameters = parameters
-  )
+test_that("test hospitilisation_flow_process", {
 
-  bernoulli_mock <- mockery::mock(
-  #  c(TRUE, FALSE, TRUE, FALSE), # bitten
-    c(TRUE),                     # infected
-    c(TRUE),                     # clinical
-    c(FALSE),                    # severe
-    c(FALSE),                    # treatment
-    c()                          # treatment successful
-  )
+  human <- mockery::mock()
 
-  api$get_scheduled = mockery::mock(4, 1)
+  ret <- hospitilisation_flow_process(
+    api,
+    to_move,
+    human,
+    states,
+    variables,
+    parameters,
+    events)
 
-  with_mock(
-    'hypatia:::bernoulli_multi_p' = bernoulli_mock,
-    'hypatia:::bernoulli' = mockery::mock(numeric(0)), # mock seek treatment
-    new_infection_process(api)
-  )
+  api <- list(get_variable = mockery::mock(), get_state = mockery::mock(),
+              get_parameters = mockery::mock())
 
-  mockery::expect_called(bernoulli_mock, 4)
+  variables <- list(discrete_age = mockery::mock())
+  problist <- seq(1,17,1)
+  parameters <- list(prob_severe = mockery::mock(problist), prob_hosp = mockery::mock(),
+                     dur_E = mockery::mock(), ICU_beds = mockery::mock(),
+                     prob_severe_death_treatment = mockery_mock(problist),
+                     prob_non_severe_death_treatment = mockery_mock(problist),
+                     hosp_beds = mockery::mock())
+  events <- list(imv_get_live = mockery::mock(),
+                 imv_get_die = mockery::mock(),
+                 imv_not_get_live = mockery::mock(),
+                 imv_not_get_die = mockery::mock(),
+                 iox_get_live = mockery::mock(), iox_get_die = mockery::mock(),
+                 iox_not_get_live = mockery::mock(),
+                 iox_not_get_die = mockery::mock())
+  states <- list(IOxGetLive = mockery::mock(), IOxGetDie = mockery::mock(),
+                 IMVGetLive = mockery::mock(), IMVGetDie = mockery::mock(),
+                 IRec = mockery::mock())
 
-  mockery::expect_args(
-    api$queue_variable_update,
-    1,
-    individuals$human,
-    variables$ib,
-    1.2,
-    1
+  ret(api, to_move)
+  to_move <- mockery::mock()
+  mockery::expect_args(hospitilisation_flow_process, 1, api,
+                       to_move,
+                       human,
+                       states,
+                       variables,
+                       parameters,
+                       events)
+
+})
+
+
+test_that("test initialise_progression", {
+
+  human <- mockery::mock()
+  event <- mockery::mock()
+  human <- mockery::mock()
+  duration <- mockery::mock()
+
+  initialise_progression(api,
+                         event,
+                         human,
+                         from_state,
+                         duration
+
   )
-  mockery::expect_args(
-    api$queue_variable_update,
-    2,
-    individuals$human,
-    variables$last_boosted_ib,
-    5,
-    1
-  )
-  mockery::expect_args(
-    api$queue_variable_update,
-    3,
-    individuals$human,
-    variables$is_severe,
-    FALSE,
-    3
-  )
-  mockery::expect_args(
-    api$schedule,
-    1,
-    events$clinical_infection,
-    3,
-    12
-  )
-  mockery::expect_args(
-    api$schedule,
-    2,
-    events$infection,
-    3,
-    12
-  )
+  from_state <- mockery::mock()
+  api <- list(schedule = mockery::mock(), get_state = mockery::mock())
+
+  target <- mockery::mock()
+  func <- mockery::mock(r_erlang(1, 1))
+  func_mock <- mockery::mock(func)
+
+  mockery::expect_args(api$schedule, 1, event, target, func_mock)
+  mockery::expect_args(api$get_state, 1, human, from_state)
 
 })
