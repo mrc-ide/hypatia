@@ -51,9 +51,11 @@ create_infection_update_listener <- function(
 #' @param human the human handle
 #' @param from_state the state this event applies to
 #' @param duration the average time spent in this state
-initialise_progression <- function(api, event, human, from_state, duration) {
-  target <- api$get_state(human, from_state)
-  api$schedule(event, target, r_erlang(length(target), duration))
+initialise_progression <- function(event, human, from_state, duration) {
+  function(api, target) {
+    target <- api$get_state(human, from_state)
+    api$schedule(event, target, r_erlang(length(target), duration))
+  }
 }
 
 #' @title Modelling the progression of the human disease

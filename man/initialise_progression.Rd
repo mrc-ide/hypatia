@@ -4,11 +4,9 @@
 \alias{initialise_progression}
 \title{Schedule progression of human disease at the start of the simulation}
 \usage{
-initialise_progression(api, event, human, from_state, duration)
+initialise_progression(event, human, from_state, duration)
 }
 \arguments{
-\item{api}{the simulation api}
-
 \item{event}{the event to schedule}
 
 \item{human}{the human handle}
@@ -16,6 +14,8 @@ initialise_progression(api, event, human, from_state, duration)
 \item{from_state}{the state this event applies to}
 
 \item{duration}{the average time spent in this state}
+
+\item{api}{the simulation api}
 }
 \description{
 Schedules infection events using Erlang
