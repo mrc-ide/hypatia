@@ -49,132 +49,14 @@ library(individual)
 ```
 
 ## Example
-This is an example showing how to run the simulation
 
 ```{r, simulation, echo = FALSE}
 options(warn = - 1) 
- pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
- dt <- 1
- R0 <-2 
- tt_contact_matrix <- 0
- time_period <- 1000
- newpopulation <- 10000
- timestep <- 100
- 
-  psq <- squire::parameters_explicit_SEEIR(
-    population = pop$n,
-    dt = dt,
-    R0 = R0,
-    tt_contact_matrix = tt_contact_matrix,
-    time_period = time_period,
-    contact_matrix_set = squire::contact_matrices[[1]])
 
-  dt <- psq$dt
-
-  numberof_days <- 5
-
-  beta <- squire::beta_est_explicit(psq$dur_IMild, psq$dur_ICase,
-                                    psq$prob_hosp,
-                                    psq$mix_mat_set[1, , ], R0 = R0)
 
   
-  states <- hypatia:::create_states(psq)
 
-  indivs <- hypatia:::create_individuals(states)
-
-  pstates <- hypatia:::probabilities_of_states(dt, psq)
-
-  E_I <- NULL
-
-  p_E_I <- pstates$pgamma_E
-
-  processes <- hypatia:::create_processes(
-    indivs,
-    states,
-    pstates,
-    psq,
-    newpopulation,
-    beta,
-    E_I,
-    numberof_days)
-
-  out <- individual::simulate(
-    indivs$human,
-    processes,
-    timestep
-  )
-  
-  df <- data.frame(
-     S = out$S,
-     E = out$E,
-     IMild = out$IMild,
-     ICase1 = out$ICase1,
-     ICase2 = out$ICase2,
-     IOxGetLive1 = out$IOxGetLive1,
-     IOxGetLive2 = out$IOxGetLive2,
-     IOxNotGetLive1 = out$IOxNotGetLive1,
-     IOxNotGetLive2 = out$IOxNotGetLive2,
-     IOxGetDie1 = out$IOxGetDie1,
-     IOxGetDie2 = out$IOxGetDie2,
-     IOxNotGetDie1 = out$IOxNotGetDie1,
-     IOxNotGetDie2 = out$IOxNotGetDie2,
-     IMVGetLive1 = out$IMVGetLive1,
-     IMVGetLive2 = out$IMVGetLive2,
-     IMVNotGetLive1 = out$IMVNotGetLive1,
-     IMVNotGetLive2 = out$IMVNotGetLive2,
-     IMVGetDie1 = out$IMVNotGetLive2,
-     IMVGetDie2 = out$IMVGetDie2,
-     IMVNotGetDie1 = out$IMVNotGetDie1,
-     IMVNotGetDie2 = out$IMVNotGetDie2,
-     IRec1 = out$IRec1, IRec2 = out$IRec2,
-     R = out$R, D = out$D, time = out$time, type = "Individual",
-     legend = "Individual", stringsAsFactors = FALSE)
-  
-   # Check if df is a dataframe. If yes then turn it into a list
-  numruns <- 0
-  datapoints <- 0
-  subtitle <- ""
-
-  numdatapoints <- paste(length(df$time))
-  numruns <- 1
-  df <- list(df)
-  subtitle <- paste(
-    "Simulation for", numruns, "run and", numdatapoints, "data points")
-
-  # Create group id for data
-  df <- dplyr::bind_rows(df, .id = "group")
-
-  #Convert to long format
-  df <- tidyr::pivot_longer(tibble::as_tibble(df),
-                            c("S", "E", "IMild", "ICase1", "ICase2",
-                              "IOxGetLive1", "IOxGetLive2",
-                              "IOxNotGetLive1", "IOxNotGetLive2", "IOxGetDie1",
-                              "IOxGetDie2", "IOxNotGetDie1", "IOxNotGetDie2",
-                              "IMVGetLive1", "IMVGetLive2", "IMVNotGetLive1",
-                              "IMVNotGetLive2", "IMVGetDie1", "IMVGetDie2",
-                              "IMVNotGetDie1", "IMVNotGetDie2", "IRec1",
-                              "IRec2", "R", "D"))
-
-  strname <- paste("SIR", df$type, "Model Simulation")
-
-  ggplot2::ggplot(
-    df, ggplot2::aes(x = df$time, y = df$value,
-                     group = interaction(df$group, df$name), colour = df$name)) +
-    ggplot2::geom_line(size = 0.5) +
-    ggplot2::theme_bw() +
-    ggplot2::labs(title = strname, subtitle = subtitle, color = df$legend) +
-    ggplot2::labs(y = "States", x = "time") +
-    ggplot2::theme(
-      legend.justification = c("right", "top"),
-      legend.box = c("horizontal", "vertical")
-    ) +
-    ggplot2::theme(
-      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
-      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
-      plot.subtitle = ggplot2::element_text(size = 13),
-      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
-      axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 
 ```
 

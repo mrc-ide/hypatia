@@ -42,10 +42,6 @@ library(individual)
 
 ## Example
 
-This is an example showing how to run the simulation
-
-<img src="man/figures/README-simulation-1.png" width="100%" />
-
 ## License
 
 MIT © Imperial College of Science, Technology and Medicine
