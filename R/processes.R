@@ -302,7 +302,7 @@ hospitilisation_flow_process <- function(
 
    disc_ages <- api$get_variable(human, variables$discrete_age, to_move)
    prob_severe <- parameters$prob_severe[as.integer(disc_ages)]
-   allocated <- c()
+   allocated <- NULL
 
    # 1. Who needs a MV
    mv <- bernoulli_multi_p(length(to_move), prob_severe)

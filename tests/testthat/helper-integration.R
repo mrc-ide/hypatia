@@ -1,7 +1,7 @@
 mock_api <- function(values, parameters = list(), timestep = 1) {
   list(
     get_state = function(individual, ...) {
-      subset <- c()
+      subset <- NULL
       for (state in list(...)) {
         subset <- c(subset, values[[individual$name]][[state$name]])
       }
