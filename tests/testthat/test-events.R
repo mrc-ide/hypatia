@@ -1,4 +1,4 @@
-test_that("test all listeners", { # WORKING
+test_that("test all listeners", { # WORKING with data but not with mockdata
 
   parameters <- mockery::mock()
   states <- mockery::mock()
@@ -97,22 +97,34 @@ test_that("test create_infection_update_listener", { # WORKING
 test_that("test create_progression_listener", { # WORKING
 
   events <- mockery::mock()
+  event <- mockery::mock()
   shift <- 0
-  duration <- mockery::mock()
+  duration <- 1
+  target <- mockery::mock()
+  func_mock <- mockery::mock()
   r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
 
+  ret <- create_progression_listener(
+    events,
+    duration,
+    shift,
+    func_mock
+  )
+
+  api <- list(schedule = mockery::mock())
+
+  ret(api, target)
+
   with_mock(
-    'r_erlang' = r_erlang_mock,
-    ret <- create_progression_listener(
-      events,
-      duration,
-      shift,
-      rep(.2, 4)
+    'hypatia::r_erlang' = r_erlang_mock,
+    ret3 <- api$schedule(
+      event,
+      target,
+      rep(.5, 4)
     )
   )
 
 })
-
 
 test_that("test create_exposure_update_listener", { #WORKING
 
@@ -143,7 +155,7 @@ test_that("test create_exposure_update_listener", { #WORKING
                        to_move)
 
   with_mock(
-    'r_erlang' = r_erlang_mock,
+    'hypatia::r_erlang' = r_erlang_mock,
     ret <- api$schedule(
       events,
       to_move,
@@ -153,14 +165,12 @@ test_that("test create_exposure_update_listener", { #WORKING
 
 })
 
-
-
-test_that("test initialise_progression", {
+test_that("test initialise_progression", { #WORKS locally
 
   event <- mockery::mock()
   human <- mockery::mock()
   from_state <- mockery::mock()
-  duration <- mockery::mock()
+  duration <- 1
   r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
 
   ret <- initialise_progression(event, human, from_state, duration)
@@ -173,33 +183,13 @@ test_that("test initialise_progression", {
   mockery::expect_args(api$get_state, 1, human, from_state)
 
   with_mock(
-    'r_erlang' = r_erlang_mock,
+    'hypatia::r_erlang' = r_erlang_mock,
     ret3 <- api$schedule(
       event,
       target,
-      rep(.2, 4)
+      rep(.5, 4)
     )
   )
-
-  ##################################
-  # human <- mockery::mock()
-  # event <- mockery::mock()
-  # human <- mockery::mock()
-  # duration <- 5
-  # from_state <- mockery::mock()
-  #
-  # # initialise_progression(api, event, human, from_state, duration)
-  #
-  # api <- list(schedule = mockery::mock(), get_state = mockery::mock())
-  #
-  # target <- mockery::mock()
-  # r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
-  #
-  # mockery::expect_args(initialise_progression, 1, api, event, human,
-  #                      from-state, duration)
-
-  #
-
 
 })
 

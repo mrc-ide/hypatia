@@ -21,6 +21,7 @@ r_erlang <- function(size, mu) { rgamma(size, shape = 2, rate = 2/mu) }
 #' @details Random draws from exponential distribution
 #' @param size Number of draws
 #' @param mu Mean duration
+#' @export
 #' @importFrom stats rexp
 r_exp <- function(size, mu) { rexp(size, rate = 1/mu) }
 

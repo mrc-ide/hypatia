@@ -14,8 +14,6 @@ initialise_progression(event, human, from_state, duration)
 \item{from_state}{the state this event applies to}
 
 \item{duration}{the average time spent in this state}
-
-\item{api}{the simulation api}
 }
 \description{
 Schedules infection events using Erlang

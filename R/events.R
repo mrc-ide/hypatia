@@ -46,7 +46,6 @@ create_infection_update_listener <- function(
 #' @title Schedule progression of human disease at the start of the simulation
 #' @description Schedules infection events using Erlang
 #'
-#' @param api the simulation api
 #' @param event the event to schedule
 #' @param human the human handle
 #' @param from_state the state this event applies to

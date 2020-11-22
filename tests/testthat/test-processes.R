@@ -30,7 +30,7 @@ test_that("test create_hospitilisation_update_listener and
 
   api <- list(get_variable = mockery::mock(), schedule = mockery::mock(),
               get_state = mockery::mock(), get_parameters = mockery::mock())
-  to_move <- seq(1, 100, 1)
+  to_move <- seq(1, 100000, 1)
 
 
   ret(api, to_move)
@@ -55,7 +55,7 @@ test_that("test create_hospitilisation_update_listener and
 
 })
 
-test_that("test create_setup_process", { # WORKING
+test_that("test create_setup_process", { # WORKING locally
 
   individuals <- list(human = mockery::mock())
   states <- list(E = mockery::mock())
@@ -63,6 +63,7 @@ test_that("test create_setup_process", { # WORKING
   problist <- seq(1, 17, 1)
   parameters <- list(prob_hosp = list(mockery::mock(problist)))
   exposed <- NULL
+  events <- mockery::mock()
 
 
   ret <- create_setup_process(
@@ -89,7 +90,7 @@ test_that("test create_setup_process", { # WORKING
                        variables$discrete_age, exposed)
 
   with_mock(
-    'r_erlang' = r_erlang_mock,
+    'hypatia::r_erlang' = r_erlang_mock,
     ret <- api$schedule(
       events,
       target,
