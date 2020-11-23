@@ -1,41 +1,5 @@
----
-output: github_document
----
+test_that("test create_states for all available states", {
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-
-# hypatia
-
-<!-- badges: start -->
-[![R build status](https://github.com/mrc-ide/hypatia/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/hypatia/actions)
-[![CodeFactor](https://www.codefactor.io/repository/github/mrc-ide/hypatia/badge)](https://www.codefactor.io/repository/github/mrc-ide/hypatia)
-[![codecov.io](https://codecov.io/github/mrc-ide/hypatia/coverage.svg?branch=main)](https://codecov.io/github/mrc-ide/hypatia?branch=main)
-<!-- badges: end -->
-
-The goal of hypatia is to enable SQUIRE to be run on an individual basis rather than aggregate
-
-## Installation
-
-``` r
-options(warn = - 1) 
-
-install_github('mrc-ide/individual')
-library(individual)
-```
-
-## Example 1
-This is an example showing how states are checked
-
-``` r
   pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
 
   dt <- 1
@@ -50,10 +14,6 @@ This is an example showing how states are checked
     tt_contact_matrix = tt_contact_matrix,
     time_period = time_period,
     contact_matrix_set = squire::contact_matrices[[1]])
-
-  beta <- squire::beta_est_explicit(psq$dur_IMild, psq$dur_ICase,
-                                    psq$prob_hosp,
-                                    psq$mix_mat_set[1, , ], R0 = R0)
 
   states <- create_states(psq)
 
@@ -118,36 +78,5 @@ This is an example showing how states are checked
   expect_equal(states$IRec2, IRec2)
   expect_equal(states$R, R)
   expect_equal(states$D, D)
-```
 
-## Example
-
-```{r, echo = FALSE}
-options(warn = - 1) 
-```
-## Example 2
-This is an example showing how to get SQUIRE parameters, psq
-
-```{r, simulation, echo = FALSE}
- pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
-
- dt <- 1
- R0 <-2 
- tt_contact_matrix <- 0
- time_period <- 1000
- newpopulation <- 10000
- timestep <- 100
- 
-  psq <- squire::parameters_explicit_SEEIR(
-    population = pop$n,
-    dt = dt,
-    R0 = R0,
-    tt_contact_matrix = tt_contact_matrix,
-    time_period = time_period,
-    contact_matrix_set = squire::contact_matrices[[1]])
-
-```
-
-## License
-
-MIT © Imperial College of Science, Technology and Medicine
+})
