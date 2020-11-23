@@ -1,3 +1,10 @@
+#' @title api helper function, mock_api
+#'
+#' @param values values
+#' @param parameters list pf parameters
+#' @param timestep time step
+#'
+#' @export
 mock_api <- function(values, parameters = list(), timestep = 1) {
   list(
     get_state = function(individual, ...) {

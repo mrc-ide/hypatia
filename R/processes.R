@@ -444,8 +444,10 @@ hospitilisation_flow_process <- function(
    }
 
    # Useful check here to make sure everyone has been allocated
-   if((length(allocated) != length(to_move)) || !all(allocated %in% to_move)) {
-      stop("hospital not fully allocated")
+   if (!is.null(allocated)) {
+      if ((length(allocated) != length(to_move)) || !all(allocated %in% to_move)) {
+         stop("hospital not fully allocated")
+      }
    }
 
 }
