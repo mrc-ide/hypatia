@@ -1,4 +1,4 @@
-test_that("test all listeners", { # WORKING with data but not with mockdata
+test_that("test all listeners", {
 
   parameters <- mockery::mock()
   states <-  list(E = mockery::mock(),
@@ -71,9 +71,30 @@ test_that("test all listeners", { # WORKING with data but not with mockdata
   create_event_based_processes(individuals, states, variables, events,
                                parameters)
 
+  api <- list()
+
+  events$exposure$add_listeners(api, c(2, 4))
+  events$mild_infection $add_listeners(api, c(2, 4))
+  events$severe_infection$add_listeners(api, c(2, 4))
+  events$hospitilisation$add_listeners(api, c(2, 4))
+  events$imv_get_live$add_listeners(api, c(2, 4))
+  events$imv_get_die$add_listeners(api, c(2, 4))
+  events$hospitilisation$add_listeners(api, c(2, 4))
+  events$imv_get_live$add_listeners(api, c(2, 4))
+  events$imv_get_die$add_listeners(api, c(2, 4))
+  events$iox_get_live$add_listeners(api, c(2, 4))
+  events$iox_get_die$add_listeners(api, c(2, 4))
+  events$imv_not_get_live $add_listeners(api, c(2, 4))
+  events$imv_not_get_die $add_listeners(api, c(2, 4))
+  events$iox_not_get_live$add_listeners(api, c(2, 4))
+  events$iox_not_get_die$add_listeners(api, c(2, 4))
+  events$stepdown$add_listeners(api, c(2, 4))
+  events$recovery$add_listeners(api, c(2, 4))
+  events$death$add_listeners(api, c(2, 4))
+
 })
 
-test_that("test create_infection_update_listener", { # WORKING
+test_that("test create_infection_update_listener", {
 
   human <- mockery::mock()
   IMild <- mockery::mock()
@@ -90,9 +111,7 @@ test_that("test create_infection_update_listener", { # WORKING
 
 })
 
-test_that("test create_progression_listener", { # WORKING
-
-  skip("test create_progression_listener is an empty test and fails")
+test_that("test create_progression_listener", {
 
   events <- mockery::mock()
   event <- mockery::mock()
@@ -124,7 +143,7 @@ test_that("test create_progression_listener", { # WORKING
 
 })
 
-test_that("test create_exposure_update_listener", { #WORKING
+test_that("test create_exposure_update_listener", {
 
   human <- mockery::mock()
   states <- mockery::mock()
@@ -163,7 +182,7 @@ test_that("test create_exposure_update_listener", { #WORKING
 
 })
 
-test_that("test initialise_progression", { #WORKS locally
+test_that("test initialise_progression", { #
 
   event <- mockery::mock()
   human <- mockery::mock()
@@ -195,21 +214,27 @@ test_that("test create_events", {
 
   events <- create_events()
 
-  expect_equal(events$exposure, individual::Event$new("exposure"))
-  expect_equal(events$mild_infection , individual::Event$new("mild_infection"))
-  expect_equal(events$severe_infection , individual::Event$new("severe_infection"))
-  expect_equal(events$hospitilisation , individual::Event$new("hospitilisation"))
-  expect_equal(events$imv_get_live , individual::Event$new("imv_get_live"))
-  expect_equal(events$imv_get_die , individual::Event$new("imv_get_die"))
-  expect_equal(events$iox_get_live , individual::Event$new("iox_get_live"))
-  expect_equal(events$iox_get_die , individual::Event$new("iox_get_die"))
-  expect_equal(events$imv_not_get_live , individual::Event$new("imv_not_get_live"))
-  expect_equal(events$imv_not_get_die , individual::Event$new("imv_not_get_die"))
-  expect_equal(events$iox_not_get_live , individual::Event$new("iox_not_get_live"))
-  expect_equal(events$iox_not_get_die , individual::Event$new("iox_not_get_die"))
-  expect_equal(events$stepdown , individual::Event$new("stepdown"))
-  expect_equal(events$recovery , individual::Event$new("recovery"))
-  expect_equal(events$death , individual::Event$new("deaths"))
+  expect_equal(events$exposure,
+               individual::Event$new("exposure"))
+  expect_equal(events$mild_infection ,
+               individual::Event$new("mild_infection"))
+  expect_equal(events$severe_infection ,
+               individual::Event$new("severe_infection"))
+  expect_equal(events$hospitilisation, individual::Event$new("hospitilisation"))
+  expect_equal(events$imv_get_live, individual::Event$new("imv_get_live"))
+  expect_equal(events$imv_get_die, individual::Event$new("imv_get_die"))
+  expect_equal(events$iox_get_live, individual::Event$new("iox_get_live"))
+  expect_equal(events$iox_get_die, individual::Event$new("iox_get_die"))
+  expect_equal(events$imv_not_get_live,
+               individual::Event$new("imv_not_get_live"))
+  expect_equal(events$imv_not_get_die,
+               individual::Event$new("imv_not_get_die"))
+  expect_equal(events$iox_not_get_live,
+               individual::Event$new("iox_not_get_live"))
+  expect_equal(events$iox_not_get_die, individual::Event$new("iox_not_get_die"))
+  expect_equal(events$stepdown, individual::Event$new("stepdown"))
+  expect_equal(events$recovery, individual::Event$new("recovery"))
+  expect_equal(events$death, individual::Event$new("deaths"))
 
   expect_equal(length(events), 15)
 

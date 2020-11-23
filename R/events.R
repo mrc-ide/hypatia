@@ -106,33 +106,3 @@ create_exposure_update_listener <- function(
     }
   }
 }
-
-
-#' @title Modelling the progression to either IMv or IOx
-#' @description Age dependent outcome of exposure
-#'
-#' @param human the handle for the human individuals
-#' @param states the available human states
-#' @param events a list of events in the model
-#' @param variables the available human variables
-#' @param parameters model parameters
-create_hospitilisation_update_listener <- function(
-  human,
-  states,
-  variables,
-  parameters,
-  events) {
-  function(api, to_move) {
-
-    hospitilisation_flow_process(
-      api,
-      to_move,
-      human,
-      states,
-      variables,
-      parameters,
-      events
-    )
-
-  }
-}
