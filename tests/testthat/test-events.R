@@ -1,11 +1,33 @@
 test_that("test all listeners", { # WORKING with data but not with mockdata
 
-  skip("test filing with mock data, passing with real data")
-
   parameters <- mockery::mock()
-  states <- mockery::mock()
+  states <-  list(E = mockery::mock(),
+                  IMild = mockery::mock(),
+                  ICase1 = mockery::mock(),
+                  ICase2 = mockery::mock(),
+                  IOxGetLive1 = mockery::mock(),
+                  IOxGetLive2 = mockery::mock(),
+                  IOxGetDie1 = mockery::mock(),
+                  IOxGetDie2 = mockery::mock(),
+                  IOxNotGetLive1 = mockery::mock(),
+                  IOxNotGetLive2 = mockery::mock(),
+                  IOxNotGetDie1 = mockery::mock(),
+                  IOxNotGetDie2 = mockery::mock(),
+                  IMVGetLive1 = mockery::mock(),
+                  IMVGetLive2 = mockery::mock(),
+                  IMVGetDie1 = mockery::mock(),
+                  IMVGetDie2 = mockery::mock(),
+                  IMVNotGetLive1 = mockery::mock(),
+                  IMVNotGetLive2 = mockery::mock(),
+                  IMVNotGetDie1 = mockery::mock(),
+                  IMVNotGetDie2 = mockery::mock(),
+                  IRec1 = mockery::mock(),
+                  IRec2 = mockery::mock(),
+                  R = mockery::mock(),
+                  D = mockery::mock()
+                  )
   variables <- mockery::mock()
-  individuals <- mockery::mock()
+  individuals <- list(human = mockery::mock())
 
   events <- list(exposure = mockery::mock(),
                  mild_infection = mockery::mock(),
@@ -27,55 +49,27 @@ test_that("test all listeners", { # WORKING with data but not with mockdata
                  death = mockery::mock()
   )
 
+  events$exposure  <- list(add_listeners = mockery::mock())
+  events$mild_infection <- list(add_listeners = mockery::mock())
+  events$severe_infection <- list(add_listeners = mockery::mock())
+  events$hospitilisation <- list(add_listeners = mockery::mock())
+  events$imv_get_live <- list(add_listeners = mockery::mock())
+  events$imv_get_die <- list(add_listeners = mockery::mock())
+  events$hospitilisation <- list(add_listeners = mockery::mock())
+  events$imv_get_live <- list(add_listeners = mockery::mock())
+  events$imv_get_die <- list(add_listeners = mockery::mock())
+  events$iox_get_live <- list(add_listeners = mockery::mock())
+  events$iox_get_die <- list(add_listeners = mockery::mock())
+  events$imv_not_get_live <- list(add_listeners = mockery::mock())
+  events$imv_not_get_die <- list(add_listeners = mockery::mock())
+  events$iox_not_get_live <- list(add_listeners = mockery::mock())
+  events$iox_not_get_die <- list(add_listeners = mockery::mock())
+  events$stepdown <- list(add_listeners = mockery::mock())
+  events$recovery <- list(add_listeners = mockery::mock())
+  events$death <- list(add_listeners = mockery::mock())
+
   create_event_based_processes(individuals, states, variables, events,
                                parameters)
-
-  api <- list(queue_variable_update = mockery::mock())
-
-  events$exposure$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$mild_infection$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$severe_infection$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$hospitilisation$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$imv_get_live$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$imv_get_die$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$iox_get_live$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$iox_get_die$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$imv_not_get_live$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$imv_not_get_die$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$iox_not_get_live$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$iox_not_get_die$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$stepdown$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$recovery$listeners[[1]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
-
-  events$death$listeners[[1]](api, numeric(0))
-  mockery::expect_called(api$queue_variable_update, 0)
 
 })
 
