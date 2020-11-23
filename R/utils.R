@@ -2,10 +2,6 @@
   if (is.null(a)) b else a
 }
 
-
-#' @importFrom stats runif
-bernoulli_multi_p <- function(size, p) runif(size, 0, 1) < p
-
 #' Erlang waiting time distribution
 #'
 #' @details Random draws from erlang distribution
@@ -33,3 +29,7 @@ remove_non_numerics <- function(l) {
   clean
 }
 
+#' @title Bernoulli sample
+#' @param p vector of probabilites for each individual
+#' @importFrom stats runif
+bernoulli_multi_p <- function(p) runif(length(p), 0, 1) < p
