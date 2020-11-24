@@ -14,7 +14,6 @@ run_simulation <- function(pop, parameters) {
   events <- create_events()
   human <- create_human(states, variables, events)
   create_event_based_processes(human, states, variables, events, parameters)
-
   individual::simulate(
     individuals = list(human),
     processes = create_processes(

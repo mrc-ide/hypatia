@@ -42,5 +42,5 @@ get_population <- function(iso3c) {
 
 #' @noRd
 get_country <- function(iso3c) {
-  squire::population[squire::population$iso3c == iso3c, "country"][[1]]
+  squire::population[squire::population$iso3c == iso3c, 'country'][[1]]
 }

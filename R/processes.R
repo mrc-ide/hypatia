@@ -294,3 +294,30 @@ create_processes <- function(
   )
 
 }
+
+#' @title Define event based processes
+#' @description defines processes for events that can be scheduled in the future
+#'
+#' @param human humans
+#' @param events a list of events in the model
+#' @param states a list of states in the model
+#' @param variables list of variables in the model
+#' @noRd
+create_event_based_processes <- function(
+  human,
+  events,
+  states,
+  variables
+) {
+  events$hospitilisation$add_listener(function(api, target) {
+    hospitilisation_flow_process(
+      api,
+      target,
+      variables$discrete_age,
+      human,
+      states,
+      events,
+      api$get_parameters()
+    )
+  })
+}
