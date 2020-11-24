@@ -12,6 +12,5 @@ create_infection_update_listener(human, to_state)
 \item{to_state}{the destination disease state}
 }
 \description{
-Randomly moves individuals towards the later stages of disease
-and updates their ineffectivity
+Moves individuals towards the later stages of disease
 }

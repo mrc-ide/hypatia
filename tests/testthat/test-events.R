@@ -1,31 +1,141 @@
+test_that("test that listeners do not call empty targets", {
+
+  events <- create_events()
+  individuals <- list(human = individual::Individual$new(
+    "human", states = list(states$S, states$IMild)))
+
+  states <- list(
+    S = individual::State$new("S", 0.5),
+    IMild = individual::State$new("IMild", 0.2)
+    )
+
+  variables <- list()
+  parameters <- list()
+
+  api <- mock_api(list(), parameters = parameters)
+
+  create_event_based_processes(individuals, states, variables, events,
+                               parameters)
+
+  # test a few listeners: test they don't call for an empty target
+  events$exposure$listeners[[2]](api, numeric(0))
+  mockery::expect_called(api$queue_variable_update, 0)
+
+  events$mild_infection$listeners[[2]](api, numeric(0))
+  mockery::expect_called(api$queue_variable_update, 0)
+
+})
+
+test_that("test that listeners return a value", {
+
+  events <- create_events()
+  individuals <- list(human = individual::Individual$new(
+    "human", states = list(S = S, E = E, IMild = IMild)))
+
+  states <- list(
+    S = individual::State$new("S", 0.5),
+    E = individual::State$new("E", 0.3),
+    IMild = individual::State$new("IMild", 0.2)
+  )
+
+  variables <- list()
+  parameters <- list()
+
+  api <- mock_api(list(), parameters = parameters)
+
+  create_event_based_processes(individuals, states, variables, events,
+                               parameters)
+
+
+  events$exposure$add_listener(api, c(human, states$E))
+
+  mockery::expect_args(
+    api$queue_state_update,
+    1,
+    individuals$human,
+    states$E,
+    states$S,
+    c(2, 4)
+  )
+
+  events$mild_infection$add_listeners(api, c(5, 6))
+
+
+
+  events$exposure$listeners[[2]](api, c(2,4))
+  #mockery::expect_called(api$queue_variable_update, 0)
+
+  events$mild_infection$listener[[2]](api, c(5, 6))
+  #mockery::expect_called(api$queue_variable_update, 0)
+
+})
+
+
+
+
 test_that("test all listeners", {
 
+  parameters <- list()
+
+  events <- create_events()
+  states <- list(E = E, S = S)
+  variables <- list( discrete_age = seq(1,17,1))
+
+  individuals <-
+    human = list(
+      E = c(1),
+      S = c(2)
+    )
+
+  create_event_based_processes(
+    individuals,
+    states,
+    variables,
+    events,
+    parameters
+  )
+
+  api <- mock_api(
+    list(
+      human = list(
+        U = c(1),
+        A = c(2),
+        S = c(4),
+        D = c(3),
+        birth = c(2, -365 * 20, -365 * 5, -365 * 7)
+      )
+    ),
+    timestep = 50,
+    parameters = parameters
+  )
+
+  listener <-   events$exposure$add_listeners()
+  #events$mda_enrollment$listeners[[1]]
+
+  m <- mockery::mock()
+  mockery::stub(listener, 'administer_listener', m)
+  with_mock(
+    "malariasimulation:::bernoulli" = mockery::mock(c(1, 2)),
+    listener(api, NULL)
+  )
+
+
+  bernoulli_mock <- mockery::mock(c(FALSE, TRUE, TRUE))
+  mockery::stub(process, 'bernoulli_multi_p', bernoulli_mock)
+
+
+
+
+
+
+
+
+
+
+
   parameters <- mockery::mock()
-  states <-  list(E = mockery::mock(),
-                  IMild = mockery::mock(),
-                  ICase1 = mockery::mock(),
-                  ICase2 = mockery::mock(),
-                  IOxGetLive1 = mockery::mock(),
-                  IOxGetLive2 = mockery::mock(),
-                  IOxGetDie1 = mockery::mock(),
-                  IOxGetDie2 = mockery::mock(),
-                  IOxNotGetLive1 = mockery::mock(),
-                  IOxNotGetLive2 = mockery::mock(),
-                  IOxNotGetDie1 = mockery::mock(),
-                  IOxNotGetDie2 = mockery::mock(),
-                  IMVGetLive1 = mockery::mock(),
-                  IMVGetLive2 = mockery::mock(),
-                  IMVGetDie1 = mockery::mock(),
-                  IMVGetDie2 = mockery::mock(),
-                  IMVNotGetLive1 = mockery::mock(),
-                  IMVNotGetLive2 = mockery::mock(),
-                  IMVNotGetDie1 = mockery::mock(),
-                  IMVNotGetDie2 = mockery::mock(),
-                  IRec1 = mockery::mock(),
-                  IRec2 = mockery::mock(),
-                  R = mockery::mock(),
-                  D = mockery::mock()
-                  )
+  states <- list()
+
   variables <- mockery::mock()
   individuals <- list(human = mockery::mock())
 

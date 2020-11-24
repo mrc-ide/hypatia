@@ -3,7 +3,7 @@
 #' @return events
 create_events <- function() {
 
-  events = list(
+  events <-list(
 
     # Human infection events
     exposure = individual::Event$new('exposure'),
@@ -30,8 +30,7 @@ create_events <- function() {
 }
 
 #' @title Update the state of an individual as infection events occur
-#' @description Randomly moves individuals towards the later stages of disease
-#' and updates their ineffectivity
+#' @description Moves individuals towards the later stages of disease
 #'
 #' @param human the handle for the human individuals
 #' @param to_state the destination disease state
