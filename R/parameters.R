@@ -1,10 +1,9 @@
 #' @title Get parameters from SQUIRE model
 #'
-#' @param pop population. See \code{\link[squire]{get_population}}
+#' @param pop population. See [squire::get_population]
 #' @param dt the timestep (days) for the simulation
 #' @param time_period the number timesteps to run the simulation for
-#' @param ... Other parameters for 
-#'   \code{\link[squire]{parameters_explicit_SEEIR}}
+#' @param ... Other parameters for [squire::parameters_explicit_SEEIR] 
 #'
 #' @return SQUIRE parameters
 #' @export

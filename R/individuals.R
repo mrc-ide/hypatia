@@ -4,6 +4,7 @@
 #' relevant states and variables 
 #'
 #' @param states available states to assign
+#' @noRd
 create_human <- function(states) {
   individual::Individual$new("human", states = states)
 }

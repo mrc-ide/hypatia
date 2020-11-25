@@ -7,14 +7,13 @@
 get_parameters(pop, dt = 1, time_period = 365, ...)
 }
 \arguments{
-\item{pop}{population. See \code{\link[squire]{get_population}}}
+\item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
 \item{dt}{the timestep (days) for the simulation}
 
 \item{time_period}{the number timesteps to run the simulation for}
 
-\item{...}{Other parameters for
-\code{\link[squire]{parameters_explicit_SEEIR}}}
+\item{...}{Other parameters for \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
 }
 \value{
 SQUIRE parameters

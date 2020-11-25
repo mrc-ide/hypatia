@@ -7,10 +7,10 @@
 run_simulation(pop, parameters)
 }
 \arguments{
-\item{pop}{population. See \code{\link[squire]{get_population}}}
+\item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
 \item{parameters}{parameters list.
-See \code{\link[squire]{parameters_explicit_SEEIR}}}
+See \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
 }
 \description{
 The main entrypoint for the simulation. run_simulation puts together the

@@ -6,7 +6,7 @@
 remove_non_numerics <- function(l) {
   clean <- list()
   for (key in names(l)) {
-    if (class(l[[key]]) %in% c("numeric", "integer", "array")) {
+    if (storage.mode(l[[key]]) %in% c("integer", "double")) {
       clean[[key]] <- l[[key]]
     }
   }
