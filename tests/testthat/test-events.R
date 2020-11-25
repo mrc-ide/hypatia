@@ -1,14 +1,23 @@
 
 test_that("create_event_based_processes assigns a listener to each event", {
-  pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
-  parameters <- list(population = pop)
+  pop <- get_population("Afghanistan")
+  contact_matrix <- squire::contact_matrices[[1]]
+  parameters <- get_parameters(
+    "Afghanistan",
+    3,
+    1,
+    100,
+    0,
+    contact_matrix,
+    pop = pop
+  )
   events <- create_events()
   states <- create_states(parameters)
   variables <- create_variables(pop)
-  individuals <- create_individuals(states, variables, events, parameters)
+  human <- create_human(states, variables, events)
 
   create_event_based_processes(
-    individuals,
+    human,
     states,
     variables,
     events,
@@ -21,6 +30,7 @@ test_that("create_event_based_processes assigns a listener to each event", {
 })
 
 test_that("test that listeners do not call empty targets", {
+  skip('in progress')
 
   events <- create_events()
 

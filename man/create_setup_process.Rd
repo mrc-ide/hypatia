@@ -4,10 +4,10 @@
 \alias{create_setup_process}
 \title{Define event based processes at initialisation}
 \usage{
-create_setup_process(individuals, states, events, variables)
+create_setup_process(human, states, events, variables)
 }
 \arguments{
-\item{individuals}{a list of individuals in the model}
+\item{human}{humans}
 
 \item{states}{a list of states in the model}
 

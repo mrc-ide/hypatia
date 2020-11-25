@@ -4,16 +4,10 @@
 \alias{create_event_based_processes}
 \title{Define event based processes}
 \usage{
-create_event_based_processes(
-  individuals,
-  states,
-  variables,
-  events,
-  parameters
-)
+create_event_based_processes(human, states, variables, events, parameters)
 }
 \arguments{
-\item{individuals}{a list of individuals in the model}
+\item{human}{humans}
 
 \item{states}{a list of states in the model}
 

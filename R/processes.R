@@ -1,20 +1,20 @@
 #' @title Define event based processes at initialisation
 #' @description Defines processes for events for states at initialisation
 #'
-#' @param individuals a list of individuals in the model
+#' @param human humans
 #' @param states a list of states in the model
 #' @param events a list of events in the model
 #' @param variables list of variables in the model
 create_setup_process <- function(
-   individuals,
+   human,
    states,
    events,
    variables
 ) {
    function(api) {
       parameters <- api$get_parameters()
-      exposed <- api$get_state(individuals$human, states$E)
-      age <- api$get_variable(individuals$human, variables$discrete_age, exposed)
+      exposed <- api$get_state(human, states$E)
+      age <- api$get_variable(human, variables$discrete_age, exposed)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
       hosp <- bernoulli_multi_p(length(exposed), prob_hosp)
 
@@ -38,13 +38,13 @@ create_setup_process <- function(
 #' @title Define event based processes
 #' @description defines processes for events that can be scheduled in the future
 #'
-#' @param individuals a list of individuals in the model
+#' @param human humans
 #' @param states a list of states in the model
 #' @param variables list of variables in the model
 #' @param events a list of events in the model
 #' @param parameters the model parameters
 create_event_based_processes <- function(
-   individuals,
+   human,
    states,
    variables,
    events,
@@ -58,7 +58,7 @@ create_event_based_processes <- function(
    # Exposure events
    events$exposure$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$E
       )
    )
@@ -66,7 +66,7 @@ create_event_based_processes <- function(
    # IMild events
    events$mild_infection$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IMild
       )
    )
@@ -74,7 +74,7 @@ create_event_based_processes <- function(
    # ICase events
    events$severe_infection$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$ICase
       )
    )
@@ -82,28 +82,28 @@ create_event_based_processes <- function(
    # IMV events
    events$imv_get_live$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IMVGetLive
       )
    )
 
    events$imv_get_die$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IMVGetDie
       )
    )
 
    events$imv_not_get_live$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IMVNotGetLive
       )
    )
 
    events$imv_not_get_die$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IMVNotGetDie
       )
    )
@@ -111,28 +111,28 @@ create_event_based_processes <- function(
    # IOx events
    events$iox_get_live$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IOxGetLive
       )
    )
 
    events$iox_get_die$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IOxGetDie
       )
    )
 
    events$iox_not_get_live$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IOxNotGetLive
       )
    )
 
    events$iox_not_get_die$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IOxNotGetDie
       )
    )
@@ -140,7 +140,7 @@ create_event_based_processes <- function(
    # Recovery events
    events$recovery$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$R
       )
    )
@@ -148,7 +148,7 @@ create_event_based_processes <- function(
    # Stepdown events
    events$stepdown$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$IRec
       )
    )
@@ -156,7 +156,7 @@ create_event_based_processes <- function(
    # Death events
    events$death$add_listener(
       create_infection_update_listener(
-         individuals$human,
+         human,
          states$D
       )
    )
@@ -168,7 +168,7 @@ create_event_based_processes <- function(
    # Exposure events
    events$exposure$add_listener(
       create_exposure_update_listener(
-         individuals$human,
+         human,
          states,
          events,
          variables,
@@ -182,14 +182,6 @@ create_event_based_processes <- function(
          event = events$recovery,
          duration = parameters$dur_IMild,
          func = r_exp
-      )
-   )
-
-   # Case Infection events
-   events$severe_infection$add_listener(
-      create_progression_listener(
-         event = events$hospitilisation,
-         duration = parameters$dur_ICase
       )
    )
 
