@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • hypatia</title>
+<title>Run the simulation — run_simulation • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Run the simulation — run_simulation" />
+<meta property="og:description" content="The main entrypoint for the simulation. run_simulation puts together the
+model components and runs the malaria simulation. This currently returns a
+dataframe with the number of individuals in each state at each timestep" />
 
 
 
@@ -58,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -100,60 +103,37 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Run the simulation</h1>
+    
+    <div class="hidden name"><code>run_simulation.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The main entrypoint for the simulation. run_simulation puts together the
+model components and runs the malaria simulation. This currently returns a
+dataframe with the number of individuals in each state at each timestep</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>run_simulation</span><span class='op'>(</span><span class='va'>pop</span>, <span class='va'>parameters</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="create_states.html">create_states()</a></code> </p>
-        </td>
-        <td><p>Define model states</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_parameters.html">get_parameters()</a></code> </p>
-        </td>
-        <td><p>Get parameters from SQUIRE model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_population.html">get_population()</a></code> </p>
-        </td>
-        <td><p>Get population from SQUIRE model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="run_simulation.html">run_simulation()</a></code> </p>
-        </td>
-        <td><p>Run the simulation</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pop</th>
+      <td><p>population. See <a href='https://rdrr.io/pkg/squire/man/get_population.html'>squire::get_population</a></p></td>
+    </tr>
+    <tr>
+      <th>parameters</th>
+      <td><p>parameters list.
+See <a href='https://rdrr.io/pkg/squire/man/parameters_explicit_SEEIR.html'>squire::parameters_explicit_SEEIR</a></p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

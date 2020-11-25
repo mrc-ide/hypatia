@@ -112,41 +112,26 @@
     <p>Get parameters from SQUIRE model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span>
-  <span class='va'>countryname</span>,
-  <span class='va'>R0</span>,
-  <span class='va'>dt</span>,
-  <span class='va'>time_period</span>,
-  <span class='va'>tt_contact_matrix</span>,
-  <span class='va'>contact_matrix_set</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>pop</span>, dt <span class='op'>=</span> <span class='fl'>1</span>, time_period <span class='op'>=</span> <span class='fl'>365</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>countryname</th>
-      <td><p>name of country</p></td>
-    </tr>
-    <tr>
-      <th>R0</th>
-      <td><p>R0</p></td>
+      <th>pop</th>
+      <td><p>population. See <a href='https://rdrr.io/pkg/squire/man/get_population.html'>squire::get_population</a></p></td>
     </tr>
     <tr>
       <th>dt</th>
-      <td><p>dt</p></td>
+      <td><p>the timestep (days) for the simulation</p></td>
     </tr>
     <tr>
       <th>time_period</th>
-      <td><p>time period</p></td>
+      <td><p>the number timesteps to run the simulation for</p></td>
     </tr>
     <tr>
-      <th>tt_contact_matrix</th>
-      <td><p>contact matrix time</p></td>
-    </tr>
-    <tr>
-      <th>contact_matrix_set</th>
-      <td><p>contact_matrix_set</p></td>
+      <th>...</th>
+      <td><p>Other parameters for <a href='https://rdrr.io/pkg/squire/man/parameters_explicit_SEEIR.html'>squire::parameters_explicit_SEEIR</a></p></td>
     </tr>
     </table>
 
