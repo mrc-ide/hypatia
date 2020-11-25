@@ -4,7 +4,7 @@
 \alias{get_population}
 \title{Get population from SQUIRE model}
 \usage{
-get_population(countryname)
+get_population(iso3c)
 }
 \arguments{
 \item{countryname}{name of country}

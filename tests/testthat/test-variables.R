@@ -33,5 +33,4 @@ test_that("test create_discrete_age_variable", {
   disc_ages <- create_discrete_age_variable(ages, pop)
 
   expect_equal(as.numeric(table(disc_ages)), pop$n)
-
 })

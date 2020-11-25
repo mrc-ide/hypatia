@@ -6,6 +6,7 @@
 #'
 #' @param psq the model parameters
 #'
+#' @noRd
 #' @return list of states
 create_states <- function(psq) {
 

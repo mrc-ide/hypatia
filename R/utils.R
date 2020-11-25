@@ -31,5 +31,6 @@ remove_non_numerics <- function(l) {
 
 #' @title Bernoulli sample
 #' @param p vector of probabilites for each individual
+#' @noRd
 #' @importFrom stats runif
 bernoulli_multi_p <- function(p) runif(length(p), 0, 1) < p

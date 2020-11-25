@@ -6,6 +6,7 @@
 #' @param states a list of states in the model
 #' @param discrete_age variable
 #' @param exposure event for covid exposure
+#' @noRd
 infection_process <- function(human, states, discrete_age, exposure) {
 
   function(api) {

@@ -1,6 +1,7 @@
 #' @ Create events
 #'
 #' @return events
+#' @noRd
 create_events <- function() {
 
   events <-list(
@@ -30,6 +31,7 @@ create_events <- function() {
 #'
 #' @param human the handle for the human individuals
 #' @param to_state the destination disease state
+#' @noRd
 create_infection_update_listener <- function(
   human,
   to_state) {
@@ -45,6 +47,7 @@ create_infection_update_listener <- function(
 #' @param human the human handle
 #' @param from_state the state this event applies to
 #' @param duration the average time spent in this state
+#' @noRd
 initialise_progression <- function(event, human, from_state, duration) {
   function(api, target) {
     target <- api$get_state(human, from_state)
@@ -60,6 +63,7 @@ initialise_progression <- function(event, human, from_state, duration) {
 #' @param shift number of days to increase scheduled event by
 #' @param func function to use for drawing progression.
 #' Default = [r_erlang]
+#' @noRd
 create_progression_listener <- function(event, duration, shift = 0, func = r_erlang) {
   function(api, target) {
     api$schedule(event, target, func(length(target), duration) + shift)
@@ -74,6 +78,7 @@ create_progression_listener <- function(event, duration, shift = 0, func = r_erl
 #' @param events a list of events in the model
 #' @param variables the available human variables
 #' @param parameters model parameters
+#' @noRd
 create_exposure_update_listener <- function(
   human,
   states,
