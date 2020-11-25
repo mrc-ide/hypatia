@@ -8,6 +8,8 @@ create_variables(pop, max_age = 100)
 }
 \arguments{
 \item{pop}{population list}
+
+\item{max_age}{maximum age - default 100}
 }
 \value{
 named list of individual::Variable

@@ -57,6 +57,7 @@ create_discrete_age_variable <- function(ages, pop) {
 #' @description Create individual variables for continuous and discrete age
 #'
 #' @param pop population list
+#' @param max_age maximum age - default 100
 #'
 #' @return named list of individual::Variable
 create_age_variables <- function(pop, max_age = 100) {
@@ -75,6 +76,7 @@ create_age_variables <- function(pop, max_age = 100) {
 #' @description Create all individual variables for humans
 #'
 #' @param pop population list
+#' @param max_age maximum age - default 100
 #'
 #' @return named list of individual::Variable
 create_variables <- function(pop, max_age = 100) {

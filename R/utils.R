@@ -2,6 +2,7 @@
   if (is.null(a)) b else a
 }
 
+
 #' @importFrom stats runif
 bernoulli_multi_p <- function(size, p) runif(size, 0, 1) < p
 
@@ -21,3 +22,15 @@ r_erlang <- function(size, mu) { rgamma(size, shape = 2, rate = 2 / mu) }
 #' @export
 #' @importFrom stats rexp
 r_exp <- function(size, mu) { rexp(size, rate = 1 / mu) }
+
+#' @noRd
+remove_non_numerics <- function(l) {
+  clean <- list()
+  for (key in names(l)) {
+    if (storage.mode(l[[key]]) %in% c("integer", "double")) {
+      clean[[key]] <- l[[key]]
+    }
+  }
+  clean
+}
+

@@ -9,6 +9,9 @@ get_population(countryname)
 \arguments{
 \item{countryname}{name of country}
 }
+\value{
+population
+}
 \description{
 rounds population sizes to discrete numbers
 }
