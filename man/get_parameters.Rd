@@ -4,27 +4,17 @@
 \alias{get_parameters}
 \title{Get parameters from SQUIRE model}
 \usage{
-get_parameters(
-  countryname,
-  R0,
-  dt,
-  time_period,
-  tt_contact_matrix,
-  contact_matrix_set
-)
+get_parameters(pop, dt = 1, time_period = 365, ...)
 }
 \arguments{
-\item{countryname}{name of country}
+\item{pop}{population. See \code{\link[squire]{get_population}}}
 
-\item{R0}{R0}
+\item{dt}{the timestep (days) for the simulation}
 
-\item{dt}{dt}
+\item{time_period}{the number timesteps to run the simulation for}
 
-\item{time_period}{time period}
-
-\item{tt_contact_matrix}{contact matrix time}
-
-\item{contact_matrix_set}{contact_matrix_set}
+\item{...}{Other parameters for
+\code{\link[squire]{parameters_explicit_SEEIR}}}
 }
 \value{
 SQUIRE parameters
