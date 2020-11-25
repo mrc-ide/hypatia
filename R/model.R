@@ -5,47 +5,29 @@
 #' dataframe with the number of individuals in each state at each timestep
 #'
 #' @param pop population. See [squire::get_population]
-#' @param parameters parameter list
-#' @param max_age maximum age defaults to 100
+#' @param parameters model parameters
 #' @export
-run_simulation <- function(pop, parameters = NULL, max_age = 100) {
-
-  if (is.null(parameters)) {
-    parameters <- get_parameters(
-      iso3c = pop$iso3c[1])
-  }
-
+run_simulation <- function(pop, parameters) {
   parameters <- remove_non_numerics(parameters)
-  variables <- create_variables(pop, max_age)
-
-  # adjust our age variables to account for age based seeding
-  variables$discrete_age$initial_values <- adjust_seeding_ages(
-    initial_values = variables$discrete_age$initial_values,
-    parameters = parameters
-  )
-
   states <- create_states(parameters)
+  variables <- create_variables(pop, parameters)
   events <- create_events()
-
   human <- create_human(states, variables, events)
+  create_event_based_processes(human, states, variables, events, parameters)
 
-  create_event_based_processes(human, states, variables,
-                               events, parameters)
-
-  output <- individual::simulate(
+  individual::simulate(
     individuals = list(human),
-    processes = create_processes(human,
-                                 states,
-                                 events,
-                                 variables,
-                                 parameters),
+    processes = create_processes(
+      human,
+      states,
+      events,
+      variables,
+      parameters
+    ),
     end_timestep  = parameters$time_period,
     parameters = parameters,
     initialisation = create_setup_process(human, states, events, variables)
   )
-
-  output
-
 }
 
 #' @title Run the simulation with repetitions

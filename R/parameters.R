@@ -10,10 +10,8 @@ get_parameters <- function(iso3c = NULL,
                            population = NULL,
                            contact_matrix_set = NULL,
                            time_period = 365,
+                           max_age = 100,
                            ...) {
-
-  # dt should always be 1 as individual is always discrete time
-  dt <- 1
 
   # if missing a contact matrix but have the iso3c use that
   if (!is.null(iso3c) && is.null(contact_matrix_set)) {
@@ -25,11 +23,12 @@ get_parameters <- function(iso3c = NULL,
       population = population,
       country = get_country(iso3c),
       contact_matrix_set = contact_matrix_set,
-      dt = dt,
+      dt = 1, # dt should always be 1 as individual is always discrete time
       time_period = time_period,
       ...
     ),
-    time_period = time_period
+    time_period = time_period,
+    max_age = max_age
   )
 }
 
