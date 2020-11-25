@@ -10,7 +10,7 @@ create_states(psq)
 \item{psq}{the model parameters}
 }
 \value{
-states
+list of states
 }
 \description{
 Create_states creates and initialises the human states for the model

@@ -6,7 +6,7 @@
 #'
 #' @param psq the model parameters
 #'
-#' @return states
+#' @return list of states
 create_states <- function(psq) {
 
   # Sum up the states from squire

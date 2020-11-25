@@ -4,6 +4,8 @@
 #' @param parameters list pf parameters
 #' @param timestep time step
 #'
+#' @return api
+#'
 #' @export
 mock_api <- function(values, parameters = list(), timestep = 1) {
   list(

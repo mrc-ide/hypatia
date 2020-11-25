@@ -4,7 +4,7 @@
 \alias{create_variables}
 \title{Create variables}
 \usage{
-create_variables(pop)
+create_variables(pop, max_age = 100)
 }
 \arguments{
 \item{pop}{population list}

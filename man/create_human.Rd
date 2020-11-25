@@ -13,6 +13,9 @@ create_human(states, variables, events)
 
 \item{events}{available events to assign}
 }
+\value{
+human - human
+}
 \description{
 Declares the human individual and assigns the
 relevant states and variables

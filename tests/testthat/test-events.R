@@ -1,9 +1,12 @@
 
 test_that("create_event_based_processes assigns a listener to each event", {
-  pop <- get_population("Afghanistan")
+
+  pop <- squire::get_population(iso3c = "FRA", simple_SEIR = FALSE)
+
   contact_matrix <- squire::contact_matrices[[1]]
+
   parameters <- get_parameters(
-    "Afghanistan",
+    "FRANCE",
     3,
     1,
     100,
@@ -11,13 +14,15 @@ test_that("create_event_based_processes assigns a listener to each event", {
     contact_matrix,
     pop = pop
   )
+
   events <- create_events()
   states <- create_states(parameters)
-  variables <- create_variables(pop)
-  human <- create_human(states, variables, events)
+  max_age <- 100
+  variables <- create_variables(pop, max_age)
+  indiv <- create_human(states, variables, events)
 
   create_event_based_processes(
-    human,
+    indiv$human,
     states,
     variables,
     events,
@@ -27,29 +32,25 @@ test_that("create_event_based_processes assigns a listener to each event", {
   for (event in events) {
     expect_gt(length(event$listeners), 0)
   }
+
 })
 
 test_that("test that listeners do not call empty targets", {
-  skip('in progress')
 
   events <- create_events()
 
   states <- list(
-    S = individual::State$new("S", 0.5),
+    E = individual::State$new("E", 0.5),
     IMild = individual::State$new("IMild", 0.2)
     )
 
   individuals <- list(human = individual::Individual$new(
-    "human", states = list(states$S, states$IMild)))
+    "human", states = list(states$E, states$IMild)))
 
   parameters <- list(human_population = 100000, average_age = 27)
 
   initial_age <- trunc(
-    rexp(
-      parameters$human_population,
-      rate=1/parameters$average_age
-    )
-  )
+    r_exp(parameters$human_population, parameters$average_age))
 
   variables <- list(
     age <- individual::Variable$new("age", 50 - initial_age))
@@ -61,11 +62,11 @@ test_that("test that listeners do not call empty targets", {
                                parameters)
 
   # test a few listeners: test they don't call for an empty target
-  events$exposure$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_state_update, 0)
+  events$exposure$listeners[[1]](api, numeric(0))
+  mockery::expect_called(api$queue_state_update, 1)
 
   events$mild_infection$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_state_update, 0)
+  mockery::expect_called(api$queue_state_update, 1)
 
 })
 
@@ -142,22 +143,31 @@ test_that("test create_exposure_update_listener", {
     parameters
   )
 
-  api <- list(get_variable = mockery::mock(), schedule = mockery::mock()
-              )
+  api <- list(get_variable = mockery::mock(), schedule = mockery::mock())
   variables <- list(discrete_age = mockery::mock())
   events <- list(exposure = mockery::mock())
   problist <- seq(1,17,1)
   exposure = mockery::mock()
   parameters <- list(dur_E = mockery::mock(),
                      prob_hosp = list(mockery::mock(problist)))
-  to_move <- mockery::mock()
+  to_move <- c(6, 7)
   discrete_age <- mockery::mock()
   target <- 100
 
   r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
-
-
   mockery::stub(ret, 'r_erlang', mockery::mock(c(TRUE, TRUE, TRUE, TRUE)))
+
+  bernoulli_multi_p_mock <- mockery::mock(rep(FALSE, 3))
+  mockery::stub(ret, 'bernoulli_multi_p', mockery::mock(rep(FALSE, 3)))
+
+  mockery::stub(
+    ret,
+    "hosp",
+    mockery::mock()(
+      length(to_move),
+      parameters$prob_hosp
+    )
+  )
 
   with_mock(
     'hypatia::r_erlang' = r_erlang_mock,
@@ -216,7 +226,6 @@ test_that("test create_events", {
                individual::Event$new("mild_infection"))
   expect_equal(events$severe_infection ,
                individual::Event$new("severe_infection"))
-  expect_equal(events$hospitilisation, individual::Event$new("hospitilisation"))
   expect_equal(events$imv_get_live, individual::Event$new("imv_get_live"))
   expect_equal(events$imv_get_die, individual::Event$new("imv_get_die"))
   expect_equal(events$iox_get_live, individual::Event$new("iox_get_live"))
@@ -232,7 +241,7 @@ test_that("test create_events", {
   expect_equal(events$recovery, individual::Event$new("recovery"))
   expect_equal(events$death, individual::Event$new("deaths"))
 
-  expect_equal(length(events), 15)
+  expect_equal(length(events), 14)
 
 })
 

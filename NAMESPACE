@@ -3,7 +3,6 @@
 export(get_parameters)
 export(r_exp)
 importFrom(stats,dexp)
-importFrom(stats,rbinom)
 importFrom(stats,rexp)
 importFrom(stats,rgamma)
 importFrom(stats,runif)

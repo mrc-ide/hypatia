@@ -2,9 +2,6 @@
   if (is.null(a)) b else a
 }
 
-#' @importFrom stats rbinom
-bernoulli <- function(size, p) sample.int(size, rbinom(1, size, min(p, 1)))
-
 #' @importFrom stats runif
 bernoulli_multi_p <- function(size, p) runif(size, 0, 1) < p
 
@@ -24,9 +21,3 @@ r_erlang <- function(size, mu) { rgamma(size, shape = 2, rate = 2 / mu) }
 #' @export
 #' @importFrom stats rexp
 r_exp <- function(size, mu) { rexp(size, rate = 1 / mu) }
-
-#' @noRd
-remove_non_numerics <- function(l) {
-  classes <- unlist(lapply(l, class))
-  return(l[classes %in% c("numeric", "integer", "array")])
-}

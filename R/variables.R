@@ -8,7 +8,7 @@
 #' @importFrom stats dexp
 create_continuous_age_variable <- function(pop, max_age = 100) {
 
-  # get out counntry median ages
+  # get out country median ages
   iso3c <- pop$iso3c[1]
   iso3c_ages <- hypatia::iso3c_ages
   med_age <- iso3c_ages$age[iso3c_ages$iso3c == iso3c]
@@ -59,7 +59,8 @@ create_discrete_age_variable <- function(ages, pop) {
 #' @param pop population list
 #'
 #' @return named list of individual::Variable
-create_age_variables <- function(pop) {
+create_age_variables <- function(pop, max_age = 100) {
+
   age <- create_continuous_age_variable(pop, max_age = 100)
   discrete_age <- create_discrete_age_variable(age, pop)
 
@@ -67,6 +68,7 @@ create_age_variables <- function(pop) {
     age = individual::Variable$new("age", age),
     discrete_age = individual::Variable$new("discrete_age", discrete_age)
   )
+
 }
 
 #' @title Create variables
@@ -75,6 +77,9 @@ create_age_variables <- function(pop) {
 #' @param pop population list
 #'
 #' @return named list of individual::Variable
-create_variables <- function(pop) {
-  create_age_variables(pop)
+create_variables <- function(pop, max_age = 100) {
+
+  ret <- create_age_variables(pop, max_age = 100)
+  list(age = ret$age, discrete_age = ret$discrete_age)
+
 }

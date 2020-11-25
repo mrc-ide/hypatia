@@ -21,3 +21,5 @@ Suggests:
 Imports:
     individual,
     squire
+Depends: 
+    R (>= 2.10)
