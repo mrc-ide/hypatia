@@ -10,11 +10,11 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
   pop <- get_population("Afghanistan")
 
   psq <- get_parameters(
-    pop,
+    population = pop$n,
+    contact_matrix_set = contact_matrix_set,
     R0 = R0,
     time_period = time_period,
-    tt_contact_matrix = tt_contact_matrix,
-    contact_matrix_set = contact_matrix_set
+    tt_contact_matrix = tt_contact_matrix
   )
 
   expect_equal(psq$dt, 1)

@@ -2,12 +2,12 @@
 % Please edit documentation in R/parameters.R
 \name{get_population}
 \alias{get_population}
-\title{Get population from SQUIRE model}
+\title{Get population from squire model}
 \usage{
-get_population(countryname)
+get_population(country)
 }
 \arguments{
-\item{countryname}{name of country}
+\item{country}{name of country}
 }
 \value{
 population

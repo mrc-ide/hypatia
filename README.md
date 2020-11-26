@@ -11,7 +11,7 @@ status](https://github.com/mrc-ide/hypatia/workflows/R-CMD-check/badge.svg)](htt
 [![codecov.io](https://codecov.io/github/mrc-ide/hypatia/coverage.svg?branch=main)](https://codecov.io/github/mrc-ide/hypatia?branch=main)
 <!-- badges: end -->
 
-The goal of hypatia is to enable SQUIRE to be run on an individual basis
+The goal of hypatia is to enable squire to be run on an individual basis
 rather than aggregate
 
 ## Installation
