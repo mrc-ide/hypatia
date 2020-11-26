@@ -25,7 +25,7 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
   # now sample from these
   ages <- list()
   for (i in seq_len(length(pop$age_group))) {
-    ages[[i]] <- sample(r[[i]], round(pop$n[i]), replace = TRUE,
+    ages[[i]] <- sample(r[[i]], pop$n[i], replace = TRUE,
                         prob = dexp(r[[i]], 1 / (med_age * 365)))
   }
 

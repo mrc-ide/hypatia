@@ -18,8 +18,6 @@ test_that("r_exp works", {
 test_that("bernoulli_multi_p works", {
 
   ret <- bernoulli_multi_p(1, 0.1)
-  expect_true(ret >= 0.0)
-  expect_true(ret <= 1.0)
 
   expect_true(all(bernoulli_multi_p(10000, 1)))
   expect_false(any(bernoulli_multi_p(10000, 0)))
