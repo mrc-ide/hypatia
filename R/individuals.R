@@ -5,12 +5,14 @@
 #' @param states available states to assign
 #' @param variables available variables to assign
 #' @param events available events to assign
+#' @param parameters available parameters to assign
 #'
 #' @return human - human
 create_human <- function(
   states,
   variables,
-  events) {
+  events,
+  parameters) {
 
   human <- individual::Individual$new(
     "human",

@@ -33,6 +33,6 @@ test_that("test create_discrete_age_variable", {
   ages <- create_continuous_age_variable(pop = pop, max_age = 100)
   disc_ages <- create_discrete_age_variable(ages, pop)
 
-  expect_true(all(as.numeric(table(disc_ages)) == pop$n))
+  expect_equal(as.numeric(table(disc_ages)), pop$n)
 
 })

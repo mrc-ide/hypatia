@@ -4,7 +4,7 @@
 \alias{create_human}
 \title{Define the human model}
 \usage{
-create_human(states, variables, events)
+create_human(states, variables, events, parameters)
 }
 \arguments{
 \item{states}{available states to assign}
@@ -12,6 +12,8 @@ create_human(states, variables, events)
 \item{variables}{available variables to assign}
 
 \item{events}{available events to assign}
+
+\item{parameters}{available parameters to assign}
 }
 \value{
 human - human

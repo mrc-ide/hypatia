@@ -4,14 +4,28 @@
 \alias{get_parameters}
 \title{Get parameters from SQUIRE model}
 \usage{
-get_parameters(pop, dt = 1, time_period = 365, ...)
+get_parameters(
+  pop,
+  R0 = 2,
+  time_period = 365,
+  tt_contact_matrix = 0,
+  contact_matrix_set = squire::contact_matrices[[1]],
+  dt = 1,
+  ...
+)
 }
 \arguments{
 \item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
-\item{dt}{the timestep (days) for the simulation}
+\item{R0}{R0}
 
 \item{time_period}{the number timesteps to run the simulation for}
+
+\item{tt_contact_matrix}{tt_contact_matrix}
+
+\item{contact_matrix_set}{contact_matrix_set}
+
+\item{dt}{the timestep (days) for the simulation}
 
 \item{...}{Other parameters for \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
 }

@@ -1,7 +1,7 @@
 test_that("create_event_based_processes assigns a listener to each event", {
 
   pop <- get_population("Antigua and Barbuda")
-  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG")
+  contact_matrix_set <- squire::get_mixing_matrix(iso3c = "ATG")
   parameters <- get_parameters(pop, 1, 100, contact_matrix_set)
 
   events <- create_events()
@@ -146,8 +146,7 @@ test_that("test create_exposure_update_listener", {
   r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
   mockery::stub(ret, 'r_erlang', mockery::mock(c(TRUE, TRUE, TRUE, TRUE)))
 
-  bernoulli_multi_p_mock <- mockery::mock(rep(FALSE, 3))
-  mockery::stub(ret, 'bernoulli_multi_p', mockery::mock(rep(FALSE, 3)))
+  mockery::stub(ret, 'bernoulli_multi_p', mockery::mock(TRUE, FALSE, TRUE))
 
   mockery::stub(
     ret,
