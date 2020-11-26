@@ -20,6 +20,9 @@ Suggests:
     mockery
 Imports:
     individual,
-    squire
+    squire,
+    tidyverse,
+    xml2,
+    rvest
 Depends: 
     R (>= 2.10)
