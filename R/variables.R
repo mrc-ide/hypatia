@@ -10,7 +10,7 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
 
   # get out country median ages
   iso3c <- pop$iso3c[1]
-  iso3c_ages <- hypatia::iso3c_ages
+  #iso3c_ages <- hypatia::iso3c_ages
   med_age <- iso3c_ages$age[iso3c_ages$iso3c == iso3c]
 
   # get the top end of the 5 year age bins
@@ -26,7 +26,7 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
   # now sample from these
   ages <- list()
   for (i in seq_len(length(pop$age_group))) {
-    ages[[i]] <- sample(r[[i]], pop$n[i], replace = TRUE,
+    ages[[i]] <- sample(r[[i]], round(pop$n[i]), replace = TRUE,
                         prob = dexp(r[[i]], 1 / (med_age * 365)))
   }
 
