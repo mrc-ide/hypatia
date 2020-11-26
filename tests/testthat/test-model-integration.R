@@ -1,6 +1,6 @@
 test_that("run_simulation can parameterise and run an French model for 10 days", {
 
-  pop <- get_population("Afhanistan")
+  pop <- get_population("Afghanistan")
   parameters <- get_parameters(
     pop,
     R0 = 2,
