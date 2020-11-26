@@ -119,7 +119,7 @@ test_that("test create_progression_listener", {
 
 })
 
-test_that("test create_exposure_update_listener", {
+test_that("test create_exposure_update_listener for hosp TRUE", {
 
   human <- mockery::mock()
   states <- mockery::mock()
@@ -139,14 +139,14 @@ test_that("test create_exposure_update_listener", {
   exposure = mockery::mock()
   parameters <- list(dur_E = mockery::mock(),
                      prob_hosp = list(mockery::mock(problist)))
-  to_move <- c(6, 7)
+  to_move <- c(6, 7, 3, 2)
   discrete_age <- mockery::mock()
   target <- 100
 
   r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
   mockery::stub(ret, 'r_erlang', mockery::mock(c(TRUE, TRUE, TRUE, TRUE)))
 
-  mockery::stub(ret, 'bernoulli_multi_p', mockery::mock(TRUE, FALSE, TRUE))
+  mockery::stub(ret, 'bernoulli_multi_p', mockery::mock(TRUE))
 
   mockery::stub(
     ret,
@@ -175,6 +175,64 @@ test_that("test create_exposure_update_listener", {
     delay = c(0.5, 0.5, 0.5, 0.5))
 
 })
+
+test_that("test create_exposure_update_listener for hosp FALSE", {
+
+  human <- mockery::mock()
+  states <- mockery::mock()
+
+  ret <- create_exposure_update_listener(
+    human,
+    states,
+    events,
+    variables,
+    parameters
+  )
+
+  api <- list(get_variable = mockery::mock(), schedule = mockery::mock())
+  variables <- list(discrete_age = mockery::mock())
+  events <- list(exposure = mockery::mock())
+  problist <- seq(1,17,1)
+  exposure = mockery::mock()
+  parameters <- list(dur_E = mockery::mock(),
+                     prob_hosp = list(mockery::mock(problist)))
+  to_move <- c(6, 7, 3, 2)
+  discrete_age <- mockery::mock()
+  target <- 100
+
+  r_erlang_mock <- mockery::mock(c(TRUE, TRUE, TRUE, TRUE))
+  mockery::stub(ret, 'r_erlang', mockery::mock(c(TRUE, TRUE, TRUE, TRUE)))
+
+  mockery::stub(ret, 'bernoulli_multi_p', mockery::mock(FALSE))
+
+  mockery::stub(
+    ret,
+    "hosp",
+    mockery::mock()(
+      length(to_move),
+      parameters$prob_hosp
+    )
+  )
+
+  with_mock(
+    'hypatia::r_erlang' = r_erlang_mock,
+    ret2 <- api$schedule(
+      events$exposure,
+      target,
+      rep(.5, 4)
+    )
+  )
+
+  ret(api, to_move)
+
+  mockery::expect_args(api$get_variable, 1, human, variables$discrete_age,
+                       to_move)
+
+  mockery::expect_args(api$schedule, 1, event = events$exposure, target = 100,
+                       delay = c(0.5, 0.5, 0.5, 0.5))
+
+})
+
 
 test_that("test initialise_progression", {
 

@@ -13,6 +13,5 @@
 #'
 #' @rdname iso3c_ages
 #' @aliases iso3c_ages
-#'
 #' @source \url{https://www.worldometers.info/world-population/population-by-country/}
 "iso3c_ages"

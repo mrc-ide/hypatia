@@ -1,7 +1,6 @@
 test_that("run_simulation can parameterise and run an French model for 10 days", {
 
-  expected_columns <- c('timestep')
-  pop <- get_population("France")
+  pop <- get_population("Afhanistan")
   parameters <- get_parameters(
     pop,
     R0 = 2,
@@ -15,7 +14,7 @@ test_that("run_simulation can parameterise and run an French model for 10 days",
     parameters
   )
 
-  expect_setequal(names(output), expected_columns)
+  expect_setequal(names(output), 'timestep')
   expect_equal(nrow(output), 10)
 
 })
