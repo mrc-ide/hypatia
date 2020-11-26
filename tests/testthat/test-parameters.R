@@ -7,7 +7,7 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
   newpopulation <- 100000
   numberof_days <- 5
   contact_matrix_set <- squire::contact_matrices[[1]]
-  pop <- get_population("France")
+  pop <- get_population("Afghanistan")
 
   psq <- get_parameters(
     pop,

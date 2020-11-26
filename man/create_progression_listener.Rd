@@ -14,7 +14,7 @@ create_progression_listener(event, duration, shift = 0, func = r_erlang)
 \item{shift}{number of days to increase scheduled event by}
 
 \item{func}{function to use for drawing progression.
-Default = \code{\link{r_erlang}}}
+Default = \link{r_erlang}}
 }
 \description{
 schedules follow up infection events

@@ -20,9 +20,6 @@ create_events <- function() {
     stepdown = individual::Event$new('stepdown'),
     recovery = individual::Event$new('recovery'),
     death = individual::Event$new('deaths')
-
-    # Vaccination events
-
   )
 
   events
@@ -62,7 +59,7 @@ initialise_progression <- function(event, human, from_state, duration) {
 #' @param duration the average time spent in this state
 #' @param shift number of days to increase scheduled event by
 #' @param func function to use for drawing progression.
-#'   Default = \code{\link{r_erlang}}
+#' Default = [r_erlang]
 create_progression_listener <- function(event, duration, shift = 0, func = r_erlang) {
   function(api, target) {
     api$schedule(event, target, func(length(target), duration) + shift)

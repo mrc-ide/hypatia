@@ -16,8 +16,7 @@ run_simulation <- function(pop, parameters) {
   events <- create_events()
   human <- create_human(states,
                         variables,
-                        events,
-                        parameters)
+                        events)
 
   individual::simulate(
     individuals = human,

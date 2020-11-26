@@ -81,6 +81,6 @@ create_age_variables <- function(pop, max_age = 100) {
 create_variables <- function(pop, max_age = 100) {
 
   ret <- create_age_variables(pop, max_age = 100)
-  list(age = ret$age, discrete_age = ret$discrete_age)
+  list(discrete_age = ret$discrete_age)
 
 }
