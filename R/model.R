@@ -18,6 +18,7 @@ run_simulation <- function(pop, parameters, renderer) {
   human <- create_human(states,
                         variables,
                         events)
+
   if (is.null(renderer)) {
     processes <- list()
   } else {

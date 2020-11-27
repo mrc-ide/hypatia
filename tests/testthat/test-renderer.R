@@ -31,11 +31,9 @@ test_that("test that renderer works for 1 state", {
     renderer
   )
 
-  rendered <- data.frame(output)
-  expect_equal(length(rendered$timestep), 1000)
-  expect_equal(length(rendered$human_S_count), 1000)
-  expect_equal(sum(rendered$human_S_count), 38928321000)
-
+  expect_equal(length(output$timestep), 1000)
+  expect_equal(length(output$human_S_count), 1000)
+  expect_equal(sum(output$human_S_count), 38928321000)
 
 })
 
@@ -59,7 +57,6 @@ test_that("test that renderer works for more than 1 state", {
     contact_matrix_set = contact_matrix_set
   )
 
-
   S <- individual::State$new("S", 10)
   E <- individual::State$new("E", 100)
   IMild <- individual::State$new("IMild", 0)
@@ -76,14 +73,12 @@ test_that("test that renderer works for more than 1 state", {
     renderer
   )
 
-  rendered <- data.frame(output)
-
-  expect_equal(length(rendered$timestep), 1000)
-  expect_equal(length(rendered$human_S_count), 1000)
-  expect_equal(length(rendered$human_E_count), 1000)
-  expect_equal(length(rendered$human_IMild_count), 1000)
-  expect_equal(sum(rendered$human_S_count), 38928321000)
-  expect_equal(sum(rendered$human_E_count), 20000)
-  expect_equal(sum(rendered$human_IMild_count), 0)
+  expect_equal(length(output$timestep), 1000)
+  expect_equal(length(output$human_S_count), 1000)
+  expect_equal(length(output$human_E_count), 1000)
+  expect_equal(length(output$human_IMild_count), 1000)
+  expect_equal(sum(output$human_S_count), 38928321000)
+  expect_equal(sum(output$human_E_count), 20000)
+  expect_equal(sum(output$human_IMild_count), 0)
 
 })

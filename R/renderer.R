@@ -5,11 +5,12 @@
 #'
 #' @return rendered data
 #' @export
+#' @importFrom Rcpp sourceCpp
 #' @examples
 #' state_count_renderer_process(individual, states)
 state_count_renderer_process <- function(individualname, statenames) {
 
-  individual:::state_count_renderer_process(
+  individual::state_count_renderer_process(
     individualname,
     statenames
   )
