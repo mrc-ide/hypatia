@@ -4,13 +4,15 @@
 \alias{run_simulation}
 \title{Run the simulation}
 \usage{
-run_simulation(pop, parameters)
+run_simulation(pop, parameters, renderer)
 }
 \arguments{
 \item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
 \item{parameters}{parameters list.
 See \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
+
+\item{renderer}{renderer}
 }
 \description{
 The main entrypoint for the simulation. run_simulation puts together the
