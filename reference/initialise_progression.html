@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Define model states — create_states • hypatia</title>
+<title>Schedule progression of human disease at the start of the simulation — initialise_progression • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Define model states — create_states" />
-<meta property="og:description" content="Create_states creates and initialises the human states for the model" />
+<meta property="og:title" content="Schedule progression of human disease at the start of the simulation — initialise_progression" />
+<meta property="og:description" content="Schedules infection events using Erlang" />
 
 
 
@@ -103,29 +103,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Define model states</h1>
+    <h1>Schedule progression of human disease at the start of the simulation</h1>
     
-    <div class="hidden name"><code>create_states.Rd</code></div>
+    <div class="hidden name"><code>initialise_progression.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create_states creates and initialises the human states for the model</p>
+    <p>Schedules infection events using Erlang</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_states</span><span class='op'>(</span><span class='va'>psq</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>initialise_progression</span><span class='op'>(</span><span class='va'>event</span>, <span class='va'>human</span>, <span class='va'>from_state</span>, <span class='va'>duration</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>psq</th>
-      <td><p>the model parameters</p></td>
+      <th>event</th>
+      <td><p>the event to schedule</p></td>
+    </tr>
+    <tr>
+      <th>human</th>
+      <td><p>the human handle</p></td>
+    </tr>
+    <tr>
+      <th>from_state</th>
+      <td><p>the state this event applies to</p></td>
+    </tr>
+    <tr>
+      <th>duration</th>
+      <td><p>the average time spent in this state</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>list of states</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

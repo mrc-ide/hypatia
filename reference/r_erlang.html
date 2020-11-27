@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Define model states — create_states • hypatia</title>
+<title>Erlang waiting time distribution — r_erlang • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Define model states — create_states" />
-<meta property="og:description" content="Create_states creates and initialises the human states for the model" />
+<meta property="og:title" content="Erlang waiting time distribution — r_erlang" />
+<meta property="og:description" content="Erlang waiting time distribution" />
 
 
 
@@ -103,29 +103,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Define model states</h1>
+    <h1>Erlang waiting time distribution</h1>
     
-    <div class="hidden name"><code>create_states.Rd</code></div>
+    <div class="hidden name"><code>r_erlang.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create_states creates and initialises the human states for the model</p>
+    <p>Erlang waiting time distribution</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_states</span><span class='op'>(</span><span class='va'>psq</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>r_erlang</span><span class='op'>(</span><span class='va'>size</span>, <span class='va'>mu</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>psq</th>
-      <td><p>the model parameters</p></td>
+      <th>size</th>
+      <td><p>Number of draws</p></td>
+    </tr>
+    <tr>
+      <th>mu</th>
+      <td><p>Mean duration</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>list of states</p>
+    <p>Random draws from erlang distribution</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

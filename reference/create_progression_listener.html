@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Define model states — create_states • hypatia</title>
+<title>Modelling the progression of the human disease — create_progression_listener • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Define model states — create_states" />
-<meta property="og:description" content="Create_states creates and initialises the human states for the model" />
+<meta property="og:title" content="Modelling the progression of the human disease — create_progression_listener" />
+<meta property="og:description" content="schedules follow up infection events" />
 
 
 
@@ -103,29 +103,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Define model states</h1>
+    <h1>Modelling the progression of the human disease</h1>
     
-    <div class="hidden name"><code>create_states.Rd</code></div>
+    <div class="hidden name"><code>create_progression_listener.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create_states creates and initialises the human states for the model</p>
+    <p>schedules follow up infection events</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_states</span><span class='op'>(</span><span class='va'>psq</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>create_progression_listener</span><span class='op'>(</span><span class='va'>event</span>, <span class='va'>duration</span>, shift <span class='op'>=</span> <span class='fl'>0</span>, func <span class='op'>=</span> <span class='va'>r_erlang</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>psq</th>
-      <td><p>the model parameters</p></td>
+      <th>event</th>
+      <td><p>the event to schedule</p></td>
+    </tr>
+    <tr>
+      <th>duration</th>
+      <td><p>the average time spent in this state</p></td>
+    </tr>
+    <tr>
+      <th>shift</th>
+      <td><p>number of days to increase scheduled event by</p></td>
+    </tr>
+    <tr>
+      <th>func</th>
+      <td><p>function to use for drawing progression.
+Default = <a href='r_erlang.html'>r_erlang</a></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>list of states</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Define model states — create_states • hypatia</title>
+<title>Median ages for countries — iso3c_ages • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Define model states — create_states" />
-<meta property="og:description" content="Create_states creates and initialises the human states for the model" />
+<meta property="og:title" content="Median ages for countries — iso3c_ages" />
+<meta property="og:description" content="Median ages for countries" />
 
 
 
@@ -103,29 +103,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Define model states</h1>
+    <h1>Median ages for countries</h1>
     
-    <div class="hidden name"><code>create_states.Rd</code></div>
+    <div class="hidden name"><code>iso3c_ages.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create_states creates and initialises the human states for the model</p>
+    <p>Median ages for countries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>create_states</span><span class='op'>(</span><span class='va'>psq</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='va'>iso3c_ages</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>psq</th>
-      <td><p>the model parameters</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>list of states</p>
+    <p>A dataframe of 3 elements:</p>
+<p><code>$iso3c_ages</code>: A dataframe of admin units and their seasonal parameters</p><ul>
+<li><p>country: Country name string</p></li>
+<li><p>age: Median population age numeric</p></li>
+<li><p>iso3c: ISO3C string</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p><a href='https://www.worldometers.info/world-population/population-by-country/'>https://www.worldometers.info/world-population/population-by-country/</a></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
