@@ -4,12 +4,15 @@
 \alias{state_count_renderer_process}
 \title{Process to render number of individuals in specified states}
 \usage{
-state_count_renderer_process(individual, states)
+state_count_renderer_process(individualname, statenames)
 }
 \arguments{
-\item{individual}{the individual of interest}
+\item{individualname}{name of the individual of interest}
 
-\item{states}{a list of state objects}
+\item{statenames}{a list of state object's names}
+}
+\value{
+rendered data
 }
 \description{
 Process to render number of individuals in specified states

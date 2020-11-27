@@ -9,9 +9,12 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
     contact_matrix_set = squire::contact_matrices[[1]]
   )
 
+  renderer <- NULL
+
   output <- run_simulation(
     pop,
-    parameters
+    parameters,
+    renderer
   )
 
   expect_setequal(names(output), 'timestep')

@@ -25,6 +25,6 @@ run_simulation <- function(pop, parameters, renderer) {
     individuals = human,
     processes = processes,
     end_timestep = parameters$time_period,
-    parameters = parameters,
+    parameters = parameters
   )
 }
