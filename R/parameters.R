@@ -3,7 +3,7 @@
 #' @param pop population. See [squire::get_population]
 #' @param dt the timestep (days) for the simulation
 #' @param time_period the number timesteps to run the simulation for
-#' @param ... Other parameters for [squire::parameters_explicit_SEEIR] 
+#' @param ... Other parameters for [squire::parameters_explicit_SEEIR]
 #'
 #' @return SQUIRE parameters
 #' @export
@@ -17,7 +17,7 @@ get_parameters <- function(pop, dt = 1, time_period = 365, ...) {
     ),
     time_period = time_period
   )
-} 
+}
 
 #' @title Get population from SQUIRE model
 #' @description rounds population sizes to discrete numbers

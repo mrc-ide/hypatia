@@ -7,6 +7,25 @@ test_that("null-or-value works", {
   expect_equal(NULL %||% 2, 2)
 })
 
+test_that("r_exp works", {
+
+  ret <- r_exp(1, 0.1)
+  expect_true(ret >= 0.0)
+  expect_true(ret <= 1.0)
+
+})
+
+test_that("bernoulli_multi_p works", {
+
+  expect_true(all(bernoulli_multi_p(10000, 1)))
+  expect_false(any(bernoulli_multi_p(10000, 0)))
+
+  try_again(5,
+            expect_equal(mean(bernoulli_multi_p(1e6, 0.5)),
+            0.5, tolerance = 1e-3))
+
+})
+
 test_that("remove_non_numerics removes characters and characters of arrays", {
   actual <- remove_non_numerics(list(
     a = array(c('1', '2'), dim=c(1, 2)),
@@ -15,3 +34,4 @@ test_that("remove_non_numerics removes characters and characters of arrays", {
   ))
   expect_equal(actual, list(c = c(1, 2)))
 })
+
