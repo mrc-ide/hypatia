@@ -260,3 +260,21 @@ create_event_based_processes <- function(
    )
 
 }
+
+#' @title Create processes for simulation
+#'
+#' @param individualname name of individual
+#' @param statenames names of states
+create_processes <- function(
+   individualname,
+   statenames) {
+
+   processes <- list(
+      # Rendering process
+      individual::state_count_renderer_process(
+         individualname,
+         statenames
+      )
+   )
+
+}

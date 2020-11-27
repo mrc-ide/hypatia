@@ -2,8 +2,6 @@
 
 export(get_parameters)
 export(run_simulation)
-export(state_count_renderer_process)
-importFrom(Rcpp,sourceCpp)
 importFrom(stats,dexp)
 importFrom(stats,rexp)
 importFrom(stats,rgamma)

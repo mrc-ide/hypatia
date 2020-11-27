@@ -7,9 +7,9 @@
 #' @param pop population. See [squire::get_population]
 #' @param parameters parameters list.
 #'   See [squire::parameters_explicit_SEEIR]
-#' @param renderer renderer
+#' @param processes processes
 #' @export
-run_simulation <- function(pop, parameters, renderer) {
+run_simulation <- function(pop, parameters, processes) {
 
   parameters <- remove_non_numerics(parameters)
   states <- create_states(parameters)
@@ -19,11 +19,11 @@ run_simulation <- function(pop, parameters, renderer) {
                         variables,
                         events)
 
-  if (is.null(renderer)) {
-    processes <- list()
-  } else {
-    processes <- list(renderer)
-  }
+  # if (is.null(renderer)) {
+  #   processes <- list()
+  # } else {
+  #   processes <- list(renderer)
+  # }
 
   individual::simulate(
     individuals = human,
