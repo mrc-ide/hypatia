@@ -10,7 +10,7 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
 
   # get out country median ages
   iso3c <- pop$iso3c[1]
-  med_age <- iso3c_ages$age[iso3c_ages$iso3c == iso3c]
+  med_age <- hypatia::iso3c_ages$age[hypatia::iso3c_ages$iso3c == iso3c]
 
   # get the top end of the 5 year age bins
   age_bins <- c(0, as.numeric(gsub("^(\\d{1,2}).*", "\\1", pop$age_group)[-1]))
