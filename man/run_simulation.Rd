@@ -4,9 +4,11 @@
 \alias{run_simulation}
 \title{Run the simulation}
 \usage{
-run_simulation(pop, parameters, processes)
+run_simulation(timesteps = NULL, pop, parameters = NULL, processes)
 }
 \arguments{
+\item{timesteps}{the number of timesteps to run the simulation for.}
+
 \item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
 \item{parameters}{parameters list.

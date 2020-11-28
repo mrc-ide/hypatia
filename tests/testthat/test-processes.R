@@ -119,6 +119,7 @@ test_that("test that renderer process works for 1 state", {
    )
 
    output <- run_simulation(
+      time_period,
       pop,
       psq,
       processes
@@ -161,6 +162,7 @@ test_that("test that renderer process works for more than 1 state", {
    )
 
    output <- run_simulation(
+      time_period,
       pop,
       psq,
       processes

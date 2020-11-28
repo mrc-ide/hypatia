@@ -31,24 +31,94 @@ pop <- squire::get_population(iso3c = "ATG")
 pop$n <- round(pop$n/10)
 
 # Create our equivalent parameters
+time_steps <- 200
+
+ S <- individual::State$new("S", 10)
+ E <- individual::State$new("E", 100)
+ IMild <- individual::State$new("IMild", 0)
+ human <- individual::Individual$new("human", list(S, E, IMild))
+
+ processes <- hypatia:::create_processes(
+    human$name,
+    c(S$name, E$name, IMild$name)
+ )
+
 parameters <- squire::parameters_explicit_SEEIR(
   population = pop$n, 
   country = "Antigua and Barbuda", 
-  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"), 
+  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"),
+  R0 = 2,
+  time_period = time_steps,
+  tt_contact_matrix = 0
   )
 
 # run our simulation
-output <- run_simulation(200, pop, parameters)
+output <- run_simulation(time_steps, pop, parameters, processes)
 
-# plotting function
-plot_states <- function(output) {
+df <- list(output)
+df <- dplyr::bind_rows(df, .id = "group")
+
+  # Convert to long format
+df <- tidyr::pivot_longer(tibble::as_tibble(df),
+                              c("human_S_count", "human_E_count", 
+                                "human_IMild_count"))
+
+
+
+plot_states <- function(df) {
   ggplot(
-    reshape2::melt(output, 'timestep'),
-    aes(x = timestep, y = value, group = variable)
-  ) + geom_line(aes(color = variable))
+    reshape2::melt(df, 'timestep'),
+    aes(x = df$timestep, y = df$value,
+    group = interaction(df$group, df$name), colour = df$name)) +
+    ggplot2::geom_line(size = 0.5) +
+    ggplot2::theme_bw()
 }
 
-plot_states(output)
+
+
+
+  # Create group id for data
+df <- list(output)
+df <- dplyr::bind_rows(df, .id = "group")
+
+  # Convert to long format
+df <- tidyr::pivot_longer(tibble::as_tibble(df),
+                              c("human_S_count", "human_E_count", 
+                                "human_IMild_count"))
+# plotting function
+# plot_states <- function(output) {
+#   ggplot(
+#     reshape2::melt(output, 'timestep'),
+#     aes(x = output$timestep, y =c(output$human_S_count,
+#                                   output$human_E_count,
+#                                   output$human_IMild_count), 
+#         group = output$timestep)
+#   ) + geom_line(aes(color = "pink"))
+  
+    strname <- "Hypatia Model Simulation"
+    subtitle <- paste(
+        "Simulation for 1 run and 1000 data points")
+  
+    time <- seq(1,200,1)
+    
+    ggplot2::ggplot(
+    df, ggplot2::aes(x = time, y = df$value,
+                     group = interaction(df$group, df$name), colour = df$name)) +
+    ggplot2::geom_line(size = 0.5) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(title = strname, subtitle = subtitle) + #, color = df$legend) +
+    ggplot2::labs(y = "States", x = "time") +
+    ggplot2::theme(
+      legend.justification = c("right", "top"),
+      legend.box = c("horizontal", "vertical")) +
+    ggplot2::theme(
+      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
+      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
+      plot.subtitle = ggplot2::element_text(size = 13),
+      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
+      axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
+
+
 ```
 
 Does it look similar to the squire output:
