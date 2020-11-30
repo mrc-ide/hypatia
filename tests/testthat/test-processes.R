@@ -76,36 +76,49 @@ test_that("test create_setup_process", {
 
 test_that("test that create_pocesses works", {
 
-   R0 <- 2
-   timestep <- 100
-   time_period <- 1000
-   tt_contact_matrix <- 0
-   numberof_days <- 10
-   contact_matrix_set <- squire::contact_matrices[[1]]
-
    pop <- get_population("Afghanistan")
 
    psq <- get_parameters(
       pop,
-      R0 = R0,
-      time_period = time_period,
-      tt_contact_matrix = tt_contact_matrix,
-      contact_matrix_set = contact_matrix_set
+      dt = 1,
+      time_period = 10,
+      R0 = 2,
+      tt_contact_matrix = 0,
+      contact_matrix_set = squire::contact_matrices[[1]]
    )
 
-   processes <- create_processes(psq, pop)
+   max_age <- 100
 
-   output <- run_simulation(
-      pop,
-      psq,
-      processes
-   )
+   processes <- create_processes(psq, pop, max_age = max_age)
 
    # Check create_processes has worked correctly
    for (process in processes) {
       expect(is.function(process) || inherits(process, 'externalptr'),
              'Process is not a function')
    }
+
+})
+
+
+test_that("test that create_pocesses works for render process", {
+
+   pop <- get_population("Afghanistan")
+
+   psq <- get_parameters(
+      pop,
+      dt = 1,
+      time_period = 10,
+      R0 = 2,
+      tt_contact_matrix = 0,
+      contact_matrix_set = squire::contact_matrices[[1]]
+   )
+
+   output <- run_simulation(
+      timesteps = 1000,
+      pop,
+      psq,
+      create_processes(psq, pop, max_age = 100)
+   )
 
    expect_equal(length(output$timestep), 1000)
    expect_equal(length(output$human_E_count), 1000)

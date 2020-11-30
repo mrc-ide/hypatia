@@ -24,5 +24,5 @@ get_parameters <- function(pop, dt = 1, time_period = 365, ...) {
 #'
 #' @param countryname name of country
 get_population <- function(countryname) {
-  squire::get_population(countryname, simple_SEIR = FALSE)
+  squire::get_population(countryname, iso3c = NULL, simple_SEIR = FALSE)
 }

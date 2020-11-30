@@ -1,6 +1,7 @@
 test_that("run_simulation can parameterise and run an Afghan model for 10 days", {
 
   pop <- get_population("Afghanistan")
+
   parameters <- get_parameters(
     pop,
     R0 = 2,
@@ -9,15 +10,13 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
     contact_matrix_set = squire::contact_matrices[[1]]
   )
 
-  processes <- list()
-
   output <- run_simulation(
+    timesteps = 1000,
     pop,
-    parameters,
-    processes
+    parameters
   )
 
-  expect_setequal(names(output), 'timestep')
-  expect_equal(nrow(output), 10)
+  expect_equal(length(output$timestep), 1000)
+  expect_equal(nrow(output), 1000)
 
 })

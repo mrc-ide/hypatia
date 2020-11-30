@@ -8,9 +8,9 @@
 #' @param pop population. See [squire::get_population]
 #' @param parameters parameters list.
 #'   See [squire::parameters_explicit_SEEIR]
-#' @param processes processes
+#' @param max_age maximum age defaults to 100
 #' @export
-run_simulation <- function(timesteps = NULL, pop, parameters = NULL, processes) {
+run_simulation <- function(timesteps = NULL, pop, parameters = NULL, max_age = 100) {
 
   if (is.null(parameters)) {
     parameters <- squire::parameters_explicit_SEEIR(
@@ -21,9 +21,9 @@ run_simulation <- function(timesteps = NULL, pop, parameters = NULL, processes) 
     timesteps = parameters$time_period
   }
 
+  variables <- create_variables(pop)
   parameters <- remove_non_numerics(parameters)
   states <- create_states(parameters)
-  variables <- create_variables(pop)
   events <- create_events()
   human <- create_human(states,
                         variables,
@@ -31,7 +31,9 @@ run_simulation <- function(timesteps = NULL, pop, parameters = NULL, processes) 
 
   output <- individual::simulate(
     individuals = human,
-    processes = processes,
+    processes = create_processes(parameters,
+                                 pop,
+                                 max_age),
     end_timestep  = timesteps,
     parameters = parameters
   )

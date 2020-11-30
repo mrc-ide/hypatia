@@ -265,17 +265,20 @@ create_event_based_processes <- function(
 #'
 #' @param psq model parameter
 #' @param pop population information
+#' @param max_age maximum age, defailt 100
+#'
 #' @return processes
 create_processes <- function(
    psq,
-   pop) {
+   pop,
+   max_age = 100) {
 
    states <- create_states(psq)
-   variables <- create_variables(pop)
+   variables <- create_variables(pop, max_age)
    events <- create_events()
    individual <- create_human(states, variables, events)
 
-   statesnamevector <- c()
+   statesnamevector <- vector()
 
    i <- 1
    for (state in states) {

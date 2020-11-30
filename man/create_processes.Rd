@@ -4,12 +4,14 @@
 \alias{create_processes}
 \title{Create processes for simulation}
 \usage{
-create_processes(psq, pop)
+create_processes(psq, pop, max_age = 100)
 }
 \arguments{
 \item{psq}{model parameter}
 
 \item{pop}{population information}
+
+\item{max_age}{maximum age, defailt 100}
 }
 \value{
 processes
