@@ -74,105 +74,46 @@ test_that("test create_setup_process", {
    )
 })
 
-test_that('create_processes makes a valid process function', {
+test_that("test that create_pocesses works", {
 
-   S <- individual::State$new("S", 10)
-   human <- individual::Individual$new("human", list(S))
+   R0 <- 2
+   timestep <- 100
+   time_period <- 1000
+   tt_contact_matrix <- 0
+   numberof_days <- 10
+   contact_matrix_set <- squire::contact_matrices[[1]]
 
-   processes <- create_processes(
-      human$name,
-      c(S$name)
+   pop <- get_population("Afghanistan")
+
+   psq <- get_parameters(
+      pop,
+      R0 = R0,
+      time_period = time_period,
+      tt_contact_matrix = tt_contact_matrix,
+      contact_matrix_set = contact_matrix_set
    )
 
+   processes <- create_processes(psq, pop)
+
+   output <- run_simulation(
+      pop,
+      psq,
+      processes
+   )
+
+   # Check create_processes has worked correctly
    for (process in processes) {
       expect(is.function(process) || inherits(process, 'externalptr'),
              'Process is not a function')
    }
 
-})
-
-test_that("test that renderer process works for 1 state", {
-
-   R0 <- 2
-   timestep <- 100
-   time_period <- 1000
-   tt_contact_matrix <- 0
-   newpopulation <- 100000
-   numberof_days <- 5
-   contact_matrix_set <- squire::contact_matrices[[1]]
-   pop <- get_population("Afghanistan")
-
-   psq <- get_parameters(
-      pop,
-      R0 = R0,
-      time_period = time_period,
-      tt_contact_matrix = tt_contact_matrix,
-      contact_matrix_set = contact_matrix_set
-   )
-
-   S <- individual::State$new("S", 10)
-   human <- individual::Individual$new("human", list(S))
-
-   processes <- create_processes(
-      human$name,
-      c(S$name)
-   )
-
-   output <- run_simulation(
-      pop,
-      psq,
-      processes
-   )
-
    expect_equal(length(output$timestep), 1000)
-   expect_equal(length(output$human_S_count), 1000)
-   expect_equal(sum(output$human_S_count), 38928321000)
-
-})
-
-
-test_that("test that renderer process works for more than 1 state", {
-
-   R0 <- 2
-   timestep <- 100
-   time_period <- 1000
-   tt_contact_matrix <- 0
-   newpopulation <- 100000
-   numberof_days <- 5
-   contact_matrix_set <- squire::contact_matrices[[1]]
-   pop <- get_population("Afghanistan")
-
-   psq <- get_parameters(
-      pop,
-      R0 = R0,
-      time_period = time_period,
-      tt_contact_matrix = tt_contact_matrix,
-      contact_matrix_set = contact_matrix_set
-   )
-
-   S <- individual::State$new("S", 10)
-   E <- individual::State$new("E", 100)
-   IMild <- individual::State$new("IMild", 0)
-   human <- individual::Individual$new("human", list(S, E, IMild))
-
-   processes <- create_processes(
-      human$name,
-      c(S$name, E$name, IMild$name)
-   )
-
-   output <- run_simulation(
-      pop,
-      psq,
-      processes
-   )
-
-   expect_equal(length(output$timestep), 1000)
-   expect_equal(length(output$human_S_count), 1000)
    expect_equal(length(output$human_E_count), 1000)
    expect_equal(length(output$human_IMild_count), 1000)
    expect_equal(sum(output$human_S_count), 38928321000)
    expect_equal(sum(output$human_E_count), 20000)
    expect_equal(sum(output$human_IMild_count), 0)
+   expect_equal(length(output$human_IMVNotGetLive_count), 1000)
 
 })
 

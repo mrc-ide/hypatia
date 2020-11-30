@@ -4,12 +4,15 @@
 \alias{create_processes}
 \title{Create processes for simulation}
 \usage{
-create_processes(individualname, statenames)
+create_processes(psq, pop)
 }
 \arguments{
-\item{individualname}{name of individual}
+\item{psq}{model parameter}
 
-\item{statenames}{names of states}
+\item{pop}{population information}
+}
+\value{
+processes
 }
 \description{
 Create processes for simulation

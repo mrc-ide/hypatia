@@ -263,18 +263,36 @@ create_event_based_processes <- function(
 
 #' @title Create processes for simulation
 #'
-#' @param individualname name of individual
-#' @param statenames names of states
+#' @param psq model parameter
+#' @param pop population information
+#' @return processes
 create_processes <- function(
-   individualname,
-   statenames) {
+   psq,
+   pop) {
+
+   states <- create_states(psq)
+   variables <- create_variables(pop)
+   events <- create_events()
+   individual <- create_human(states, variables, events)
+
+   statesnamevector <- c()
+
+   i <- 1
+   for (state in states) {
+      statesnamevector[i] <- state$name
+      i <- i + 1
+   }
+
+   # Rendering process
+   process_render <- individual::state_count_renderer_process(
+      individual$name,
+      statesnamevector
+   )
 
    processes <- list(
-      # Rendering process
-      individual::state_count_renderer_process(
-         individualname,
-         statenames
-      )
+      process_render
    )
+
+   processes
 
 }
