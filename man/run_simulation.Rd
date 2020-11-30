@@ -4,15 +4,26 @@
 \alias{run_simulation}
 \title{Run the simulation}
 \usage{
-run_simulation(timesteps = NULL, pop, parameters = NULL, max_age = 100)
+run_simulation(
+  country,
+  timesteps = NULL,
+  pop,
+  parameters = NULL,
+  contact_matrix_set,
+  max_age = 100
+)
 }
 \arguments{
+\item{country}{country simulation is being run for}
+
 \item{timesteps}{the number of timesteps to run the simulation for.}
 
 \item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
 \item{parameters}{parameters list.
 See \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
+
+\item{contact_matrix_set}{contact_matrix_set}
 
 \item{max_age}{maximum age defaults to 100}
 }

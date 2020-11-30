@@ -2,22 +2,35 @@
 % Please edit documentation in R/parameters.R
 \name{get_parameters}
 \alias{get_parameters}
-\title{Get parameters from SQUIRE model}
+\title{Get parameters from squire model}
 \usage{
-get_parameters(pop, dt = 1, time_period = 365, ...)
+get_parameters(
+  country = NULL,
+  population = NULL,
+  contact_matrix_set = NULL,
+  time_period = 365,
+  ...
+)
 }
 \arguments{
-\item{pop}{population. See \link[squire:get_population]{squire::get_population}}
+\item{country}{Character for country beign simulated. WIll be used to
+generate \code{population} and \code{contact_matrix_set} if
+unprovided. Either \code{country} or \code{population} and
+\code{contact_matrix_set} must be provided.}
 
-\item{dt}{the timestep (days) for the simulation}
+\item{population}{Population vector (for each age group). Default = NULL,
+which will cause population to be sourced from \code{country}}
 
-\item{time_period}{the number timesteps to run the simulation for}
+\item{contact_matrix_set}{Contact matrices used in simulation. Default =
+NULL, which will generate this based on the \code{country}.}
+
+\item{time_period}{Length of simulation. Default = 365}
 
 \item{...}{Other parameters for \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
 }
 \value{
-SQUIRE parameters
+squire model parameters
 }
 \description{
-Get parameters from SQUIRE model
+Get parameters from squire model
 }

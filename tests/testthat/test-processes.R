@@ -78,13 +78,20 @@ test_that("test that create_pocesses works", {
 
    pop <- get_population("Afghanistan")
 
+   R0 <- 2
+   timestep <- 100
+   time_period <- 1000
+   tt_contact_matrix <- 0
+   numberof_days <- 5
+   contact_matrix_set <- squire::contact_matrices[[1]]
+
    psq <- get_parameters(
-      pop,
-      dt = 1,
-      time_period = 10,
-      R0 = 2,
-      tt_contact_matrix = 0,
-      contact_matrix_set = squire::contact_matrices[[1]]
+      country = "Afghanistan",
+      population = pop$n,
+      contact_matrix_set = contact_matrix_set,
+      R0 = R0,
+      time_period = time_period,
+      tt_contact_matrix = tt_contact_matrix
    )
 
    max_age <- 100
@@ -104,20 +111,29 @@ test_that("test that create_pocesses works for render process", {
 
    pop <- get_population("Afghanistan")
 
+   R0 <- 2
+   timestep <- 100
+   time_period <- 1000
+   tt_contact_matrix <- 0
+   numberof_days <- 5
+   contact_matrix_set <- squire::contact_matrices[[1]]
+
    psq <- get_parameters(
-      pop,
-      dt = 1,
-      time_period = 10,
-      R0 = 2,
-      tt_contact_matrix = 0,
-      contact_matrix_set = squire::contact_matrices[[1]]
+      country = "Afghanistan",
+      population = pop$n,
+      contact_matrix_set = contact_matrix_set,
+      R0 = R0,
+      time_period = time_period,
+      tt_contact_matrix = tt_contact_matrix
    )
 
    output <- run_simulation(
-      timesteps = 1000,
+      "Afghanistan",
+      1000,
       pop,
       psq,
-      create_processes(psq, pop, max_age = 100)
+      contact_matrix_set,
+      max_age = 100
    )
 
    expect_equal(length(output$timestep), 1000)
