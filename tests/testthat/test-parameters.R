@@ -1,26 +1,22 @@
 test_that("test get_parameters returns the correct values from SQUIRE", {
 
   R0 <- 2
+  timestep <- 100
   time_period <- 1000
   tt_contact_matrix <- 0
   contact_matrix_set <- squire::contact_matrices[[1]]
 
-  pop <- get_population("Antigua and Barbuda")
+  pop <- get_population("Afghanistan")
 
-  # psq <- get_parameters(
-  #   "Afghanistan",
-  #   pop,
-  #   contact_matrix_set,
-  #   time_period  #,
-  #   # tt_contact_matrix = tt_contact_matrix,
-  #   # R0 = R0
-  # )
+  psq <- get_parameters(
+    country = "Afghanistan",
+    population = pop$n,
+    R0 = R0,
+    time_period = time_period,
+    tt_contact_matrix = tt_contact_matrix,
+    contact_matrix_set = contact_matrix_set
+  )
 
-  psq <- get_parameters("Antigua and Barbuda", pop,
-                               squire::get_mixing_matrix(iso3c = "ATG"),
-                               100)
-
-  expect_equal(psq$dt, 1)
   expect_equal(psq$dur_E, 4.6)
   expect_equal(psq$N_age, 17)
   expect_equal(length(psq$S_0), 17)
