@@ -35,7 +35,7 @@ devtools::install_github("mrc-ide/hypatia")
 What is special about using `README.Rmd` instead of just `README.md`?
 You can include R chunks like so:
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
+You will still need to render `README.Rmd` regularly, to keep `README.md`
 up-to-date.
 
 You can also embed plots, for example:
