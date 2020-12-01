@@ -79,10 +79,8 @@ test_that("test that create_pocesses works", {
    pop <- get_population("Afghanistan")
 
    R0 <- 2
-   timestep <- 100
    time_period <- 1000
    tt_contact_matrix <- 0
-   numberof_days <- 5
    contact_matrix_set <- squire::contact_matrices[[1]]
 
    psq <- get_parameters(
@@ -112,10 +110,8 @@ test_that("test that create_pocesses works for render process", {
    pop <- get_population("Afghanistan")
 
    R0 <- 2
-   timestep <- 100
    time_period <- 1000
    tt_contact_matrix <- 0
-   numberof_days <- 5
    contact_matrix_set <- squire::contact_matrices[[1]]
 
    psq <- get_parameters(
@@ -128,11 +124,8 @@ test_that("test that create_pocesses works for render process", {
    )
 
    output <- run_simulation(
-      "Afghanistan",
-      1000,
       pop,
       psq,
-      contact_matrix_set,
       max_age = 100
    )
 

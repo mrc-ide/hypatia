@@ -31,23 +31,22 @@ library(individual)
 ```
 
 ## Example
+Get parameters from SQUIRE
 ```{r, simulation, echo = FALSE}
- pop <- squire::get_population("Afghanistan", simple_SEIR = FALSE)
+  R0 <- 2
+  time_period <- 1000
+  tt_contact_matrix <- 0
+  contact_matrix_set <- squire::contact_matrices[[1]]
 
- dt <- 1
- R0 <-2 
- tt_contact_matrix <- 0
- time_period <- 1000
- newpopulation <- 10000
- timestep <- 100
- 
-  psq <- squire::parameters_explicit_SEEIR(
+  pop <- hypatia:::get_population("Afghanistan")
+
+  psq <- hypatia:::get_parameters(
     population = pop$n,
-    dt = dt,
     R0 = R0,
-    tt_contact_matrix = tt_contact_matrix,
     time_period = time_period,
-    contact_matrix_set = squire::contact_matrices[[1]])
+    contact_matrix_set = contact_matrix_set,
+    tt_contact_matrix = tt_contact_matrix
+  )
 
 ```
 
