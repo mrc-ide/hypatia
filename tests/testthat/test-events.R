@@ -2,9 +2,9 @@ test_that("create_event_based_processes assigns a listener to each event", {
 
   pop <- get_population("Antigua and Barbuda")
 
-  parameters <- get_parameters(
-    pop = pop, dt = 1, time_period = 100,
-    contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"))
+  parameters <- get_parameters("Antigua and Barbuda", pop,
+    squire::get_mixing_matrix(iso3c = "ATG"),
+    100)
 
   events <- create_events()
   states <- create_states(parameters)

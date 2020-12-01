@@ -4,26 +4,26 @@
 #' model components and runs the malaria simulation. This currently returns a
 #' dataframe with the number of individuals in each state at each timestep
 #'
-#' @param timesteps the number of timesteps to run the simulation for.
 #' @param pop population. See [squire::get_population]
 #' @param parameters parameters list.
 #'   See [squire::parameters_explicit_SEEIR]
-#' @param processes processes
+#' @param max_age maximum age defaults to 100
 #' @export
-run_simulation <- function(timesteps = NULL, pop, parameters = NULL, processes) {
+run_simulation <- function(pop, parameters = NULL, max_age = 100) {
 
   if (is.null(parameters)) {
     parameters <- squire::parameters_explicit_SEEIR(
-      population = pop$n,  time_period = timesteps)
-  }
-
-  if (is.null(timesteps)) {
-    timesteps = parameters$time_period
+      country = pop$country[1]
+      #contact_matrix_set = contact_matrix_set,
+     # time_period = timesteps
+    )
   }
 
   parameters <- remove_non_numerics(parameters)
+
+  variables <- create_variables(pop, max_age)
+  parameters <- remove_non_numerics(parameters)
   states <- create_states(parameters)
-  variables <- create_variables(pop)
   events <- create_events()
   human <- create_human(states,
                         variables,
@@ -31,8 +31,10 @@ run_simulation <- function(timesteps = NULL, pop, parameters = NULL, processes) 
 
   output <- individual::simulate(
     individuals = human,
-    processes = processes,
-    end_timestep  = timesteps,
+    processes = create_processes(parameters,
+                                 pop,
+                                 max_age),
+    end_timestep  = parameters$time_period,
     parameters = parameters
   )
 
