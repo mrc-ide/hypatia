@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get parameters from SQUIRE model — get_parameters • hypatia</title>
+<title>Get parameters from squire model — get_parameters • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get parameters from SQUIRE model — get_parameters" />
-<meta property="og:description" content="Get parameters from SQUIRE model" />
+<meta property="og:title" content="Get parameters from squire model — get_parameters" />
+<meta property="og:description" content="Get parameters from squire model" />
 
 
 
@@ -103,31 +103,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get parameters from SQUIRE model</h1>
+    <h1>Get parameters from squire model</h1>
     
     <div class="hidden name"><code>get_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get parameters from SQUIRE model</p>
+    <p>Get parameters from squire model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>pop</span>, dt <span class='op'>=</span> <span class='fl'>1</span>, time_period <span class='op'>=</span> <span class='fl'>365</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span>
+  country <span class='op'>=</span> <span class='cn'>NULL</span>,
+  population <span class='op'>=</span> <span class='cn'>NULL</span>,
+  contact_matrix_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  time_period <span class='op'>=</span> <span class='fl'>365</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pop</th>
-      <td><p>population. See <a href='https://rdrr.io/pkg/squire/man/get_population.html'>squire::get_population</a></p></td>
+      <th>country</th>
+      <td><p>Character for country beign simulated. WIll be used to
+generate <code>population</code> and <code>contact_matrix_set</code> if
+unprovided. Either <code>country</code> or <code>population</code> and
+<code>contact_matrix_set</code> must be provided.</p></td>
     </tr>
     <tr>
-      <th>dt</th>
-      <td><p>the timestep (days) for the simulation</p></td>
+      <th>population</th>
+      <td><p>Population vector (for each age group). Default = NULL,
+which will cause population to be sourced from <code>country</code></p></td>
+    </tr>
+    <tr>
+      <th>contact_matrix_set</th>
+      <td><p>Contact matrices used in simulation. Default =
+NULL, which will generate this based on the <code>country</code>.</p></td>
     </tr>
     <tr>
       <th>time_period</th>
-      <td><p>the number timesteps to run the simulation for</p></td>
+      <td><p>Length of simulation. Default = 365</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -137,7 +152,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>SQUIRE parameters</p>
+    <p>squire model parameters</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

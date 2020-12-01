@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Run the simulation — run_simulation • hypatia</title>
+<title>Create processes for simulation — create_processes • hypatia</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Run the simulation — run_simulation" />
-<meta property="og:description" content="The main entrypoint for the simulation. run_simulation puts together the
-model components and runs the malaria simulation. This currently returns a
-dataframe with the number of individuals in each state at each timestep" />
+<meta property="og:title" content="Create processes for simulation — create_processes" />
+<meta property="og:description" content="Create processes for simulation" />
 
 
 
@@ -105,36 +103,37 @@ dataframe with the number of individuals in each state at each timestep" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Run the simulation</h1>
+    <h1>Create processes for simulation</h1>
     
-    <div class="hidden name"><code>run_simulation.Rd</code></div>
+    <div class="hidden name"><code>create_processes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The main entrypoint for the simulation. run_simulation puts together the
-model components and runs the malaria simulation. This currently returns a
-dataframe with the number of individuals in each state at each timestep</p>
+    <p>Create processes for simulation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_simulation</span><span class='op'>(</span><span class='va'>pop</span>, parameters <span class='op'>=</span> <span class='cn'>NULL</span>, max_age <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>create_processes</span><span class='op'>(</span><span class='va'>psq</span>, <span class='va'>pop</span>, max_age <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pop</th>
-      <td><p>population. See <code><a href='https://rdrr.io/pkg/squire/man/get_population.html'>get_population</a></code></p></td>
+      <th>psq</th>
+      <td><p>model parameter</p></td>
     </tr>
     <tr>
-      <th>parameters</th>
-      <td><p>parameter list</p></td>
+      <th>pop</th>
+      <td><p>population information</p></td>
     </tr>
     <tr>
       <th>max_age</th>
-      <td><p>maximum age defaults to 100</p></td>
+      <td><p>maximum age, defailt 100</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>processes</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
