@@ -128,11 +128,8 @@ test_that("test that create_pocesses works for render process", {
    )
 
    output <- run_simulation(
-     # "Afghanistan",
-     # 1000,
       pop,
       psq,
-     # contact_matrix_set,
       max_age = 100
    )
 

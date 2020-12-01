@@ -7,10 +7,9 @@
 run_simulation(pop, parameters = NULL, max_age = 100)
 }
 \arguments{
-\item{pop}{population. See \link[squire:get_population]{squire::get_population}}
+\item{pop}{population. See \code{\link[squire]{get_population}}}
 
-\item{parameters}{parameters list.
-See \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
+\item{parameters}{parameter list}
 
 \item{max_age}{maximum age defaults to 100}
 }

@@ -23,91 +23,87 @@ library(ggplot2)
 library(tidyverse)
 ```
 
-```{r basic use}
+```{r hypatia}
 
 # Create our population
-pop <- hypatia:::get_population(country = "Antigua and Barbuda")
+countryname = "Antigua and Barbuda"
+
+pop <- hypatia:::get_population(countryname)
 
 # Scale it for speed
 pop$n <- round(pop$n/10)
 
 # Create our equivalent parameters
-time_steps <- 200
-# max_age <- 100
-countryname = "Antigua and Barbuda"
-contact_matrix_set <- squire::get_mixing_matrix(iso3c = "ATG")
+time_period <- 200
 
-parameters <- hypatia:::get_parameters (
-    country = countryname, 
-    population = pop$n, 
-    contact_matrix_set = contact_matrix_set,
-    time_period = time_steps,
-    R0 = 2,
-    tt_contact_matrix = 0
+parameters <- get_parameters(
+  population = pop$n,
+  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"),
+  R0 = 2,
+  time_period = time_period,
+  tt_contact_matrix = 0
 )
 
-# run our simulation
-output <- hypatia:::run_simulation(pop, parameters, max_age = 100)
+# parameters <- squire::parameters_explicit_SEEIR(
+#       population = pop$n,
+#       country = countryname,
+#       contact_matrix_set =  squire::get_mixing_matrix(iso3c = "ATG"),
+#       dt = 1,
+#       time_period = 200,
+#       R0 = 2,
+#     )
 
-df <- list(output)
+# run our simulation - default timesteps = 200
+df <- hypatia:::run_simulation(pop, parameters, max_age = 100)
+
+numruns <- length(df)
+numdatapoints <- length(df[[1]][[1]]) - 1
+subtitle <- paste(
+  "Simulation for 1 run and 200 data points per run")
+
 df <- dplyr::bind_rows(df, .id = "group")
 
-  # Convert to long format
-df <- tidyr::pivot_longer(tibble::as_tibble(df),
-                              c("human_S_count", "human_E_count", 
-                                "human_IMild_count"))
-
-
-# 
-# plot_states <- function(output) {
-#   ggplot(
-#     reshape2::melt(df, 'timestep'),
-#     aes(x = df$timestep, y = df$value,
-#     group = interaction(df$group, df$name), colour = df$name)) +
-#     ggplot2::geom_line(size = 0.5) +
-#     ggplot2::theme_bw()
-# }
-
- statesnamevector <- vector()
-
- i <- 2
- for (o in output) {
-    statesnamevector[i] <- o
-    i <- i + 1
- }
-
-  # Create group id for data
-df <- list(output)
-df <- dplyr::bind_rows(df, .id = "group")
+statesnamevector <- c("human_S_count",
+                           "human_E_count",
+                           "human_IMild_count",
+                           "human_ICase_count",
+                           "human_IOxGetLive_count",
+                           "human_IOxGetDie_count",
+                           "human_IOxNotGetLive_count",
+                           "human_IOxNotGetDie_count",
+                           "human_IMVGetLive_count",
+                           "human_IMVGetDie_count",
+                           "human_IMVNotGetLive_count",
+                           "human_IMVNotGetDie_count",
+                           "human_IRec_count",
+                           "human_R_count",
+                           "human_D_count")
 
   # Convert to long format
-df <- tidyr::pivot_longer(tibble::as_tibble(df),
-                              c("human_S_count", "human_E_count",
-                                "human_IMild_count"))
+df <- tidyr::pivot_longer(tibble::as_tibble(df), all_of(statesnamevector))
 
+strname <- "Hypatia Model Simulation"
+subtitle <- paste(
+    "Simulation for 1 run and 1000 data points")
 
-    strname <- "Hypatia Model Simulation"
-    subtitle <- paste(
-        "Simulation for 1 run and 1000 data points")
+time <- seq(1,200,1)
 
-    time <- seq(1,200,1)
-
-    ggplot2::ggplot(
-    df, ggplot2::aes(x = df$timestep, y = df$value,
-                     group = interaction(df$group, df$name), colour = df$name)) +
-    ggplot2::geom_line(size = 0.5) +
-    ggplot2::theme_bw() +
-    ggplot2::labs(title = strname, subtitle = subtitle) + #, color = df$legend) +
-    ggplot2::labs(y = "States", x = "time") +
-    ggplot2::theme(
-      legend.justification = c("right", "top"),
-      legend.box = c("horizontal", "vertical")) +
-    ggplot2::theme(
-      text = ggplot2::element_text(color = "#444444", family = "Lucida Bright"),
-      plot.title = ggplot2::element_text(size = 26, color = "#333333"),
-      plot.subtitle = ggplot2::element_text(size = 13),
-      axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
-      axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
+ggplot2::ggplot(
+df, ggplot2::aes(x = df$timestep, y = df$value,
+                 group = interaction(df$group, df$name), colour = df$name)) +
+ggplot2::geom_line(size = 0.5) +
+ggplot2::theme_bw() +
+ggplot2::labs(title = strname, subtitle = subtitle) + #, color = df$legend) +
+ggplot2::labs(y = "States", x = "time") +
+ggplot2::theme(
+  legend.justification = c("right", "top"),
+  legend.box = c("horizontal", "vertical")) +
+ggplot2::theme(
+  text = ggplot2::element_text(color = "#444444", family = "Arial"),
+  plot.title = ggplot2::element_text(size = 26, color = "#333333"),
+  plot.subtitle = ggplot2::element_text(size = 13),
+  axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
+  axis.title.y = ggplot2::element_text(angle = 0, vjust = .5))
 
 
 ```

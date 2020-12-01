@@ -13,10 +13,22 @@ create_setup_process <- function(
 ) {
    function(api) {
       parameters <- api$get_parameters()
+      print(parameters$dur_E)
       exposed <- api$get_state(human, states$E)
       age <- api$get_variable(human, variables$discrete_age, exposed)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
+      print(prob_hosp)
       hosp <- bernoulli_multi_p(length(exposed), prob_hosp)
+      print("hosp")
+      print(hosp)
+      print("(exposed[hosp]")
+      print(exposed[hosp])
+      print("length(exposed[hosp]")
+      print(length(exposed[hosp]))
+      print("exposed[!hosp]")
+      print(exposed[!hosp])
+      print("length(exposed[!hosp]")
+      print(length(exposed[!hosp]))
 
       if(sum(hosp) > 0) {
          api$schedule(
@@ -263,37 +275,32 @@ create_event_based_processes <- function(
 
 #' @title Create processes for simulation
 #'
-#' @param psq model parameter
-#' @param pop population information
-#' @param max_age maximum age, defailt 100
+#' @param states states for model
+#' @param variables variables for model
+#' @param individuals individuals for model
+#' @param events events for model
 #'
 #' @return processes
-create_processes <- function(
-   psq,
-   pop,
-   max_age = 100) {
+create_processes <- function(states, variables, events, individuals) {
 
-   states <- create_states(psq)
-   variables <- create_variables(pop, max_age)
-   events <- create_events()
-   individual <- create_human(states, variables, events)
-
-   statesnamevector <- vector()
-
-   i <- 1
-   for (state in states) {
-      statesnamevector[i] <- state$name
-      i <- i + 1
-   }
-
-   # Rendering process
-   process_render <- individual::state_count_renderer_process(
-      individual$name,
-      statesnamevector
-   )
+   # statesnamevector <- vector()
+   #
+   # i <- 1
+   # for (state in states) {
+   #    statesnamevector[i] <- state$name
+   #    i <- i + 1
+   # }
 
    processes <- list(
-      process_render
+
+      infection_process(individuals, states, variables, events),
+
+      individual::state_count_renderer_process(
+         #individuals$name,
+         #statesnamevector
+         individuals$human$name,
+         unlist(lapply(states, "[[", "name"))
+      )
    )
 
    processes
