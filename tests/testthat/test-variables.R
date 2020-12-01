@@ -1,8 +1,7 @@
 test_that("create_variables returns the correct output", {
 
   pop <- get_population("Afghanistan")
-  theages <- create_variables(pop, 90)
-  expect_length(length(theages$age), 1)
+  theages <- create_variables(pop, max_age = 100)
   expect_length(length(theages$discrete_age), 1)
 
 })
