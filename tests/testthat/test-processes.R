@@ -98,7 +98,7 @@ test_that("test that create_pocesses works", {
    psq <- remove_non_numerics(psq)
    states <- create_states(psq)
    events <- create_events()
-   individuals <- create_individuals(states,
+   individuals <- create_human(states,
                                      variables,
                                      events)
 
