@@ -76,16 +76,13 @@ test_that("test create_setup_process", {
 
 test_that("test that create_pocesses works", {
 
-   skip("No idea what create_process call is doing here so just skipped")
-
    pop <- get_population("Afghanistan")
    pop$n <- as.integer(pop$n/10000)
 
    R0 <- 2
-   timestep <- 100
    time_period <- 1000
    tt_contact_matrix <- 0
-   numberof_days <- 5
+
    contact_matrix_set <- squire::contact_matrices[[1]]
 
    psq <- get_parameters(
@@ -125,10 +122,9 @@ test_that("test that create_pocesses works for render process", {
    pop <- get_population("Afghanistan")
    pop$n <- as.integer(pop$n/10000)
    R0 <- 2
-   timestep <- 100
    time_period <- 1000
    tt_contact_matrix <- 0
-   numberof_days <- 5
+
    contact_matrix_set <- squire::contact_matrices[[1]]
 
    psq <- get_parameters(

@@ -16,6 +16,7 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
       population = pop$n, contact_matrix_set = squire::contact_matrices[1])
   }
 
+  variables <- create_variables(pop, max_age)
   parameters <- remove_non_numerics(parameters)
 
   variables <- create_variables(pop, max_age)

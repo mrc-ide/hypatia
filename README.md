@@ -23,6 +23,8 @@ library(individual)
 
 ## Example
 
+Get parameters from SQUIRE
+
 ## License
 
 MIT © Imperial College of Science, Technology and Medicine
