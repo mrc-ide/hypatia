@@ -12,6 +12,7 @@ create_setup_process <- function(
    variables
 ) {
    function(api) {
+      parameters <- api$get_parameters()
       exposed <- api$get_state(human, states$E)
       age <- api$get_variable(human, variables$discrete_age, exposed)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
@@ -280,12 +281,11 @@ create_processes <- function(
     infection_process(individuals, states, variables, events),
 
     individual::state_count_renderer_process(
-      individuals$human$name,
+      individuals$name,
       unlist(lapply(states, "[[", "name"))
     )
 
   )
-
-  processes
-
 }
+
+

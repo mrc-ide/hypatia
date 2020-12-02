@@ -2,7 +2,8 @@ test_that("create_event_based_processes assigns a listener to each event", {
 
   pop <- get_population("Antigua and Barbuda")
 
-  parameters <- get_parameters(
+  pop$n <- as.integer(pop$n/100)
+  psq <- get_parameters(
     country = "Antigua and Barbuda",
     population = pop$n,
     R0 = 2,
@@ -12,7 +13,7 @@ test_that("create_event_based_processes assigns a listener to each event", {
   )
 
   events <- create_events()
-  states <- create_states(parameters)
+  states <- create_states(psq)
   variables <- create_variables(pop, max_age = 100)
   indiv <- create_human(states, variables, events)
 
@@ -21,7 +22,7 @@ test_that("create_event_based_processes assigns a listener to each event", {
     states,
     variables,
     events,
-    parameters
+    psq
   )
 
   for (event in events) {

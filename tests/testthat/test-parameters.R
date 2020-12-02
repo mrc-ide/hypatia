@@ -7,7 +7,7 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
   contact_matrix_set <- squire::contact_matrices[[1]]
 
   pop <- get_population("Afghanistan")
-
+  pop$n <- as.integer(pop$n/1000)
   psq <- get_parameters(
     country = "Afghanistan",
     population = pop$n,
