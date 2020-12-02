@@ -16,7 +16,6 @@ create_setup_process <- function(
       exposed <- api$get_state(human, states$E)
       age <- api$get_variable(human, variables$discrete_age, exposed)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
-      print(prob_hosp)
       hosp <- bernoulli_multi_p(length(exposed), prob_hosp)
 
       if(sum(hosp) > 0) {

@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 library(hypatia)
 library(ggplot2)
 library(tidyverse)
-library(individual)
 ```
 
 ```{r hypatia}
@@ -44,15 +43,6 @@ parameters <- get_parameters(
   time_period = time_period,
   tt_contact_matrix = 0
 )
-
-# parameters <- squire::parameters_explicit_SEEIR(
-#       population = pop$n,
-#       country = countryname,
-#       contact_matrix_set =  squire::get_mixing_matrix(iso3c = "ATG"),
-#       dt = 1,
-#       time_period = 200,
-#       R0 = 2,
-#     )
 
 # run our simulation - default timesteps = 200
 df <- hypatia:::run_simulation(pop, parameters, max_age = 100)
@@ -89,18 +79,23 @@ subtitle <- paste(
 
 time <- seq(1,200,1)
 
+timsestep <- df$timestep
+value <- df$value
+name <- df$name
+group <- df$group
+
 ggplot2::ggplot(
-df, ggplot2::aes(x = df$timestep, y = df$value,
-                 group = interaction(df$group, df$name), colour = df$name)) +
+df, ggplot2::aes(x = timestep, y = value,
+                 group = interaction(group, name), colour = name)) +
 ggplot2::geom_line(size = 0.5) +
 ggplot2::theme_bw() +
-ggplot2::labs(title = strname, subtitle = subtitle) + #, color = df$legend) +
+ggplot2::labs(title = strname, subtitle = subtitle) +
 ggplot2::labs(y = "States", x = "time") +
 ggplot2::theme(
   legend.justification = c("right", "top"),
   legend.box = c("horizontal", "vertical")) +
 ggplot2::theme(
-  text = ggplot2::element_text(color = "#444444", family = "Arial"),
+  text = ggplot2::element_text(color = "#444444"),
   plot.title = ggplot2::element_text(size = 26, color = "#333333"),
   plot.subtitle = ggplot2::element_text(size = 13),
   axis.title.x = ggplot2::element_text(size = 16, color = "#333333"),
@@ -130,20 +125,22 @@ plot(out)
 Get the actual comparative outputs. 
 
 ```{r comparisons}
-
-hyp <- tidyr::pivot_longer(output, -1) %>% 
-  rename(t = timestep, compartment = name, y = value) %>% 
-  mutate(compartment = gsub("(^human_)(\\w*)(_count)", "\\2", compartment),
-         model = "hypatia") %>% 
-  select(c("t", "compartment", "y", "model"))
-
-sq <- squire::format_output(out, unique(hyp$compartment)) %>% 
-  mutate(model = "squire") %>% 
-  select(c("t", "compartment", "y", "model"))
-
-ggplot(rbind(sq, hyp), aes(t, y, color = model)) + 
-  geom_line() + 
-  facet_wrap(~compartment, scales = "free")
+# 
+# strtime <- toString(df$timestep)
+# 
+# hyp <- tidyr::pivot_longer(df, -1) %>%
+#   rename(t = strtime, compartment = name, y = value) %>% 
+#   mutate(compartment = gsub("(^human_)(\\w*)(_count)", "\\2", compartment),
+#          model = "hypatia") %>% 
+#   select(c("t", "compartment", "y", "model"))
+# 
+# sq <- squire::format_output(out, unique(hyp$compartment)) %>% 
+#   mutate(model = "squire") %>% 
+#   select(c("t", "compartment", "y", "model"))
+# 
+# ggplot(rbind(sq, hyp), aes(t, y, color = model)) + 
+#   geom_line() + 
+#   facet_wrap(~compartment, scales = "free")
 
 
 
