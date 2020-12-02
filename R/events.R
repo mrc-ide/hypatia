@@ -88,7 +88,7 @@ create_exposure_update_listener <- function(
   function(api, to_move) {
     disc_ages <- api$get_variable(human, variables$discrete_age, to_move)
     prob_hosp <- parameters$prob_hosp[as.integer(disc_ages)]
-    hosp <- bernoulli_multi_p(length(to_move), prob_hosp)
+    hosp <- bernoulli_multi_p(prob_hosp)
 
     if(sum(hosp) > 0) {
       api$schedule(

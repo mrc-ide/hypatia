@@ -24,10 +24,7 @@ Suggests:
 Imports:
     individual,
     Rcpp,
-    squire (>= 0.5.5),
-    tidyverse,
-    xml2,
-    rvest
+    squire (>= 0.5.5)
 Depends: 
     R (>= 2.10)
 RcppModules: 

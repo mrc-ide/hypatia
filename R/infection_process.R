@@ -29,7 +29,7 @@ infection_process <- function(human, states, discrete_age, exposure) {
       ages <- api$get_variable(human, discrete_age, susceptible)
 
       # FOI for each susceptible person
-      lambda <- lambda[as.integer(ages)]
+      lambda <- lambda[ages]
       prob_infection  <- 1 - exp(-lambda)
 
       # infected

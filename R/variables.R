@@ -26,8 +26,8 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
   ages_in_bin[[length(ages_in_bin) + 1]] <- seq(max(age_bins), max_age, 1)
 
   # now sample from these
-  ages <- c()
-  for (i in seq_len(length(pop$age_group))) {
+  ages <- NULL
+  for (i in seq_along(pop$age_group)) {
     ages <- c(
       ages,
       sample(

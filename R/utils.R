@@ -34,3 +34,6 @@ remove_non_numerics <- function(l) {
 #' @noRd
 #' @importFrom stats runif
 bernoulli_multi_p <- function(p) runif(length(p), 0, 1) < p
+
+#' @noRd
+vcapply <- function(X, FUN, ...) vapply(X, FUN, ..., character(1))

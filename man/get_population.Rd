@@ -7,7 +7,7 @@
 get_population(iso3c)
 }
 \arguments{
-\item{countryname}{name of country}
+\item{iso3c}{three letter code for your country of interest}
 }
 \description{
 rounds population sizes to discrete numbers

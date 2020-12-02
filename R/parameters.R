@@ -21,7 +21,7 @@ get_parameters <- function(iso3c, time_period = 365, ...) {
 #' @title Get population from SQUIRE model
 #' @description rounds population sizes to discrete numbers
 #'
-#' @param countryname name of country
+#' @param iso3c three letter code for your country of interest
 get_population <- function(iso3c) {
   squire::get_population(iso3c = iso3c, simple_SEIR = FALSE)
 }
