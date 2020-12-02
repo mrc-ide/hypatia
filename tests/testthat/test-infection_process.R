@@ -4,7 +4,7 @@ test_that("test infection process", {
   pop <- squire::get_population(iso3c = "ATG")
 
   # Scale it for speed
-  pop$n <- round(pop$n / 10)
+  pop$n <- round(pop$n / 100)
 
   # Create our equivalent parameters
   psq <- squire::parameters_explicit_SEEIR(

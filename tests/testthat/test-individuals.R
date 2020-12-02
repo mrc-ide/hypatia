@@ -2,7 +2,7 @@ test_that("test that create_individuals works", {
 
   # Get population information
   pop <- get_population("Afghanistan")
-
+  pop$n <- as.integer(pop$n/1000)
   R0 <- 2
   time_period <- 1000
   tt_contact_matrix <- 0
@@ -57,7 +57,7 @@ test_that("test that create_individuals works", {
 test_that("test Create_states with S for 1st age group", {
 
   pop <- get_population("Afghanistan")
-
+  pop$n <- as.integer(pop$n/1000)
   R0 <- 2
   time_period <- 1000
   tt_contact_matrix <- 0

@@ -296,9 +296,7 @@ create_processes <- function(states, variables, events, individuals) {
       infection_process(individuals, states, variables, events),
 
       individual::state_count_renderer_process(
-         #individuals$name,
-         #statesnamevector
-         individuals$human$name,
+         individuals$name,
          unlist(lapply(states, "[[", "name"))
       )
    )

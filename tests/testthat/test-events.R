@@ -1,7 +1,7 @@
 test_that("create_event_based_processes assigns a listener to each event", {
 
   pop <- get_population("Antigua and Barbuda")
-
+  pop$n <- as.integer(pop$n/100)
   psq <- get_parameters(
     country = "Antigua and Barbuda",
     population = pop$n,

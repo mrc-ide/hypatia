@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - dev/vignette_fix
   pull_request:
     branches:
       - main
