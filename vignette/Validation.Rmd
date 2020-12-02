@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 library(hypatia)
 library(ggplot2)
 library(tidyverse)
+library(individual)
 ```
 
 ```{r hypatia}

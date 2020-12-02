@@ -12,23 +12,11 @@ create_setup_process <- function(
    variables
 ) {
    function(api) {
-      parameters <- api$get_parameters()
-      print(parameters$dur_E)
       exposed <- api$get_state(human, states$E)
       age <- api$get_variable(human, variables$discrete_age, exposed)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
       print(prob_hosp)
       hosp <- bernoulli_multi_p(length(exposed), prob_hosp)
-      print("hosp")
-      print(hosp)
-      print("(exposed[hosp]")
-      print(exposed[hosp])
-      print("length(exposed[hosp]")
-      print(length(exposed[hosp]))
-      print("exposed[!hosp]")
-      print(exposed[!hosp])
-      print("length(exposed[!hosp]")
-      print(length(exposed[!hosp]))
 
       if(sum(hosp) > 0) {
          api$schedule(
@@ -275,34 +263,29 @@ create_event_based_processes <- function(
 
 #' @title Create processes for simulation
 #'
-#' @param states states for model
-#' @param variables variables for model
 #' @param individuals individuals for model
+#' @param states states for model
 #' @param events events for model
-#'
-#' @return processes
-create_processes <- function(states, variables, events, individuals) {
+#' @param variables variables for model
+#' @return list of processes
+create_processes <- function(
+  individuals,
+  states,
+  events,
+  variables
+) {
 
-   # statesnamevector <- vector()
-   #
-   # i <- 1
-   # for (state in states) {
-   #    statesnamevector[i] <- state$name
-   #    i <- i + 1
-   # }
+  processes <- list(
 
-   processes <- list(
+    infection_process(individuals, states, variables, events),
 
-      infection_process(individuals, states, variables, events),
+    individual::state_count_renderer_process(
+      individuals$human$name,
+      unlist(lapply(states, "[[", "name"))
+    )
 
-      individual::state_count_renderer_process(
-         #individuals$name,
-         #statesnamevector
-         individuals$human$name,
-         unlist(lapply(states, "[[", "name"))
-      )
-   )
+  )
 
-   processes
+  processes
 
 }

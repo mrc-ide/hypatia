@@ -19,7 +19,6 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
   parameters <- remove_non_numerics(parameters)
 
   variables <- create_variables(pop, max_age)
-  parameters <- remove_non_numerics(parameters)
   states <- create_states(parameters)
   events <- create_events()
   individuals <- create_human(states,
@@ -31,7 +30,10 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
 
   output <- individual::simulate(
     individuals = individuals,
-    processes = create_processes(states, variables, events, individuals),
+    processes = create_processes(individuals,
+                                 states,
+                                 events,
+                                 variables),
     end_timestep  = parameters$time_period,
     parameters = parameters,
     initialisation = create_setup_process(individuals, states, events,

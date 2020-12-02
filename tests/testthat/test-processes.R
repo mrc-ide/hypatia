@@ -94,9 +94,19 @@ test_that("test that create_pocesses works", {
       tt_contact_matrix = tt_contact_matrix
    )
 
-   max_age <- 100
+   variables <- create_variables(pop, max_age = 100)
+   psq <- remove_non_numerics(psq)
+   states <- create_states(psq)
+   events <- create_events()
+   individuals <- create_individuals(states,
+                                     variables,
+                                     events)
 
-   processes <- create_processes(psq, pop, max_age = max_age)
+
+   processes <- create_processes(individuals,
+                                 states,
+                                 events,
+                                 variables)
 
    # Check create_processes has worked correctly
    for (process in processes) {

@@ -4,16 +4,16 @@
 \alias{infection_process}
 \title{Calculating the FOI}
 \usage{
-infection_process(individuals, states, variables, events)
+infection_process(human, states, discrete_age, exposure)
 }
 \arguments{
-\item{individuals}{a list of individuals in the model}
+\item{human}{the human handle}
 
 \item{states}{a list of states in the model}
 
-\item{variables}{list of variables in the model}
+\item{discrete_age}{variable}
 
-\item{events}{a list of events in the model}
+\item{exposure}{event for covid exposure}
 }
 \description{
 calculating the FOI and infection process

@@ -4,19 +4,19 @@
 \alias{create_processes}
 \title{Create processes for simulation}
 \usage{
-create_processes(states, variables, events, individuals)
+create_processes(individuals, states, events, variables)
 }
 \arguments{
-\item{states}{states for model}
+\item{individuals}{individuals for model}
 
-\item{variables}{variables for model}
+\item{states}{states for model}
 
 \item{events}{events for model}
 
-\item{individuals}{individuals for model}
+\item{variables}{variables for model}
 }
 \value{
-processes
+list of processes
 }
 \description{
 Create processes for simulation

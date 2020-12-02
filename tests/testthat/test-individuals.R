@@ -1,4 +1,4 @@
-test_that("test that create_individuals works", {
+test_that("test that create_human works", {
 
   # Get population information
   pop <- get_population("Afghanistan")
@@ -16,15 +16,11 @@ test_that("test that create_individuals works", {
     contact_matrix_set = squire::contact_matrices[[1]]
   )
 
-  beta <- squire::beta_est_explicit(psq$dur_IMild, psq$dur_ICase,
-                                    psq$prob_hosp,
-                                    psq$mix_mat_set[1, , ], R0 = R0)
-
   states <- create_states(psq)
-  variables <- create_variables(pop, max_age = 100)
   events <- create_events()
+  variables <- create_variables(pop = pop)
 
-  indivs <- create_human(states, variables, events)
+  indiv <- create_human(states, variables, events)
 
   # Create test human
   human <- individual::Individual$new(
@@ -49,8 +45,8 @@ test_that("test that create_individuals works", {
     events = events
   )
 
-  expect_equal(indivs$name, human$name)
-  expect_equal(length(indivs$states), length(human$states))
+  expect_equal(indiv$name, human$name)
+  expect_equal(length(indiv$states), length(human$states))
 
 })
 
