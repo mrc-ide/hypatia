@@ -11,14 +11,13 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.path = "man/figures/README-",
   fig.width = 9, 
   fig.height = 9
 )
 ```
 
 
-```{r hypatia}
+```{r}
 
 # Create our population
 countryname <- "Antigua and Barbuda"
@@ -93,7 +92,7 @@ df, ggplot2::aes(x = timestep, y = value,
 
 Does it look similar to the squire output:
 
-```{r squire}
+```{r}
 
 out <- squire::run_explicit_SEEIR_model(
   population = pop$n, 
@@ -111,7 +110,7 @@ plot(out)
 
 Get the actual comparative outputs. 
 
-```{r comparisons}
+```{r}
 
 hyp <- tidyr::pivot_longer(df_1, -1)
 hyp <- dplyr::rename(hyp, t = timestep, compartment = name, y = value) 
@@ -121,11 +120,11 @@ hyp <- dplyr::select(hyp, c("t", "compartment", "y", "model"))
 
 sq <- squire::format_output(out, unique(hyp$compartment)) 
 sq <- dplyr::mutate(sq, model = "squire") 
-sq <- dplyr::select(d, c("t", "compartment", "y", "model"))
+sq <- dplyr::select(sq, c("t", "compartment", "y", "model"))
 
-ggplot(rbind(sq, hyp), aes(t, y, color = model)) +
-  geom_line() +
-  facet_wrap(~compartment, scales = "free")
+ggplot2::ggplot(rbind(sq, hyp), ggplot2::aes(t, y, color = model)) +
+  ggplot2::geom_line() +
+  ggplot2::facet_wrap(~compartment, scales = "free")
 
 
 

@@ -27,7 +27,10 @@ Imports:
     tidyverse,
     xml2,
     rvest,
-    ggplot2
+    ggplot2,
+    tibble,
+    tidyr,
+    dplyr
 Depends: 
     R (>= 2.10)
 RcppModules: 
