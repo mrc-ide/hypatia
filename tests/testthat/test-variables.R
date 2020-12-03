@@ -41,3 +41,31 @@ test_that("test create_discrete_age_variable", {
   expect_equal(as.numeric(table(disc_ages)), pop$n)
 
 })
+
+
+test_that("test adjust_seeding_ages_works", {
+
+  # Create our parameters
+  pop <- squire::get_population(iso3c = "ATG")
+  pop$n <- as.integer(pop$n)/100
+  parameters <- get_parameters(
+    population = pop$n, contact_matrix_set = squire::contact_matrices[1]
+  )
+
+  # Create our variables
+  variables <- create_variables(pop)
+
+  # adjust the seeding ages
+  variables$discrete_age$initial_values <- adjust_seeding_ages(
+    initial_values = variables$discrete_age$initial_values,
+    parameters = parameters
+  )
+
+  # checks
+  e1 <- parameters$E1_0
+  expect_equal(
+    tail(variables$discrete_age$initial_values, 20),
+    rep(which(e1>0), e1[e1>0])
+  )
+
+})
