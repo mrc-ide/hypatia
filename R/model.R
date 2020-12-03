@@ -1,4 +1,3 @@
-
 #' @title Run the simulation
 #' @description
 #' The main entrypoint for the simulation. run_simulation puts together the
@@ -16,15 +15,21 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
       population = pop$n, contact_matrix_set = squire::contact_matrices[1])
   }
 
+  # create parameters and variables
   variables <- create_variables(pop, max_age)
   parameters <- remove_non_numerics(parameters)
 
-  variables <- create_variables(pop, max_age)
+  # adjust our age variables to account for age based seeding
+  variables$discrete_age$initial_values <- adjust_seeding_ages(
+    initial_values = variables$discrete_age$initial_values,
+    parameters = parameters
+  )
+
   states <- create_states(parameters)
   events <- create_events()
   individuals <- create_human(states,
-                        variables,
-                        events)
+                              variables,
+                              events)
 
   create_event_based_processes(individuals, states, variables,
                                events, parameters)

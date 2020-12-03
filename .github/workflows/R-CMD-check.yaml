@@ -4,12 +4,9 @@ on:
   push:
     branches:
       - main
-      - master
-      - dev/vignette_fix
   pull_request:
     branches:
       - main
-      - master
 
 name: R-CMD-check
 

@@ -19,7 +19,7 @@ create_events <- function() {
     iox_not_get_die = individual::Event$new('iox_not_get_die'),
     stepdown = individual::Event$new('stepdown'),
     recovery = individual::Event$new('recovery'),
-    death = individual::Event$new('deaths')
+    death = individual::Event$new('death')
   )
 
   events
