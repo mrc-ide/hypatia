@@ -112,37 +112,18 @@
     <p>Get parameters from squire model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span>
-  country <span class='op'>=</span> <span class='cn'>NULL</span>,
-  population <span class='op'>=</span> <span class='cn'>NULL</span>,
-  contact_matrix_set <span class='op'>=</span> <span class='cn'>NULL</span>,
-  time_period <span class='op'>=</span> <span class='fl'>365</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>iso3c</span>, time_period <span class='op'>=</span> <span class='fl'>365</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>country</th>
-      <td><p>Character for country beign simulated. WIll be used to
-generate <code>population</code> and <code>contact_matrix_set</code> if
-unprovided. Either <code>country</code> or <code>population</code> and
-<code>contact_matrix_set</code> must be provided.</p></td>
-    </tr>
-    <tr>
-      <th>population</th>
-      <td><p>Population vector (for each age group). Default = NULL,
-which will cause population to be sourced from <code>country</code></p></td>
-    </tr>
-    <tr>
-      <th>contact_matrix_set</th>
-      <td><p>Contact matrices used in simulation. Default =
-NULL, which will generate this based on the <code>country</code>.</p></td>
+      <th>iso3c</th>
+      <td><p>three letter code for your country of interest</p></td>
     </tr>
     <tr>
       <th>time_period</th>
-      <td><p>Length of simulation. Default = 365</p></td>
+      <td><p>for the simulation</p></td>
     </tr>
     <tr>
       <th>...</th>
