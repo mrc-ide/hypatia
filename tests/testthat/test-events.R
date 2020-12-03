@@ -243,7 +243,7 @@ test_that("test create_events", {
   expect_equal(events$iox_not_get_die, individual::Event$new("iox_not_get_die"))
   expect_equal(events$stepdown, individual::Event$new("stepdown"))
   expect_equal(events$recovery, individual::Event$new("recovery"))
-  expect_equal(events$death, individual::Event$new("deaths"))
+  expect_equal(events$death, individual::Event$new("death"))
 
   expect_equal(length(events), 14)
 

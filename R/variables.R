@@ -125,7 +125,7 @@ adjust_seeding_ages <- function(initial_values, parameters) {
   to_distribute <- tail(seq_along(iv), length(ages))
 
   # position of iv to be swapped in
-  to_swap <- c()
+  to_swap <- vector()
   for (i in seq_along(unique(ages))) {
 
     tsi <- which(iv == unique(ages)[i])
