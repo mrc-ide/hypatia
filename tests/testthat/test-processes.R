@@ -74,40 +74,38 @@ test_that("test create_setup_process", {
    )
 })
 
-test_that("test that create_pocesses works", {
+test_that("test that create_pocesses makes valid functions", {
 
-   pop <- get_population("Afghanistan")
+  pop <- get_population("AFG")
 
-   R0 <- 2
-   time_period <- 1000
-   tt_contact_matrix <- 0
-   contact_matrix_set <- squire::contact_matrices[[1]]
+  parameters <- get_parameters(
+    iso3c = "AFG",
+    population = pop$n,
+    contact_matrix_set = squire::contact_matrices[[1]],
+    R0 = 2,
+    time_period = 10,
+    tt_contact_matrix = 0 
+  )
+  parameters <- remove_non_numerics(parameters)
+  states <- create_states(parameters)
+  variables <- create_variables(pop, 100)
+  events <- create_events()
+  human <- create_human(states, variables, events)
+  processes <- create_processes(human, states, events, variables)
 
-   psq <- get_parameters(
-      country = "Afghanistan",
-      population = pop$n,
-      contact_matrix_set = contact_matrix_set,
-      R0 = R0,
-      time_period = time_period,
-      tt_contact_matrix = tt_contact_matrix
-   )
-
-   max_age <- 100
-
-   processes <- create_processes(psq, pop, max_age = max_age)
-
-   # Check create_processes has worked correctly
-   for (process in processes) {
-      expect(is.function(process) || inherits(process, 'externalptr'),
-             'Process is not a function')
-   }
-
+  # Check create_processes has worked correctly
+  for (process in processes) {
+    expect(
+      is.function(process) || inherits(process, 'externalptr'),
+      'Process is not a function'
+    )
+  }
 })
 
 
 test_that("test that create_pocesses works for render process", {
 
-   pop <- get_population("Afghanistan")
+   pop <- get_population("AFG")
 
    R0 <- 2
    time_period <- 1000
@@ -115,7 +113,7 @@ test_that("test that create_pocesses works for render process", {
    contact_matrix_set <- squire::contact_matrices[[1]]
 
    psq <- get_parameters(
-      country = "Afghanistan",
+      "AFG",
       population = pop$n,
       contact_matrix_set = contact_matrix_set,
       R0 = R0,
@@ -136,6 +134,4 @@ test_that("test that create_pocesses works for render process", {
    expect_equal(sum(output$human_E_count), 20000)
    expect_equal(sum(output$human_IMild_count), 0)
    expect_equal(length(output$human_IMVNotGetLive_count), 1000)
-
 })
-

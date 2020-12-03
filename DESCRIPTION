@@ -17,14 +17,14 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests:
     testthat,
-    mockery
-Imports:
-    individual,
-    Rcpp,
-    squire (>= 0.5.5),
+    mockery,
     tidyverse,
     xml2,
     rvest
+Imports:
+    individual,
+    Rcpp,
+    squire (>= 0.5.5)
 Depends: 
     R (>= 2.10)
 RcppModules: 

@@ -4,10 +4,10 @@
 \alias{run_simulation}
 \title{Run the simulation}
 \usage{
-run_simulation(pop, parameters = NULL, max_age = 100)
+run_simulation(pop, parameters, max_age = 100)
 }
 \arguments{
-\item{pop}{population. See \code{\link[squire]{get_population}}}
+\item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
 \item{parameters}{parameter list}
 
