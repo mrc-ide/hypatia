@@ -281,10 +281,9 @@ create_processes <- function(
 
     individual::state_count_renderer_process(
       individuals$name,
-      unlist(lapply(states, "[[", "name"))
+      vapply(states, "[[", FUN.VALUE = character(1), "name")
     )
 
   )
 
 }
-
