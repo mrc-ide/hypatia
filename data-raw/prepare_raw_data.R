@@ -1,6 +1,5 @@
 # 1. Median Country Ages -------------------------------------------------------
 
-# Decide if we trust worldometers ages
 
 # url <- "https://en.wikipedia.org/wiki/List_of_countries_by_median_age"
 # ages <- url %>% read_html() %>%

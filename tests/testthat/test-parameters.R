@@ -4,17 +4,16 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
   timestep <- 100
   time_period <- 1000
   tt_contact_matrix <- 0
-  contact_matrix_set <- squire::contact_matrices[[1]]
 
-  pop <- get_population("Afghanistan")
+  pop <- get_population("AFG")
   pop$n <- as.integer(pop$n/1000)
+
   psq <- get_parameters(
-    country = "Afghanistan",
+    iso3c = "AFG",
     population = pop$n,
     R0 = R0,
     time_period = time_period,
     tt_contact_matrix = tt_contact_matrix,
-    contact_matrix_set = contact_matrix_set
   )
 
   expect_equal(psq$dur_E, 4.6)

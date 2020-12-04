@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 # Create our population
 countryname <- "Antigua and Barbuda"
 
-pop <- hypatia:::get_population(countryname)
+pop <- hypatia:::get_population("ATG")
 
 # Scale it for speed
 pop$n <- round(pop$n/10)

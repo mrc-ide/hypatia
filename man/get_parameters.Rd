@@ -5,7 +5,7 @@
 \title{Get parameters from squire model}
 \usage{
 get_parameters(
-  country = NULL,
+  iso3c,
   population = NULL,
   contact_matrix_set = NULL,
   time_period = 365,
@@ -13,11 +13,6 @@ get_parameters(
 )
 }
 \arguments{
-\item{country}{Character for country beign simulated. WIll be used to
-generate \code{population} and \code{contact_matrix_set} if
-unprovided. Either \code{country} or \code{population} and
-\code{contact_matrix_set} must be provided.}
-
 \item{population}{Population vector (for each age group). Default = NULL,
 which will cause population to be sourced from \code{country}}
 
@@ -32,5 +27,8 @@ NULL, which will generate this based on the \code{country}.}
 squire model parameters
 }
 \description{
-Get parameters from squire model
+
+}
+\details{
+
 }

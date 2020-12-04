@@ -1,24 +1,23 @@
 test_that("test that create_human works", {
 
   # Get population information
-  pop <- get_population("Afghanistan")
+  pop <- get_population("AFG")
   pop$n <- as.integer(pop$n/1000)
   R0 <- 2
   time_period <- 1000
   tt_contact_matrix <- 0
 
   psq <- get_parameters(
-    country = "Afghanistan",
+    iso3c = "AFG",
     population = pop$n,
     R0 = R0,
     time_period = time_period,
-    tt_contact_matrix = tt_contact_matrix,
-    contact_matrix_set = squire::contact_matrices[[1]]
+    tt_contact_matrix = tt_contact_matrix
   )
 
   states <- create_states(psq)
   events <- create_events()
-  variables <- create_variables(pop = pop)
+  variables <- create_variables(pop = pop, max_age = 100)
 
   indiv <- create_human(states, variables, events)
 
@@ -52,19 +51,18 @@ test_that("test that create_human works", {
 
 test_that("test Create_states with S for 1st age group", {
 
-  pop <- get_population("Afghanistan")
+  pop <- get_population("AFG")
   pop$n <- as.integer(pop$n/1000)
   R0 <- 2
   time_period <- 1000
   tt_contact_matrix <- 0
 
   psq <- get_parameters(
-    country = "Afghanistan",
+    iso3c = "AFG",
     population = pop$n,
     R0 = R0,
     time_period = time_period,
-    tt_contact_matrix = tt_contact_matrix,
-    contact_matrix_set = squire::contact_matrices[[1]]
+    tt_contact_matrix = tt_contact_matrix
   )
 
   Snew <- individual::State$new("S", sum(psq$S_0))

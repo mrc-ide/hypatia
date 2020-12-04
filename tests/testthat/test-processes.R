@@ -76,19 +76,16 @@ test_that("test create_setup_process", {
 
 test_that("test that create_pocesses works", {
 
-   pop <- get_population("Afghanistan")
+   pop <- get_population("AFG")
    pop$n <- as.integer(pop$n/10000)
 
    R0 <- 2
    time_period <- 1000
    tt_contact_matrix <- 0
 
-   contact_matrix_set <- squire::contact_matrices[[1]]
-
    psq <- get_parameters(
-      country = "Afghanistan",
+      iso3c = "AFG",
       population = pop$n,
-      contact_matrix_set = contact_matrix_set,
       R0 = R0,
       time_period = time_period,
       tt_contact_matrix = tt_contact_matrix
@@ -102,35 +99,29 @@ test_that("test that create_pocesses works", {
                                      variables,
                                      events)
 
-
-   processes <- create_processes(individuals,
-                                 states,
-                                 events,
-                                 variables)
-
    # Check create_processes has worked correctly
-   for (process in processes) {
+   for (process in create_processes(individuals,
+                                    states,
+                                    events,
+                                    variables,
+                                    parameters)) {
       expect(is.function(process) || inherits(process, 'externalptr'),
              'Process is not a function')
    }
 
 })
 
-
 test_that("test that create_pocesses works for render process", {
 
-   pop <- get_population("Afghanistan")
-   pop$n <- as.integer(pop$n/10000)
+   pop <- get_population("AFG")
+
    R0 <- 2
    time_period <- 1000
    tt_contact_matrix <- 0
 
-   contact_matrix_set <- squire::contact_matrices[[1]]
-
    psq <- get_parameters(
-      country = "Afghanistan",
+      iso3c = "AFG",
       population = pop$n,
-      contact_matrix_set = contact_matrix_set,
       R0 = R0,
       time_period = time_period,
       tt_contact_matrix = tt_contact_matrix
@@ -146,7 +137,4 @@ test_that("test that create_pocesses works for render process", {
    expect_equal(length(output$human_E_count), 1000)
    expect_equal(length(output$human_IMild_count), 1000)
    expect_equal(length(output$human_IMVNotGetLive_count), 1000)
-
 })
-
-

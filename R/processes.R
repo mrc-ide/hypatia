@@ -14,9 +14,21 @@ create_setup_process <- function(
    function(api) {
       parameters <- api$get_parameters()
       exposed <- api$get_state(human, states$E)
+      print("exposed")
+      print(exposed)
       age <- api$get_variable(human, variables$discrete_age, exposed)
+      print("age")
+      print(age)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
-      hosp <- bernoulli_multi_p(length(exposed), prob_hosp)
+      print("prob_hosp")
+      print(prob_hosp)
+      hosp <- bernoulli_multi_p(prob_hosp)
+      print("hosp")
+      print(hosp)
+      print("length(exposed[hosp]")
+      print(length(exposed[hosp]))
+      print("parameters$dur_E")
+      print(parameters$dur_E)
 
       if(sum(hosp) > 0) {
          api$schedule(
@@ -261,29 +273,36 @@ create_event_based_processes <- function(
 
 }
 
-#' @title Create processes for simulation
+#' @title Create list of processes for the simulation
 #'
-#' @param individuals individuals for model
-#' @param states states for model
-#' @param events events for model
-#' @param variables variables for model
-#' @return list of processes
+#' @description wires up all the processes to run in the simulation
+#'
+#' @param human the human handle
+#' @param states a list of states in the model
+#' @param events a list of events in the model
+#' @param variables a list of variables in the model
+#' @param parameters a list of parameters in the model
+#' @noRd
 create_processes <- function(
-  individuals,
+  human,
   states,
   events,
-  variables
+  variables,
+  parameters
 ) {
 
-  processes <- list(
-
-    infection_process(individuals, states, variables, events),
-
+  list(
+    infection_process(
+      human,
+      states,
+      variables$discrete_age,
+      events$exposure,
+      parameters$contact_matrix_set
+    ),
     individual::state_count_renderer_process(
-      individuals$name,
+      human$name,
       unlist(lapply(states, "[[", "name"))
     )
-
   )
 
 }

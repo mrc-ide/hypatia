@@ -18,15 +18,15 @@ RoxygenNote: 7.1.1
 Suggests:
     testthat,
     mockery,
+    tidyverse,
+    xml2,
+    rvest,
     knitr,
     rmarkdown
 Imports:
     individual (>= 0.0.9),
     Rcpp,
     squire (>= 0.5.8),
-    tidyverse,
-    xml2,
-    rvest,
     ggplot2,
     tibble,
     tidyr,

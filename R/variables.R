@@ -6,6 +6,7 @@
 #'
 #' @return continuous age variable
 #' @importFrom stats dexp
+#' @noRd
 create_continuous_age_variable <- function(pop, max_age = 100) {
 
   # get out country median ages
@@ -13,43 +14,62 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
   med_age <- hypatia::iso3c_ages$age[hypatia::iso3c_ages$iso3c == iso3c]
 
   # get the top end of the 5 year age bins
-  age_bins <- c(0, as.numeric(gsub("^(\\d{1,2}).*", "\\1", pop$age_group)[-1]))
+  age_bins <- get_age_bins(pop$age_group)
 
   # use these to work out the ages in each bin
-  r <- list()
+  ages_in_bin <- list()
   for (i in seq_along(age_bins)[-1]) {
-    r[[i - 1]] <- seq(age_bins[i - 1], age_bins[i] - 1, 1)
+    ages_in_bin[[i - 1]] <- seq(age_bins[i - 1], age_bins[i] - 1, 1)
   }
-  r[[length(r) + 1]] <- seq(max(age_bins), max_age, 1)
+  ages_in_bin[[length(ages_in_bin) + 1]] <- seq(max(age_bins), max_age, 1)
 
   # now sample from these
-  ages <- list()
-  for (i in seq_len(length(pop$age_group))) {
-    ages[[i]] <- sample(r[[i]], pop$n[i], replace = TRUE,
-                        prob = dexp(r[[i]], 1 / (med_age * 365)))
+  ages <- NULL
+  for (i in seq_along(pop$age_group)) {
+    ages <- c(
+      ages,
+      sample(
+        ages_in_bin[[i]],
+        pop$n[i],
+        replace = TRUE,
+        prob = dexp(ages_in_bin[[i]], 1 / (med_age * 365))
+      )
+    )
   }
 
-  sample(unlist(ages))
+  sample(ages)
+
 }
 
 #' @title Discrete age variable
 #' @description Create a discrete age variable for each of the
 #' length(pop$age_group) distinct age groups
 #'
-#' @param ages Vector of ages from \code{\link{create_continuous_age_variable}}
+#' @param ages Vector of ages from [create_continuous_age_variable]
 #' @param pop Vector of integer ages created by
-#'   \code{\link{create_continuous_age_variable}}
 #'
+#' @noRd
 #' @return discrete age variable
 create_discrete_age_variable <- function(ages, pop) {
   # get the top end of the 5 year age bins
-  age_bins <-
-    c(0, as.numeric(gsub("^(\\d{1,2}).*", "\\1", pop$age_group)[-1]))
-  age_bins <- c(age_bins, max(ages))
+  age_bins <- c(get_age_bins(pop$age_group), max(ages))
 
   # put these into bins
   disc_ages <- cut(ages, age_bins, include.lowest = TRUE, right = FALSE)
   as.integer(pop$age_group[as.numeric(disc_ages)])
+}
+
+#' @title Get age bins
+#'
+#' @param groups a character vector of strings representing the age groups
+#'
+#' @noRd
+#' @return A vector of age boundaries
+get_age_bins <- function(groups) {
+  c(
+    0,
+    as.numeric(gsub("^(\\d{1,2}).*", "\\1", groups)[-1])
+  )
 }
 
 #' @title Create age variables
@@ -58,17 +78,16 @@ create_discrete_age_variable <- function(ages, pop) {
 #' @param pop population list
 #' @param max_age maximum age - default 100
 #'
+#' @noRd
 #' @return named list of individual::Variable
 create_age_variables <- function(pop, max_age = 100) {
-
-  age <- create_continuous_age_variable(pop, max_age = 100)
+  age <- create_continuous_age_variable(pop, max_age)
   discrete_age <- create_discrete_age_variable(age, pop)
 
   list(
     age = individual::Variable$new("age", age),
     discrete_age = individual::Variable$new("discrete_age", discrete_age)
   )
-
 }
 
 #' @title Create variables
@@ -77,12 +96,10 @@ create_age_variables <- function(pop, max_age = 100) {
 #' @param pop population list
 #' @param max_age maximum age - default 100
 #'
+#' @noRd
 #' @return named list of individual::Variable
 create_variables <- function(pop, max_age = 100) {
-
-  ret <- create_age_variables(pop, max_age = 100)
-  list(discrete_age = ret$discrete_age)
-
+  create_age_variables(pop, max_age)
 }
 
 #' Adjust seeding ages

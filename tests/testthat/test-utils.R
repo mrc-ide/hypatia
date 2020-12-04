@@ -15,17 +15,6 @@ test_that("r_exp works", {
 
 })
 
-test_that("bernoulli_multi_p works", {
-
-  expect_true(all(bernoulli_multi_p(10000, 1)))
-  expect_false(any(bernoulli_multi_p(10000, 0)))
-
-  try_again(5,
-            expect_equal(mean(bernoulli_multi_p(1e6, 0.5)),
-            0.5, tolerance = 1e-3))
-
-})
-
 test_that("remove_non_numerics removes characters and characters of arrays", {
   actual <- remove_non_numerics(list(
     a = array(c('1', '2'), dim=c(1, 2)),
@@ -35,3 +24,16 @@ test_that("remove_non_numerics removes characters and characters of arrays", {
   expect_equal(actual, list(c = c(1, 2)))
 })
 
+test_that("bernoulli_multi_p works with empty p", {
+  expect_equal(bernoulli_multi_p(NULL), logical(0))
+})
+
+test_that("bernoulli_multi_p works with two p", {
+  mockery::stub(bernoulli_multi_p, 'runif', mockery::mock(c(.1, .7)))
+  expect_equal(bernoulli_multi_p(c(.2, .6)), c(TRUE, FALSE))
+})
+
+test_that("bernoulli_multi_p works on the boundary", {
+  mockery::stub(bernoulli_multi_p, 'runif', mockery::mock(c(.1, .7)))
+  expect_equal(bernoulli_multi_p(c(.2, .7)), c(TRUE, FALSE))
+})
