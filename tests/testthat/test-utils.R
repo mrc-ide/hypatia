@@ -7,12 +7,12 @@ test_that("null-or-value works", {
   expect_equal(NULL %||% 2, 2)
 })
 
-test_that("vcapply works") {
+test_that("vcapply works", {
 
   expect_length(vcapply(1:5, function(x) {letters[x]}), 5)
   expect_equal(vcapply(1:5, function(x) {letters[x]}), letters[1:5])
 
-}
+})
 
 test_that("r_exp works", {
 
