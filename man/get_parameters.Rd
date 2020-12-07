@@ -4,12 +4,24 @@
 \alias{get_parameters}
 \title{Get parameters from squire model}
 \usage{
-get_parameters(iso3c, time_period = 365, ...)
+get_parameters(
+  iso3c = NULL,
+  population = NULL,
+  contact_matrix_set = NULL,
+  time_period = 365,
+  ...
+)
 }
 \arguments{
-\item{iso3c}{three letter code for your country of interest}
+\item{iso3c}{Character for country iso3c}
 
-\item{time_period}{for the simulation}
+\item{population}{Population vector (for each age group). Default = NULL,
+which will cause population to be sourced from \code{country}}
+
+\item{contact_matrix_set}{Contact matrices used in simulation. Default =
+NULL, which will generate this based on the \code{country}.}
+
+\item{time_period}{Length of simulation. Default = 365}
 
 \item{...}{Other parameters for \link[squire:parameters_explicit_SEEIR]{squire::parameters_explicit_SEEIR}}
 }

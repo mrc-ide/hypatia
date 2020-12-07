@@ -269,23 +269,28 @@ create_event_based_processes <- function(
 #' @param states a list of states in the model
 #' @param events a list of events in the model
 #' @param variables a list of variables in the model
+#' @param parameters a list of parameters in the model
 #' @noRd
 create_processes <- function(
   human,
   states,
   events,
-  variables
+  variables,
+  parameters
 ) {
+
   list(
     infection_process(
       human,
       states,
       variables$discrete_age,
-      events$exposure
+      events$exposure,
+      parameters$mix_mat_set
     ),
     individual::state_count_renderer_process(
       human$name,
-      vcapply(states, function(s) s$name)
+      unlist(lapply(states, "[[", "name"))
     )
   )
+
 }

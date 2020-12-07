@@ -7,13 +7,11 @@
 #' @return continuous age variable
 #' @importFrom stats dexp
 #' @noRd
-#' @importFrom stats dexp
 create_continuous_age_variable <- function(pop, max_age = 100) {
 
-  # get out counntry median ages
+  # get out country median ages
   iso3c <- pop$iso3c[1]
-  iso3c_ages <- hypatia::iso3c_ages
-  med_age <- iso3c_ages$age[iso3c_ages$iso3c == iso3c]
+  med_age <- hypatia::iso3c_ages$age[hypatia::iso3c_ages$iso3c == iso3c]
 
   # get the top end of the 5 year age bins
   age_bins <- get_age_bins(pop$age_group)
@@ -40,6 +38,7 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
   }
 
   sample(ages)
+
 }
 
 #' @title Discrete age variable
@@ -97,8 +96,68 @@ create_age_variables <- function(pop, max_age = 100) {
 #' @param pop population list
 #' @param max_age maximum age - default 100
 #'
-#' @noRd
 #' @return named list of individual::Variable
 create_variables <- function(pop, max_age = 100) {
   create_age_variables(pop, max_age)
+}
+
+#' Adjust seeding ages
+#'
+#' @details Switches age variables based on parameters object
+#' @param initial_values Vector of inital values from with variables object
+#'   created by \code{\link{create_variables}}
+#' @param parameters Parameters object created by \code{\link{get_parameters}}
+#' @return Returns modified initial_values vector
+#' @importFrom utils head tail
+#'
+#' @examples
+#' \dontrun{
+#' Create our parameters
+#' pop <- squire::get_population(iso3c = "ATG")
+#' pop$n <- as.integer(pop$n)/100
+#' parameters <- get_parameters(
+#'    population = pop$n, contact_matrix_set = squire::contact_matrices[1]
+#' )
+#'
+#' # Create our variables
+#' variables <- create_variables(pop)
+#'
+#' # adjust the seeding ages
+#' variables$discrete_age$initial_values <- adjust_seeding_ages(
+#' initial_values = variables$discrete_age$initial_values,
+#'   parameters = parameters
+#' )
+#' }
+
+adjust_seeding_ages <- function(initial_values, parameters) {
+
+  # whate are the ages that have been initialised
+  iv <- initial_values
+
+  # what ages need to be at the back of our initials for seeding
+  ages <- rep(which(parameters$E1_0 > 0), parameters$E1_0[parameters$E1_0 > 0])
+
+  # position of iv to be swapped out
+  to_distribute <- tail(seq_along(iv), length(ages))
+
+  # position of iv to be swapped in
+  to_swap <- vector()
+  for (i in seq_along(unique(ages))) {
+
+    tsi <- which(iv == unique(ages)[i])
+    tsi <- head(tsi, sum(ages == unique(ages)[i]))
+    to_swap <- c(to_swap, tsi)
+
+  }
+
+  # what values are being moved around
+  to_distribute_values <- iv[to_distribute]
+  to_swap_values <- iv[to_swap]
+
+  # do the swap
+  iv[to_distribute] <- to_swap_values
+  iv[to_swap] <- to_distribute_values
+
+  return(iv)
+
 }

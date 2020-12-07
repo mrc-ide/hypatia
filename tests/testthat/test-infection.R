@@ -41,8 +41,10 @@ test_that("infection_process does not schedule when no-one infects by chance", {
   )
   exposure = mockery::mock()
   discrete_age = mockery::mock()
+  contact_matrix <- mockery::mock()
 
-  process <- infection_process(human, states, discrete_age, exposure)
+  process <- infection_process(human, states, discrete_age, exposure,
+                               contact_matrix)
 
   api <- list(
     get_state = mockery::mock(
@@ -82,8 +84,10 @@ test_that("infection_process gives correct lambda for infections", {
   )
   exposure = mockery::mock()
   discrete_age = mockery::mock()
+  contact_matrix <- mockery::mock()
 
-  process <- infection_process(human, states, discrete_age, exposure)
+  process <- infection_process(human, states, discrete_age, exposure,
+                               contact_matrix)
 
   api <- list(
     get_state = mockery::mock(

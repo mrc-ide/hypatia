@@ -9,7 +9,7 @@ create_events <- function() {
     # Human infection events
     exposure = individual::Event$new('exposure'),
     mild_infection = individual::Event$new('mild_infection'),
-    severe_infection = individual::Event$new('severe_infection'), # requiring hospital eventually
+    severe_infection = individual::Event$new('severe_infection'),
     imv_get_live = individual::Event$new('imv_get_live'),
     imv_get_die = individual::Event$new('imv_get_die'),
     iox_get_live = individual::Event$new('iox_get_live'),
@@ -20,7 +20,7 @@ create_events <- function() {
     iox_not_get_die = individual::Event$new('iox_not_get_die'),
     stepdown = individual::Event$new('stepdown'),
     recovery = individual::Event$new('recovery'),
-    death = individual::Event$new('deaths')
+    death = individual::Event$new('death')
   )
 
   events

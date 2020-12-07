@@ -14,4 +14,3 @@ create_human <- function(states, variables, events) {
     events = events
   )
 }
-

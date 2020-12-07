@@ -2,13 +2,14 @@ test_that("create_event_based_processes assigns a listener to each event", {
 
   pop <- get_population("ATG")
 
+  pop$n <- as.integer(pop$n/100)
+
   psq <- get_parameters(
     iso3c = "ATG",
     population = pop$n,
     R0 = 2,
     time_period = 100,
-    tt_contact_matrix = 0,
-    contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG")
+    tt_contact_matrix = 0
   )
 
   events <- create_events()
@@ -21,12 +22,20 @@ test_that("create_event_based_processes assigns a listener to each event", {
     states,
     variables,
     events,
-    parameters
+    psq
   )
 
   for (event in events) {
     expect_gt(length(event$listeners), 0)
   }
+
+  expect_equal(length(events$mild_infection$listeners), 2)
+  expect_equal(length(events$severe_infection$listeners), 1)
+  expect_equal(length(events$imv_not_get_live$listeners), 2)
+  expect_equal(length(events$imv_not_get_die$listeners), 2)
+  expect_equal(events$exposure$name, "exposure")
+  expect_equal(events$death$name, "death")
+  expect_equal(events$iox_get_die$name, "iox_get_die")
 
 })
 
@@ -233,7 +242,7 @@ test_that("test create_events", {
   expect_equal(events$iox_not_get_die, individual::Event$new("iox_not_get_die"))
   expect_equal(events$stepdown, individual::Event$new("stepdown"))
   expect_equal(events$recovery, individual::Event$new("recovery"))
-  expect_equal(events$death, individual::Event$new("deaths"))
+  expect_equal(events$death, individual::Event$new("death"))
 
   expect_equal(length(events), 14)
 

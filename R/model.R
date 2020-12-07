@@ -1,4 +1,3 @@
-
 #' @title Run the simulation
 #' @description
 #' The main entrypoint for the simulation. run_simulation puts together the
@@ -9,16 +8,42 @@
 #' @param parameters parameter list
 #' @param max_age maximum age defaults to 100
 #' @export
-run_simulation <- function(pop, parameters, max_age = 100) {
+run_simulation <- function(pop, parameters = NULL, max_age = 100) {
+
+  if (is.null(parameters)) {
+    parameters <- get_parameters(
+      iso3c = pop$iso3c[1])
+  }
+
   parameters <- remove_non_numerics(parameters)
-  states <- create_states(parameters)
   variables <- create_variables(pop, max_age)
-  events <- create_events()
-  human <- create_human(states, variables, events)
-  individual::simulate(
-    individuals = list(human),
-    processes = create_processes(human, states, events, variables),
-    end_timestep = parameters$time_period,
+
+  # adjust our age variables to account for age based seeding
+  variables$discrete_age$initial_values <- adjust_seeding_ages(
+    initial_values = variables$discrete_age$initial_values,
     parameters = parameters
   )
+
+  states <- create_states(parameters)
+  events <- create_events()
+
+  human <- create_human(states, variables, events)
+
+  create_event_based_processes(human, states, variables,
+                               events, parameters)
+
+  output <- individual::simulate(
+    individuals = list(human),
+    processes = create_processes(human,
+                                 states,
+                                 events,
+                                 variables,
+                                 parameters),
+    end_timestep  = parameters$time_period,
+    parameters = parameters,
+    initialisation = create_setup_process(human, states, events, variables)
+  )
+
+  output
+
 }

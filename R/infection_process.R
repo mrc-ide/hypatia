@@ -6,8 +6,9 @@
 #' @param states a list of states in the model
 #' @param discrete_age variable
 #' @param exposure event for covid exposure
+#' @param contact_matrix_set contact matrix set
 #' @noRd
-infection_process <- function(human, states, discrete_age, exposure) {
+infection_process <- function(human, states, discrete_age, exposure, contact_matrix_set) {
 
   function(api) {
     pars <- api$get_parameters()
@@ -21,7 +22,8 @@ infection_process <- function(human, states, discrete_age, exposure) {
       inf_ages <- tabulate(ages, nbins = pars$N_age)
 
       # Calculate FoI and use to create probability for each age group
-      m <- get_contact_matrix(pars$contact_matrix_set)
+      m <- get_contact_matrix(contact_matrix_set)
+
       lambda <- pars$beta * rowSums(m %*% diag(inf_ages))
 
       # Transition from S to E
