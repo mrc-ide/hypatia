@@ -114,6 +114,7 @@ test_that("test that create_pocesses works", {
 test_that("test that create_pocesses works for render process", {
 
    pop <- get_population("AFG")
+   pop$n <- as.integer(pop$n/10000)
 
    R0 <- 2
    time_period <- 1000

@@ -14,21 +14,9 @@ create_setup_process <- function(
    function(api) {
       parameters <- api$get_parameters()
       exposed <- api$get_state(human, states$E)
-      print("exposed")
-      print(exposed)
       age <- api$get_variable(human, variables$discrete_age, exposed)
-      print("age")
-      print(age)
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
-      print("prob_hosp")
-      print(prob_hosp)
       hosp <- bernoulli_multi_p(prob_hosp)
-      print("hosp")
-      print(hosp)
-      print("length(exposed[hosp]")
-      print(length(exposed[hosp]))
-      print("parameters$dur_E")
-      print(parameters$dur_E)
 
       if(sum(hosp) > 0) {
          api$schedule(
@@ -297,7 +285,7 @@ create_processes <- function(
       states,
       variables$discrete_age,
       events$exposure,
-      parameters$contact_matrix_set
+      parameters$mix_mat_set
     ),
     individual::state_count_renderer_process(
       human$name,

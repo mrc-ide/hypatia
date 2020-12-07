@@ -1,34 +1,12 @@
-#' #' @title Get parameters from squire model
-#' #'
-#' #' @param iso3c three letter code for your country of interest
-#' #' @param time_period for the simulation
-#' #' @param ... Other parameters for [squire::parameters_explicit_SEEIR]
-#' #'
-#' #' @return squire model parameters
-#' #' @export
-#' get_parameters <- function(iso3c, time_period = 365, ...) {
-#'   c(
-#'     squire::parameters_explicit_SEEIR(
-#'       country = get_country(iso3c),
-#'       # population = get_population(iso3c),
-#'       # contact_matrix_set = squire::contact_matrices[[1]],
-#'       dt = 1,
-#'       time_period = time_period,
-#'
-#'       ...
-#'     ),
-#'     time_period = time_period
-#'   )
-#' }
-
 #' @title Get parameters from squire model
 #'
 #' @inheritParams squire::parameters_explicit_SEEIR
+#' @param iso3c Character for country iso3c
 #' @param ... Other parameters for [squire::parameters_explicit_SEEIR]
 #'
 #' @return squire model parameters
 #' @export
-get_parameters <- function(iso3c,
+get_parameters <- function(iso3c = NULL,
                            population = NULL,
                            contact_matrix_set = NULL,
                            time_period = 365,
@@ -36,6 +14,11 @@ get_parameters <- function(iso3c,
 
   # dt should always be 1 as individual is always discrete time
   dt <- 1
+
+  # if missing a contact matrix but have the iso3c use that
+  if (!is.null(iso3c) && is.null(contact_matrix_set)) {
+    contact_matrix_set <- squire::get_mixing_matrix(iso3c = iso3c)
+  }
 
   c(
     squire::parameters_explicit_SEEIR(

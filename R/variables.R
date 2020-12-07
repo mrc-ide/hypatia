@@ -96,7 +96,6 @@ create_age_variables <- function(pop, max_age = 100) {
 #' @param pop population list
 #' @param max_age maximum age - default 100
 #'
-#' @noRd
 #' @return named list of individual::Variable
 create_variables <- function(pop, max_age = 100) {
   create_age_variables(pop, max_age)

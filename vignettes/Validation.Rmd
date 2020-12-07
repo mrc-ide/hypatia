@@ -20,9 +20,8 @@ knitr::opts_chunk$set(
 ```{r}
 
 # Create our population
-countryname <- "Antigua and Barbuda"
-
-pop <- hypatia:::get_population("ATG")
+iso3c <- "ATG"
+pop <- hypatia:::get_population(iso3c)
 
 # Scale it for speed
 pop$n <- round(pop$n/10)
@@ -32,7 +31,8 @@ time_period <- 200
 
 parameters <-  hypatia::get_parameters(
   population = pop$n,
-  contact_matrix_set = squire::get_mixing_matrix(iso3c = "ATG"),
+  contact_matrix_set = squire::get_mixing_matrix(iso3c = iso3c),
+  iso3c = iso3c,
   R0 = 2,
   time_period = time_period,
   tt_contact_matrix = 0
@@ -62,7 +62,7 @@ statesnamevector <- c("human_S_count",
                            "human_R_count",
                            "human_D_count")
 
-  # Convert to long format
+# Convert to long format
 df <- tidyr::pivot_longer(tibble::as_tibble(df), all_of(statesnamevector))
 
 strname <- "Hypatia Model Simulation"

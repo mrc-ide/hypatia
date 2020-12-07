@@ -5,7 +5,7 @@
 \title{Get parameters from squire model}
 \usage{
 get_parameters(
-  iso3c,
+  iso3c = NULL,
   population = NULL,
   contact_matrix_set = NULL,
   time_period = 365,
@@ -13,6 +13,8 @@ get_parameters(
 )
 }
 \arguments{
+\item{iso3c}{Character for country iso3c}
+
 \item{population}{Population vector (for each age group). Default = NULL,
 which will cause population to be sourced from \code{country}}
 
@@ -27,8 +29,5 @@ NULL, which will generate this based on the \code{country}.}
 squire model parameters
 }
 \description{
-
-}
-\details{
-
+Get parameters from squire model
 }

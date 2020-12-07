@@ -22,7 +22,7 @@ infection_process <- function(human, states, discrete_age, exposure, contact_mat
       inf_ages <- tabulate(ages, nbins = pars$N_age)
 
       # Calculate FoI and use to create probability for each age group
-      m <- (contact_matrix_set)
+      m <- get_contact_matrix(contact_matrix_set)
 
       lambda <- pars$beta * rowSums(m %*% diag(inf_ages))
 

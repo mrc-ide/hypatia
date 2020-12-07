@@ -15,7 +15,7 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
       iso3c = pop$iso3c[1])
   }
 
-  #parameters <- remove_non_numerics(parameters)
+  parameters <- remove_non_numerics(parameters)
   variables <- create_variables(pop, max_age)
 
   # adjust our age variables to account for age based seeding
@@ -40,9 +40,8 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
                                  variables,
                                  parameters),
     end_timestep  = parameters$time_period,
-    parameters = parameters#,
-    # initialisation = create_setup_process(human, states, events,
-    #                                       variables)
+    parameters = parameters,
+    initialisation = create_setup_process(human, states, events, variables)
   )
 
   output

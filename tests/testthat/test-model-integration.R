@@ -4,15 +4,15 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
   time_period <- 1000
   tt_contact_matrix <- 0
 
-  pop <- get_population("AFG")
-
+  iso3c <- "AFG"
+  pop <- get_population(iso3c)
+  pop$n <- as.integer(pop$n/1000)
   psq <- get_parameters(
-    iso3c = "AFG",
     population = pop$n,
+    contact_matrix_set = squire::get_mixing_matrix(iso3c = iso3c),
+    iso3c = iso3c,
     R0 = R0,
-    time_period = time_period,
-    tt_contact_matrix = tt_contact_matrix,
-    contact_matrix = squire::contact_matrices[[1]]
+    time_period = time_period
   )
 
   output <- run_simulation(
