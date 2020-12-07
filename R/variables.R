@@ -131,7 +131,7 @@ create_variables <- function(pop, max_age = 100) {
 
 adjust_seeding_ages <- function(initial_values, parameters) {
 
-  # whate are the ages that have been initialised
+  # what are the ages that have been initialised
   iv <- initial_values
 
   # what ages need to be at the back of our initials for seeding

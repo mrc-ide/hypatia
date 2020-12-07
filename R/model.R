@@ -47,3 +47,44 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
   output
 
 }
+
+#' @title Run the simulation with repetitions
+#'
+#' @param repetitions n times to run the simulation
+#' @param overrides a named list of parameters to use instead of defaults
+#' @param parallel execute runs in parallel
+#' @return data frame for runs
+#' @export
+run_multiple_models <- function(
+  repetitions,
+  overrides = list(),
+  parallel = FALSE
+) {
+
+
+  if (parallel) {
+    fapply <- parallel::mclapply
+  } else {
+    fapply <- lapply
+  }
+
+  sum <- 0
+
+  dfs <- fapply(
+
+    seq(repetitions),
+    function(repetition) {
+      sum <- sum + 1
+      df <- run_simulation(pop = overrides$pop[[sum]],
+                           parameters = overrides$parameters[[sum]],
+                           max_age = overrides$max_age[[sum]])
+      df$repetition <- repetition
+      df
+    }
+
+  )
+
+  do.call("rbind", dfs)
+
+  dfs
+}
