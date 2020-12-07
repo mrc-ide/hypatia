@@ -17,7 +17,7 @@ test_that("test that create_human works", {
 
   states <- create_states(psq)
   events <- create_events()
-  variables <- create_variables(pop = pop, max_age = 100)
+  variables <- create_variables(pop = pop, psq)
 
   indiv <- create_human(states, variables, events)
 

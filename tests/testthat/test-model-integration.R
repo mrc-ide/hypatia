@@ -15,29 +15,10 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
     time_period = time_period
   )
 
-  output <- run_simulation(
-    pop,
-    psq,
-    max_age = 100
-  )
+  output <- run_simulation(pop, psq)
 
   expect_equal(length(output$timestep), 1000)
   expect_equal(nrow(output), 1000)
-
-})
-
-test_that("run_simulation with parameters = NULL", {
-
-  pop <- get_population("ATG")
-  pop$n <- as.integer(pop$n)
-
-  output <- run_simulation(
-    pop,
-    NULL,
-    max_age = 100
-  )
-
-  expect_equal(length(output$timestep), 365)
 
 })
 
@@ -84,10 +65,8 @@ test_that("run run_simulation twice using mockery_mock", {
 
 })
 
-test_that("run run_simulation twice using mockery_mock - another method", {
+test_that("run_simulation is called with the correct arguments", {
 
-  # 2nd Test Type
-  # simple overrides
   overrides <- list("pop" = list(1,3),
                     "parameters" = list(1,3),
                     "max_age" = list(1,3))
@@ -100,8 +79,8 @@ test_that("run run_simulation twice using mockery_mock - another method", {
     'run_simulation',
     run_simulation_mock
   )
-  # run our mocked function
 
+  # run our mocked function
   out <- run(repetitions = 2, overrides = overrides)
 
   mockery::expect_args(

@@ -25,7 +25,6 @@ iso3c_ages <- read_html(url) %>%
                      "Virgin Islands" = "VIR",
                      "Saint Martin" = "MAF",
                      "Channel Islands" = "CHI",
-<<<<<<< HEAD
                      "Micronesia" = "FSM"))) %>%
   filter(iso3c %in% squire::population$iso3c) %>%
   mutate(age = as.numeric(age))

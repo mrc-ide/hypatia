@@ -2,6 +2,7 @@
 #'
 #' @inheritParams squire::parameters_explicit_SEEIR
 #' @param iso3c Character for country iso3c
+#' @param max_age the maximum age for humans
 #' @param ... Other parameters for [squire::parameters_explicit_SEEIR]
 #'
 #' @return squire model parameters
@@ -42,5 +43,5 @@ get_population <- function(iso3c) {
 
 #' @noRd
 get_country <- function(iso3c) {
-  squire::population[squire::population$iso3c == iso3c, 'country'][[1]]
+  squire::population[squire::population$iso3c == iso3c, "country"][[1]]
 }

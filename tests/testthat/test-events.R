@@ -14,7 +14,7 @@ test_that("create_event_based_processes assigns a listener to each event", {
 
   events <- create_events()
   states <- create_states(psq)
-  variables <- create_variables(pop, max_age = 100)
+  variables <- create_variables(pop, psq)
   human <- create_human(states, variables, events)
 
   create_event_based_processes(
