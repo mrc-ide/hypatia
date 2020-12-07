@@ -87,6 +87,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Validation.html">Comparison</a>
+    </li>
+  </ul>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -112,18 +124,34 @@
     <p>Get parameters from squire model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span><span class='va'>iso3c</span>, time_period <span class='op'>=</span> <span class='fl'>365</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_parameters</span><span class='op'>(</span>
+  iso3c <span class='op'>=</span> <span class='cn'>NULL</span>,
+  population <span class='op'>=</span> <span class='cn'>NULL</span>,
+  contact_matrix_set <span class='op'>=</span> <span class='cn'>NULL</span>,
+  time_period <span class='op'>=</span> <span class='fl'>365</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>iso3c</th>
-      <td><p>three letter code for your country of interest</p></td>
+      <td><p>Character for country iso3c</p></td>
+    </tr>
+    <tr>
+      <th>population</th>
+      <td><p>Population vector (for each age group). Default = NULL,
+which will cause population to be sourced from <code>country</code></p></td>
+    </tr>
+    <tr>
+      <th>contact_matrix_set</th>
+      <td><p>Contact matrices used in simulation. Default =
+NULL, which will generate this based on the <code>country</code>.</p></td>
     </tr>
     <tr>
       <th>time_period</th>
-      <td><p>for the simulation</p></td>
+      <td><p>Length of simulation. Default = 365</p></td>
     </tr>
     <tr>
       <th>...</th>
