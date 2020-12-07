@@ -5,6 +5,7 @@
 #' @param states a list of states in the model
 #' @param events a list of events in the model
 #' @param variables list of variables in the model
+#' @noRd
 create_setup_process <- function(
    human,
    states,
@@ -43,221 +44,234 @@ create_setup_process <- function(
 #' @param variables list of variables in the model
 #' @param events a list of events in the model
 #' @param parameters the model parameters
+#' @noRd
 create_event_based_processes <- function(
    human,
    states,
    variables,
    events,
    parameters
-) {
+   ) {
 
-   # STATE UPDATES
-   # These events cause the infection state to change at the end of the timestep
-   # ---------------------
+  # STATE UPDATES
+  # These events cause the infection state to change at the end of the timestep
+  # ---------------------
+  # Exposure events
+  events$exposure$add_listener(
+    create_infection_update_listener(
+      human,
+      states$E
+    )
+  )
 
-   # Exposure events
-   events$exposure$add_listener(
-      create_infection_update_listener(
-         human,
-         states$E
-      )
-   )
+  # IMild events
+  events$mild_infection$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IMild
+    )
+  )
 
-   # IMild events
-   events$mild_infection$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IMild
-      )
-   )
+  # ICase events
+  events$severe_infection$add_listener(
+    create_infection_update_listener(
+      human,
+      states$ICase
+    )
+  )
 
-   # ICase events
-   events$severe_infection$add_listener(
-      create_infection_update_listener(
-         human,
-         states$ICase
-      )
-   )
+  # Hospitalisation
+  events$hospitilisation$add_listener(function(api, target) {
+    hospitilisation_flow_process(
+      api,
+      target,
+      variables$discrete_age,
+      human,
+      states,
+      events,
+      api$get_parameters()
+    )
+  })
 
-   # IMV events
-   events$imv_get_live$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IMVGetLive
-      )
-   )
+  # IMV events
+  events$imv_get_live$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IMVGetLive
+    )
+  )
 
-   events$imv_get_die$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IMVGetDie
-      )
-   )
+  events$imv_get_die$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IMVGetDie
+    )
+  )
 
-   events$imv_not_get_live$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IMVNotGetLive
-      )
-   )
+  events$imv_not_get_live$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IMVNotGetLive
+    )
+  )
 
-   events$imv_not_get_die$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IMVNotGetDie
-      )
-   )
+  events$imv_not_get_die$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IMVNotGetDie
+    )
+  )
 
-   # IOx events
-   events$iox_get_live$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IOxGetLive
-      )
-   )
+  # IOx events
+  events$iox_get_live$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IOxGetLive
+    )
+  )
 
-   events$iox_get_die$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IOxGetDie
-      )
-   )
+  events$iox_get_die$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IOxGetDie
+    )
+  )
 
-   events$iox_not_get_live$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IOxNotGetLive
-      )
-   )
+  events$iox_not_get_live$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IOxNotGetLive
+    )
+  )
 
-   events$iox_not_get_die$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IOxNotGetDie
-      )
-   )
+  events$iox_not_get_die$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IOxNotGetDie
+    )
+  )
 
-   # Recovery events
-   events$recovery$add_listener(
-      create_infection_update_listener(
-         human,
-         states$R
-      )
-   )
+  # Recovery events
+  events$recovery$add_listener(
+    create_infection_update_listener(
+      human,
+      states$R
+    )
+  )
 
-   # Stepdown events
-   events$stepdown$add_listener(
-      create_infection_update_listener(
-         human,
-         states$IRec
-      )
-   )
+  # Stepdown events
+  events$stepdown$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IRec
+    )
+  )
 
-   # Death events
-   events$death$add_listener(
-      create_infection_update_listener(
-         human,
-         states$D
-      )
-   )
+  # Death events
+  events$death$add_listener(
+    create_infection_update_listener(
+      human,
+      states$D
+    )
+  )
 
-   # STATE SCHEDULES
-   # These events trigger the scheduling for infection state changes
-   # ----------------------------
+  # STATE SCHEDULES
+  # These events trigger the scheduling for infection state changes
+  # ----------------------------
 
-   # Exposure events
-   events$exposure$add_listener(
-      create_exposure_update_listener(
-         human,
-         states,
-         events,
-         variables,
-         parameters
-      )
-   )
+  # Exposure events
+  events$exposure$add_listener(
+    create_exposure_update_listener(
+      human,
+      states,
+      events,
+      variables,
+      parameters
+    )
+  )
 
-   # Mild Infection events
-   events$mild_infection$add_listener(
-      create_progression_listener(
-         event = events$recovery,
-         duration = parameters$dur_IMild,
-         func = r_exp
-      )
-   )
+  # Mild Infection events
+  events$mild_infection$add_listener(
+    create_progression_listener(
+      event = events$recovery,
+      duration = parameters$dur_IMild,
+      func = r_exp
+    )
+  )
 
-   # MV outcomes
-   events$imv_get_live$add_listener(
-      create_progression_listener(
-         event = events$stepdown,
-         duration = parameters$dur_get_mv_survive,
-         shift = 1
-      )
-   )
+  # MV outcomes
+  events$imv_get_live$add_listener(
+    create_progression_listener(
+      event = events$stepdown,
+      duration = parameters$dur_get_mv_survive,
+      shift = 1
+    )
+  )
 
-   events$imv_get_die$add_listener(
-      create_progression_listener(
-         event = events$death,
-         duration = parameters$dur_get_mv_die,
-         shift = 1
-      )
-   )
+  events$imv_get_die$add_listener(
+    create_progression_listener(
+      event = events$death,
+      duration = parameters$dur_get_mv_die,
+      shift = 1
+    )
+  )
 
-   events$imv_not_get_live$add_listener(
-      create_progression_listener(
-         event = events$recovery,
-         duration = parameters$dur_not_get_mv_survive,
-         shift = 1
-      )
-   )
+  events$imv_not_get_live$add_listener(
+    create_progression_listener(
+      event = events$recovery,
+      duration = parameters$dur_not_get_mv_survive,
+      shift = 1
+    )
+  )
 
-   events$imv_not_get_die$add_listener(
-      create_progression_listener(
-         event = events$death,
-         duration = parameters$dur_not_get_mv_die,
-         shift = 1
-      )
-   )
+  events$imv_not_get_die$add_listener(
+    create_progression_listener(
+      event = events$death,
+      duration = parameters$dur_not_get_mv_die,
+      shift = 1
+    )
+  )
 
-   # Ox outcomes
-   events$iox_get_live$add_listener(
-      create_progression_listener(
-         event = events$recovery,
-         duration = parameters$dur_get_ox_survive,
-         shift = 1
-      )
-   )
+  # Ox outcomes
+  events$iox_get_live$add_listener(
+    create_progression_listener(
+      event = events$recovery,
+      duration = parameters$dur_get_ox_survive,
+      shift = 1
+    )
+  )
 
-   events$iox_get_die$add_listener(
-      create_progression_listener(
-         event = events$death,
-         duration = parameters$dur_get_ox_die,
-         shift = 1
-      )
-   )
+  events$iox_get_die$add_listener(
+    create_progression_listener(
+      event = events$death,
+      duration = parameters$dur_get_ox_die,
+      shift = 1
+    )
+  )
 
-   events$iox_not_get_live$add_listener(
-      create_progression_listener(
-         event = events$recovery,
-         duration = parameters$dur_not_get_ox_survive,
-         shift = 1
-      )
-   )
+  events$iox_not_get_live$add_listener(
+    create_progression_listener(
+      event = events$recovery,
+      duration = parameters$dur_not_get_ox_survive,
+      shift = 1
+    )
+  )
 
-   events$iox_not_get_die$add_listener(
-      create_progression_listener(
-         event = events$death,
-         duration = parameters$dur_not_get_ox_die,
-         shift = 1
-      )
-   )
+  events$iox_not_get_die$add_listener(
+    create_progression_listener(
+      event = events$death,
+      duration = parameters$dur_not_get_ox_die,
+      shift = 1
+    )
+  )
 
-   # Stepdon
-   events$stepdown$add_listener(
-      create_progression_listener(
-         event = events$recovery,
-         duration = parameters$dur_rec
-      )
-   )
+  # Stepdon
+  events$stepdown$add_listener(
+    create_progression_listener(
+      event = events$recovery,
+      duration = parameters$dur_rec
+    )
+  )
 
 }
 
@@ -293,31 +307,4 @@ create_processes <- function(
     )
   )
 
-}
-
-#' @title Define event based processes
-#' @description defines processes for events that can be scheduled in the future
-#'
-#' @param human humans
-#' @param events a list of events in the model
-#' @param states a list of states in the model
-#' @param variables list of variables in the model
-#' @noRd
-create_event_based_processes <- function(
-  human,
-  events,
-  states,
-  variables
-) {
-  events$hospitilisation$add_listener(function(api, target) {
-    hospitilisation_flow_process(
-      api,
-      target,
-      variables$discrete_age,
-      human,
-      states,
-      events,
-      api$get_parameters()
-    )
-  })
 }

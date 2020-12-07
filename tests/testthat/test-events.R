@@ -15,10 +15,10 @@ test_that("create_event_based_processes assigns a listener to each event", {
   events <- create_events()
   states <- create_states(psq)
   variables <- create_variables(pop, max_age = 100)
-  indiv <- create_human(states, variables, events)
+  human <- create_human(states, variables, events)
 
   create_event_based_processes(
-    indiv$human,
+    human,
     states,
     variables,
     events,
@@ -36,42 +36,6 @@ test_that("create_event_based_processes assigns a listener to each event", {
   expect_equal(events$exposure$name, "exposure")
   expect_equal(events$death$name, "death")
   expect_equal(events$iox_get_die$name, "iox_get_die")
-
-})
-
-test_that("test that listeners can call empty targets and that
-          queue_state_update is called", {
-
-  events <- create_events()
-
-  states <- list(
-    E = individual::State$new("E", 0.5),
-    IMild = individual::State$new("IMild", 0.2)
-    )
-
-  individuals <- list(human = individual::Individual$new(
-    "human", states = list(states$E, states$IMild)))
-
-  parameters <- list(human_population = 100000, average_age = 27)
-
-  initial_age <- trunc(
-    r_exp(parameters$human_population, parameters$average_age))
-
-  variables <- list(
-    age <- individual::Variable$new("age", 50 - initial_age))
-
-
-  api <- mock_api(list(), parameters = parameters)
-
-  create_event_based_processes(individuals, states, variables, events,
-                               parameters)
-
-  # test a few listeners: test they don't call for an empty target
-  events$exposure$listeners[[1]](api, numeric(0))
-  mockery::expect_called(api$queue_state_update, 1)
-
-  events$mild_infection$listeners[[2]](api, numeric(0))
-  mockery::expect_called(api$queue_state_update, 1)
 
 })
 
@@ -218,33 +182,3 @@ test_that("test initialise_progression", {
   )
 
 })
-
-test_that("test create_events", {
-
-  events <- create_events()
-
-  expect_equal(events$exposure,
-               individual::Event$new("exposure"))
-  expect_equal(events$mild_infection ,
-               individual::Event$new("mild_infection"))
-  expect_equal(events$severe_infection ,
-               individual::Event$new("severe_infection"))
-  expect_equal(events$imv_get_live, individual::Event$new("imv_get_live"))
-  expect_equal(events$imv_get_die, individual::Event$new("imv_get_die"))
-  expect_equal(events$iox_get_live, individual::Event$new("iox_get_live"))
-  expect_equal(events$iox_get_die, individual::Event$new("iox_get_die"))
-  expect_equal(events$imv_not_get_live,
-               individual::Event$new("imv_not_get_live"))
-  expect_equal(events$imv_not_get_die,
-               individual::Event$new("imv_not_get_die"))
-  expect_equal(events$iox_not_get_live,
-               individual::Event$new("iox_not_get_live"))
-  expect_equal(events$iox_not_get_die, individual::Event$new("iox_not_get_die"))
-  expect_equal(events$stepdown, individual::Event$new("stepdown"))
-  expect_equal(events$recovery, individual::Event$new("recovery"))
-  expect_equal(events$death, individual::Event$new("death"))
-
-  expect_equal(length(events), 14)
-
-})
-
