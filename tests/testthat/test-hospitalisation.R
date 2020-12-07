@@ -72,42 +72,45 @@ test_that('allocate_treatment can allocate when limit is exceeded', {
 })
 
 test_that('hospitilisation_flow_process can integrate a mix of mv and ox', {
-  api <- list(get_variable = mockery::mock(c(1, 2, 3, 4))) # mock age
+  api <- list(
+    get_variable = mockery::mock(c(1, 2, 3, 4)), # mock age
+    get_parameters = mockery::mock(list(
+      prob_severe_death_treatment = rep(.1, 4),
+      prob_severe_death_no_treatment = rep(.2, 4),
+      prob_non_severe_death_treatment = rep(.3, 4),
+      prob_non_severe_death_no_treatment = rep(.4, 4)
+    ))
+  )
+
+  events <- create_events()
+
+  process <- hospitilisation_flow_process(
+    discrete_age = mockery::mock(),
+    human = mockery::mock(),
+    states = list(),
+    events = events
+  )
+
   mockery::stub(
-    hospitilisation_flow_process,
+    process,
     'bernoulli_multi_p',
     mockery::mock(c(TRUE, TRUE, FALSE, FALSE))
   )
 
   mockery::stub(
-    hospitilisation_flow_process,
+    process,
     'allocate_treatment',
     mockery::mock(1, 3)
   )
 
   schedule_mock <- mockery::mock()
   mockery::stub(
-    hospitilisation_flow_process,
+    process,
     'schedule_outcome',
     schedule_mock
   )
 
-  events <- create_events()
-
-  hospitilisation_flow_process(
-    api = api,
-    hospitalised = c(1, 2, 3, 4),
-    discrete_age = mockery::mock(),
-    human = mockery::mock(),
-    states = list(),
-    events = events,
-    parameters = list(
-      prob_severe_death_treatment = rep(.1, 4),
-      prob_severe_death_no_treatment = rep(.2, 4),
-      prob_non_severe_death_treatment = rep(.3, 4),
-      prob_non_severe_death_no_treatment = rep(.4, 4)
-    )
-  )
+  process(api, hospitalised = c(1, 2, 3, 4))
 
   mockery::expect_args(
     schedule_mock,

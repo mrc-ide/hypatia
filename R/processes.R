@@ -81,17 +81,14 @@ create_event_based_processes <- function(
   )
 
   # Hospitalisation
-  events$hospitilisation$add_listener(function(api, target) {
+  events$hospitilisation$add_listener(
     hospitilisation_flow_process(
-      api,
-      target,
       variables$discrete_age,
       human,
       states,
-      events,
-      api$get_parameters()
+      events
     )
-  })
+  )
 
   # IMV events
   events$imv_get_live$add_listener(
