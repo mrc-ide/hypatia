@@ -28,15 +28,6 @@ test_that("create_event_based_processes assigns a listener to each event", {
   for (event in events) {
     expect_gt(length(event$listeners), 0)
   }
-
-  expect_equal(length(events$mild_infection$listeners), 2)
-  expect_equal(length(events$severe_infection$listeners), 1)
-  expect_equal(length(events$imv_not_get_live$listeners), 2)
-  expect_equal(length(events$imv_not_get_die$listeners), 2)
-  expect_equal(events$exposure$name, "exposure")
-  expect_equal(events$death$name, "death")
-  expect_equal(events$iox_get_die$name, "iox_get_die")
-
 })
 
 test_that("test create_infection_update_listener", {

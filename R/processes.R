@@ -80,16 +80,6 @@ create_event_based_processes <- function(
     )
   )
 
-  # Hospitalisation
-  events$hospitilisation$add_listener(
-    hospitilisation_flow_process(
-      variables$discrete_age,
-      human,
-      states,
-      events
-    )
-  )
-
   # IMV events
   events$imv_get_live$add_listener(
     create_infection_update_listener(
@@ -203,6 +193,17 @@ create_event_based_processes <- function(
       duration = parameters$dur_ICase
     )
   )
+
+  # Hospitalisation
+  events$hospitilisation$add_listener(
+    hospitilisation_flow_process(
+      variables$discrete_age,
+      human,
+      states,
+      events
+    )
+  )
+
   # MV outcomes
   events$imv_get_live$add_listener(
     create_progression_listener(
