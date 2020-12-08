@@ -30,8 +30,7 @@ Imports:
     ggplot2,
     tibble,
     tidyr,
-    dplyr,
-    parallel
+    dplyr
 Depends: 
     R (>= 2.10)
 RcppModules: 

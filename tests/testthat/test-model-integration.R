@@ -41,7 +41,78 @@ test_that("run_simulation with parameters = NULL", {
 
 })
 
-test_that("run 2 models with run_simulation", {
+test_that("run run_simulation twice using mockery_mock", {
+
+  # simple overrides
+  overrides <- list("pop" = list(1,3),
+                    "parameters" = list(1,3),
+                    "max_age" = list(1,3))
+
+  # get our run function that we will do some mocking to
+  run <- run_simulation_replicate
+
+  # mock the function to just return a data frame made up of our overrides
+  # to check they are being grabbed correctly
+  mockery::stub(
+    run,
+    'run_simulation',
+    function(pop, parameters, max_age) {
+      data.frame("timestep" = 1,
+                 "pop" = pop,
+                 "parameters" = parameters,
+                 "max_age" = max_age)
+    }
+  )
+
+  # run our mocked function
+  out <- run(repetitions = 2, overrides = overrides, parallel = FALSE)
+
+  # Now we can check the arguments are correctly filled from overrides
+  expect_true(out$repetition[1] == 1)
+  expect_true(out$timestep[2] == 1)
+  expect_true(out$pop[2] == 3)
+
+})
+
+test_that("run run_simulation twice using mockery_mock - another method", {
+
+  # 2nd Test Type
+  # simple overrides
+  overrides <- list("pop" = list(1,3),
+                    "parameters" = list(1,3),
+                    "max_age" = list(1,3))
+  # get our run function that we will do some mocking to
+  run <- run_simulation_replicate
+  # mock the function as just a plain mock
+  run_simulation_mock <- mockery::mock(cycle = TRUE)
+  mockery::stub(
+    run,
+    'run_simulation',
+    run_simulation_mock
+  )
+  # run our mocked function
+
+  out <- run(repetitions = 2, overrides = overrides, parallel = FALSE)
+
+  mockery::expect_args(
+    run_simulation_mock,
+    1,
+    pop = overrides$pop[[1]],
+    parameters = overrides$parameters[[1]],
+    max_age = overrides$max_age[[1]]
+  )
+
+  mockery::expect_args(
+    run_simulation_mock,
+    2,
+    pop = overrides$pop[[2]],
+    parameters = overrides$parameters[[2]],
+    max_age = overrides$max_age[[2]]
+  )
+
+})
+
+test_that("run 2 models with run_simulation sequentially on real data", {
 
   R0 <- 2
   time_period <- 1000
@@ -76,11 +147,17 @@ test_that("run 2 models with run_simulation", {
                           max_age = list(max_age, max_age))
 
 
-  dfs <- run_multiple_models(
+  dfs <- run_simulation_replicate(
     repetitions,
     overrides,
-    parallel = TRUE
+    parallel = FALSE
   )
 
+  expect_equal(length(dfs), 2)
+  expect_equal(length(dfs[[1]]$timestep), 1000)
+  expect_equal(dfs[[1]]$human_S_count[1], 97908)
+  expect_equal(length(dfs[[2]]$timestep), 1000)
+  expect_equal(dfs[[2]]$human_S_count[1], 97908)
+  expect_equal(length(dfs[[2]]$human_S_count), 1000)
 
 })

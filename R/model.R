@@ -55,29 +55,26 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
 #' @param parallel execute runs in parallel
 #' @return data frame for runs
 #' @export
-run_multiple_models <- function(
+run_simulation_replicate <- function(
   repetitions,
   overrides = list(),
   parallel = FALSE
 ) {
 
+  # Currently running sequentially only
+  fapply <- lapply
 
-  if (parallel) {
-    fapply <- parallel::mclapply
-  } else {
-    fapply <- lapply
-  }
-
-  sum <- 0
+  # Currently running sequentially only
+  counter <- 0
 
   dfs <- fapply(
 
     seq(repetitions),
     function(repetition) {
-      sum <- sum + 1
-      df <- run_simulation(pop = overrides$pop[[sum]],
-                           parameters = overrides$parameters[[sum]],
-                           max_age = overrides$max_age[[sum]])
+      counter <<- counter + 1
+      df <- run_simulation(pop = overrides$pop[[counter]],
+                           parameters = overrides$parameters[[counter]],
+                           max_age = overrides$max_age[[counter]])
       df$repetition <- repetition
       df
     }
@@ -86,5 +83,4 @@ run_multiple_models <- function(
 
   do.call("rbind", dfs)
 
-  dfs
 }
