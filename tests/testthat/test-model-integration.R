@@ -6,7 +6,7 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
 
   iso3c <- "AFG"
   pop <- get_population(iso3c)
-  pop$n <- as.integer(pop$n/1000)
+  pop$n <- as.integer(pop$n / 1000)
   psq <- get_parameters(
     population = pop$n,
     contact_matrix_set = squire::get_mixing_matrix(iso3c = iso3c),
@@ -120,6 +120,7 @@ test_that("run 2 models with run_simulation sequentially on real data", {
 
   iso3c <- "ATG"
   pop <- get_population(iso3c)
+  pop$n <- as.integer(pop$n / 1000)
 
   psq <- get_parameters(
     population = pop$n,
@@ -131,6 +132,7 @@ test_that("run 2 models with run_simulation sequentially on real data", {
 
   iso3c <- "AFG"
   pop2 <- get_population(iso3c)
+  pop2$n <- as.integer(pop2$n / 1000)
 
   psq2 <- get_parameters(
     population = pop2$n,
@@ -153,11 +155,12 @@ test_that("run 2 models with run_simulation sequentially on real data", {
     parallel = FALSE
   )
 
-  expect_equal(length(dfs), 2)
-  expect_equal(length(dfs[[1]]$timestep), 1000)
-  expect_equal(dfs[[1]]$human_S_count[1], 97908)
-  expect_equal(length(dfs[[2]]$timestep), 1000)
-  expect_equal(dfs[[2]]$human_S_count[1], 97908)
-  expect_equal(length(dfs[[2]]$human_S_count), 1000)
+  expect_equal(length(dfs), 17)
+  expect_equal(length(dfs$timestep), 2000)
+  expect_equal(dfs$human_S_count[1], 70)
+  expect_equal(dfs$human_E_count[1], 20)
+  expect_equal(dfs$human_E_count[1], 20)
+  expect_true(dfs$repetition[1] == 1)
+  expect_true(dfs$timestep[2] == 2)
 
 })
