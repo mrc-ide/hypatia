@@ -52,7 +52,7 @@ hospitilisation_flow_process <- function(
            api = api,
            target = mv_not_get,
            prob_successful = prob_outcome(
-             mv_get,
+             mv_not_get,
              disc_ages,
              parameters$prob_severe_death_no_treatment
            ),
