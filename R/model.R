@@ -52,29 +52,22 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
 #'
 #' @param repetitions n times to run the simulation
 #' @param overrides a named list of parameters to use instead of defaults
-#' @param parallel execute runs in parallel
 #' @return data frame for runs
 #' @export
 run_simulation_replicate <- function(
   repetitions,
-  overrides = list(),
-  parallel = FALSE
+  overrides = list()
 ) {
 
   # Currently running sequentially only
-  fapply <- lapply
 
-  # Currently running sequentially only
-  counter <- 0
-
-  dfs <- fapply(
+  dfs <- lapply(
 
     seq(repetitions),
     function(repetition) {
-      counter <<- counter + 1
-      df <- run_simulation(pop = overrides$pop[[counter]],
-                           parameters = overrides$parameters[[counter]],
-                           max_age = overrides$max_age[[counter]])
+      df <- run_simulation(pop = overrides$pop[[repetition]],
+                           parameters = overrides$parameters[[repetition]],
+                           max_age = overrides$max_age[[repetition]])
       df$repetition <- repetition
       df
     }

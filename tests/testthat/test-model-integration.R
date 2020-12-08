@@ -65,12 +65,12 @@ test_that("run run_simulation twice using mockery_mock", {
   )
 
   # run our mocked function
-  out <- run(repetitions = 2, overrides = overrides, parallel = FALSE)
+  out <- run(repetitions = 2, overrides = overrides)
 
   # Now we can check the arguments are correctly filled from overrides
-  expect_true(out$repetition[1] == 1)
-  expect_true(out$timestep[2] == 1)
-  expect_true(out$pop[2] == 3)
+  expect_equal(out$repetition[1], 1)
+  expect_equal(out$timestep[2], 1)
+  expect_equal(out$pop[2], 3)
 
   expected <- data.frame(
     timestep = c(1, 1),
@@ -79,8 +79,6 @@ test_that("run run_simulation twice using mockery_mock", {
     max_age = c(1, 3),
     repetition= c(1, 2)
   )
-
-  do.call("rbind", out)
 
   expect_equal(out, expected)
 
@@ -104,7 +102,7 @@ test_that("run run_simulation twice using mockery_mock - another method", {
   )
   # run our mocked function
 
-  out <- run(repetitions = 2, overrides = overrides, parallel = FALSE)
+  out <- run(repetitions = 2, overrides = overrides)
 
   mockery::expect_args(
     run_simulation_mock,
@@ -163,16 +161,15 @@ test_that("run 2 models with run_simulation sequentially on real data", {
 
   dfs <- run_simulation_replicate(
     repetitions,
-    overrides,
-    parallel = FALSE
+    overrides
   )
 
   expect_equal(length(dfs), 17)
   expect_equal(length(dfs$timestep), 2000)
   expect_equal(dfs$human_S_count[1], 952)
   expect_equal(dfs$human_E_count[1], 20)
-  expect_true(dfs$repetition[1] == 1)
-  expect_true(dfs$timestep[1] == 1)
-  expect_true(dfs$timestep[2] == 2)
+  expect_equal(dfs$repetition[1], 1)
+  expect_equal(dfs$timestep[1], 1)
+  expect_equal(dfs$timestep[2], 2)
 
 })
