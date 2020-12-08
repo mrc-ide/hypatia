@@ -159,7 +159,6 @@ test_that("run 2 models with run_simulation sequentially on real data", {
   expect_equal(length(dfs$timestep), 2000)
   expect_equal(dfs$human_S_count[1], 952)
   expect_equal(dfs$human_E_count[1], 20)
-  expect_equal(dfs$human_E_count[2], 20)
   expect_true(dfs$repetition[1] == 1)
   expect_true(dfs$timestep[1] == 1)
   expect_true(dfs$timestep[2] == 2)
