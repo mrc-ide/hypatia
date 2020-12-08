@@ -72,6 +72,18 @@ test_that("run run_simulation twice using mockery_mock", {
   expect_true(out$timestep[2] == 1)
   expect_true(out$pop[2] == 3)
 
+  expected <- data.frame(
+    timestep = c(1, 1),
+    pop = c(1, 3),
+    parameters = c(1, 3),
+    max_age = c(1, 3),
+    repetition= c(1, 2)
+  )
+
+  do.call("rbind", out)
+
+  expect_equal(out, expected)
+
 })
 
 test_that("run run_simulation twice using mockery_mock - another method", {
