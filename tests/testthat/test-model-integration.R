@@ -120,7 +120,7 @@ test_that("run 2 models with run_simulation sequentially on real data", {
 
   iso3c <- "ATG"
   pop <- get_population(iso3c)
-  pop$n <- as.integer(pop$n / 1000)
+  pop$n <- as.integer(pop$n / 100)
 
   psq <- get_parameters(
     population = pop$n,
@@ -132,7 +132,7 @@ test_that("run 2 models with run_simulation sequentially on real data", {
 
   iso3c <- "AFG"
   pop2 <- get_population(iso3c)
-  pop2$n <- as.integer(pop2$n / 1000)
+  pop2$n <- as.integer(pop2$n / 100)
 
   psq2 <- get_parameters(
     population = pop2$n,
@@ -157,10 +157,11 @@ test_that("run 2 models with run_simulation sequentially on real data", {
 
   expect_equal(length(dfs), 17)
   expect_equal(length(dfs$timestep), 2000)
-  expect_equal(dfs$human_S_count[1], 70)
+  expect_equal(dfs$human_S_count[1], 952)
   expect_equal(dfs$human_E_count[1], 20)
-  expect_equal(dfs$human_E_count[1], 20)
+  expect_equal(dfs$human_E_count[2], 20)
   expect_true(dfs$repetition[1] == 1)
+  expect_true(dfs$timestep[1] == 1)
   expect_true(dfs$timestep[2] == 2)
 
 })
