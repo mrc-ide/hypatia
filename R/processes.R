@@ -196,6 +196,13 @@ create_event_based_processes <- function(
     )
   )
 
+  # Severe Infection events
+  events$severe_infection$add_listener(
+    create_progression_listener(
+      event = events$hospitilisation, 
+      duration = parameters$dur_ICase
+    )
+  )
   # MV outcomes
   events$imv_get_live$add_listener(
     create_progression_listener(
