@@ -3,7 +3,7 @@ test_that("create_variables returns the correct output", {
   pop <- get_population("AFG")
 
   pop$n <- as.integer(pop$n/10000)
-  theages <- create_variables(pop, 90)
+  theages <- create_variables(pop, get_parameters("AFG"))
   expect_length(length(theages$age), 1)
 
   expect_length(theages$age$initial_values, sum(pop$n))
@@ -15,7 +15,6 @@ test_that("create_continuous_age_variable creates the right number of ages", {
 
   pop <- get_population("AFG")
   pop$n <- as.integer(pop$n/10000)
-  age <- create_continuous_age_variable(pop, max_age = 100)
   ages <- create_continuous_age_variable(pop)
   expect_length(ages, sum(pop$n))
 
@@ -35,7 +34,7 @@ test_that("test create_discrete_age_variable", {
 
   pop <- squire::get_population(iso3c = "ATG", simple_SEIR = FALSE)
   pop$n <- as.integer(pop$n/100)
-  ages <- create_continuous_age_variable(pop = pop, max_age = 100)
+  ages <- create_continuous_age_variable(pop = pop)
   disc_ages <- create_discrete_age_variable(ages, pop)
 
   expect_equal(as.numeric(table(disc_ages)), pop$n)
@@ -51,19 +50,18 @@ test_that("test adjust_seeding_ages_works", {
     iso3c = "ATG", population = pop$n
   )
 
-  # Create our variables
-  variables <- create_variables(pop)
+  age_cont <- create_continuous_age_variable(pop)
 
   # adjust the seeding ages
-  variables$discrete_age$initial_values <- adjust_seeding_ages(
-    initial_values = variables$discrete_age$initial_values,
+  actual <- adjust_seeding_ages(
+    initial_values = age_cont,
     parameters = parameters
   )
 
   # checks
   e1 <- parameters$E1_0
   expect_equal(
-    tail(variables$discrete_age$initial_values, 20),
+    tail(actual, 20),
     rep(which(e1>0), e1[e1>0])
   )
 

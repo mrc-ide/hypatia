@@ -4,14 +4,12 @@
 \alias{run_simulation}
 \title{Run the simulation}
 \usage{
-run_simulation(pop, parameters = NULL, max_age = 100)
+run_simulation(pop, parameters)
 }
 \arguments{
 \item{pop}{population. See \link[squire:get_population]{squire::get_population}}
 
-\item{parameters}{parameter list}
-
-\item{max_age}{maximum age defaults to 100}
+\item{parameters}{model parameters}
 }
 \description{
 The main entrypoint for the simulation. run_simulation puts together the

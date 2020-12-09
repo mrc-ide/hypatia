@@ -91,8 +91,8 @@ test_that("test that create_pocesses works", {
       tt_contact_matrix = tt_contact_matrix
    )
 
-   variables <- create_variables(pop, max_age = 100)
    psq <- remove_non_numerics(psq)
+   variables <- create_variables(pop, psq)
    states <- create_states(psq)
    events <- create_events()
    individuals <- create_human(states,
@@ -128,11 +128,7 @@ test_that("test that create_pocesses works for render process", {
       tt_contact_matrix = tt_contact_matrix
    )
 
-   output <- run_simulation(
-      pop,
-      psq,
-      max_age = 100
-   )
+   output <- run_simulation(pop, psq)
 
    expect_equal(length(output$timestep), 1000)
    expect_equal(length(output$human_E_count), 1000)

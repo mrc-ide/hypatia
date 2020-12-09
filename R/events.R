@@ -1,15 +1,14 @@
 #' @ Create events
 #'
-#' @return events
+#' @return a named list of individual::Event
 #' @noRd
 create_events <- function() {
-
-  events <-list(
-
+  list(
     # Human infection events
     exposure = individual::Event$new('exposure'),
     mild_infection = individual::Event$new('mild_infection'),
-    severe_infection = individual::Event$new('severe_infection'),
+    severe_infection = individual::Event$new('severe_infection'), # requiring hospital eventually
+    hospitilisation = individual::Event$new('hospitilisation'), # either ICU or MV
     imv_get_live = individual::Event$new('imv_get_live'),
     imv_get_die = individual::Event$new('imv_get_die'),
     iox_get_live = individual::Event$new('iox_get_live'),
@@ -22,8 +21,6 @@ create_events <- function() {
     recovery = individual::Event$new('recovery'),
     death = individual::Event$new('death')
   )
-
-  events
 }
 
 #' @title Update the state of an individual as infection events occur
@@ -106,3 +103,4 @@ create_exposure_update_listener <- function(
     }
   }
 }
+

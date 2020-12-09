@@ -4,8 +4,8 @@
 #' @param pop population list
 #' @param max_age maximum age to be drawn
 #'
-#' @return continuous age variable
 #' @importFrom stats dexp
+#' @return continuous age variable
 #' @noRd
 create_continuous_age_variable <- function(pop, max_age = 100) {
 
@@ -46,7 +46,7 @@ create_continuous_age_variable <- function(pop, max_age = 100) {
 #' length(pop$age_group) distinct age groups
 #'
 #' @param ages Vector of ages from [create_continuous_age_variable]
-#' @param pop Vector of integer ages created by
+#' @param pop Vector of integer ages
 #'
 #' @noRd
 #' @return discrete age variable
@@ -76,12 +76,15 @@ get_age_bins <- function(groups) {
 #' @description Create individual variables for continuous and discrete age
 #'
 #' @param pop population list
-#' @param max_age maximum age - default 100
+#' @param parameters model parameters
 #'
 #' @noRd
 #' @return named list of individual::Variable
-create_age_variables <- function(pop, max_age = 100) {
-  age <- create_continuous_age_variable(pop, max_age)
+create_age_variables <- function(pop, parameters) {
+  age <- adjust_seeding_ages(
+    create_continuous_age_variable(pop, parameters$max_age),
+    parameters
+  )
   discrete_age <- create_discrete_age_variable(age, pop)
 
   list(
@@ -94,11 +97,12 @@ create_age_variables <- function(pop, max_age = 100) {
 #' @description Create all individual variables for humans
 #'
 #' @param pop population list
-#' @param max_age maximum age - default 100
+#' @param parameters model parameters
 #'
 #' @return named list of individual::Variable
-create_variables <- function(pop, max_age = 100) {
-  create_age_variables(pop, max_age)
+#' @noRd
+create_variables <- function(pop, parameters) {
+  create_age_variables(pop, parameters)
 }
 
 #' Adjust seeding ages
@@ -110,6 +114,7 @@ create_variables <- function(pop, max_age = 100) {
 #' @return Returns modified initial_values vector
 #' @importFrom utils head tail
 #'
+#' @noRd
 #' @examples
 #' \dontrun{
 #' Create our parameters
