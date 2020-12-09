@@ -22,12 +22,11 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
 
 })
 
-test_that("run run_simulation twice using mockery_mock", {
+test_that("run_simulation produces a sensible dataframe", {
 
   # simple overrides
   overrides <- list("pop" = list(1,3),
-                    "parameters" = list(1,3),
-                    "max_age" = list(1,3))
+                    "parameters" = list(1,3))
 
   # get our run function that we will do some mocking to
   run <- run_simulation_replicate
@@ -40,8 +39,8 @@ test_that("run run_simulation twice using mockery_mock", {
     function(pop, parameters, max_age) {
       data.frame("timestep" = 1,
                  "pop" = pop,
-                 "parameters" = parameters,
-                 "max_age" = max_age)
+                 "parameters" = parameters
+                 )
     }
   )
 
@@ -57,7 +56,6 @@ test_that("run run_simulation twice using mockery_mock", {
     timestep = c(1, 1),
     pop = c(1, 3),
     parameters = c(1, 3),
-    max_age = c(1, 3),
     repetition= c(1, 2)
   )
 
@@ -68,8 +66,7 @@ test_that("run run_simulation twice using mockery_mock", {
 test_that("run_simulation is called with the correct arguments", {
 
   overrides <- list("pop" = list(1,3),
-                    "parameters" = list(1,3),
-                    "max_age" = list(1,3))
+                    "parameters" = list(1,3))
   # get our run function that we will do some mocking to
   run <- run_simulation_replicate
   # mock the function as just a plain mock
@@ -87,16 +84,14 @@ test_that("run_simulation is called with the correct arguments", {
     run_simulation_mock,
     1,
     pop = overrides$pop[[1]],
-    parameters = overrides$parameters[[1]],
-    max_age = overrides$max_age[[1]]
+    parameters = overrides$parameters[[1]]
   )
 
   mockery::expect_args(
     run_simulation_mock,
     2,
     pop = overrides$pop[[2]],
-    parameters = overrides$parameters[[2]],
-    max_age = overrides$max_age[[2]]
+    parameters = overrides$parameters[[2]]
   )
 
 })
@@ -132,11 +127,8 @@ test_that("run 2 models with run_simulation sequentially on real data", {
   )
 
   repetitions <- 2
-  max_age <- 100
 
-  overrides <-list(pop = list(pop, pop2), parameters = list(psq, psq2),
-                          max_age = list(max_age, max_age))
-
+  overrides <-list(pop = list(pop, pop2), parameters = list(psq, psq2))
 
   dfs <- run_simulation_replicate(
     repetitions,

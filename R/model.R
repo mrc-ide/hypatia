@@ -47,8 +47,7 @@ run_simulation_replicate <- function(
     seq(repetitions),
     function(repetition) {
       df <- run_simulation(pop = overrides$pop[[repetition]],
-                           parameters = overrides$parameters[[repetition]],
-                           max_age = overrides$max_age[[repetition]])
+                           parameters = overrides$parameters[[repetition]])
       df$repetition <- repetition
       df
     }
