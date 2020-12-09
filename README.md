@@ -25,6 +25,12 @@ library(individual)
 
 Get parameters from SQUIRE
 
+## Contributing
+
+We follow [RESIDE's PR guidelines](https://reside-ic.github.io/articles/pull-requests/).
+
+Please read [TESTING.md](https://github.com/mrc-ide/hypatia/blob/main/TESTING.md) for testing guidelines.
+
 ## License
 
 MIT © Imperial College of Science, Technology and Medicine

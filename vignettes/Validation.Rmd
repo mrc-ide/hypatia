@@ -39,7 +39,7 @@ parameters <-  hypatia::get_parameters(
 )
 
 # run our simulation - default timesteps = 200
-df_1 <- hypatia::run_simulation(pop, parameters, max_age = 100)
+df_1 <- hypatia::run_simulation(pop, parameters)
 
 subtitle <- paste(
   "Simulation for 1 run and 200 data points per run")
