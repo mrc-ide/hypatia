@@ -29,6 +29,7 @@ get_parameters <- function(iso3c = NULL,
       time_period = time_period,
       ...
     ),
+    prob_asymp = c(0.3, 0.3, rep(0.2, 15)),
     time_period = time_period
   )
 }

@@ -71,6 +71,14 @@ create_event_based_processes <- function(
       )
    )
 
+   # IAsymp events
+   events$asymp_infection$add_listener(
+      create_infection_update_listener(
+         human,
+         states$IAsymp
+      )
+   )
+
    # ICase events
    events$severe_infection$add_listener(
       create_infection_update_listener(

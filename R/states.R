@@ -14,6 +14,7 @@ create_states <- function(psq) {
   S <- sum(psq$S_0)
   E <- sum(psq$E1_0, psq$E2_0)
   IMild <- sum(psq$IMild_0)
+  IAsymp <- 0
   ICase <- sum(psq$ICase1_0, psq$ICase2_0)
   IOxGetLive <- sum(psq$IOxGetLive1_0, psq$IOxGetLive2_0)
   IOxGetDie <- sum(psq$IOxGetDie1_0, psq$IOxGetDie2_0)
@@ -32,6 +33,7 @@ create_states <- function(psq) {
     S = individual::State$new("S", S),
     E = individual::State$new("E", E),
     IMild = individual::State$new("IMild", IMild),
+    IAsymp = individual::State$new("IAsymp", IAsymp),
     ICase = individual::State$new("ICase", ICase),
     IOxGetLive = individual::State$new("IOxGetLive", IOxGetLive),
     IOxGetDie = individual::State$new("IOxGetDie", IOxGetDie),

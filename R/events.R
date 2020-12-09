@@ -9,6 +9,7 @@ create_events <- function() {
     # Human infection events
     exposure = individual::Event$new('exposure'),
     mild_infection = individual::Event$new('mild_infection'),
+    asymp_infection = individual::Event$new('asymp_infection'),
     severe_infection = individual::Event$new('severe_infection'),
     imv_get_live = individual::Event$new('imv_get_live'),
     imv_get_die = individual::Event$new('imv_get_die'),
