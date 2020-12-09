@@ -2,6 +2,7 @@
 
 export(get_parameters)
 export(run_simulation)
+export(run_simulation_replicate)
 importFrom(stats,dexp)
 importFrom(stats,rexp)
 importFrom(stats,rgamma)

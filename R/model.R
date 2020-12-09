@@ -47,3 +47,33 @@ run_simulation <- function(pop, parameters = NULL, max_age = 100) {
   output
 
 }
+
+#' @title Run the simulation with repetitions
+#'
+#' @param repetitions n times to run the simulation
+#' @param overrides a named list of parameters to use instead of defaults
+#' @return data frame for runs
+#' @export
+run_simulation_replicate <- function(
+  repetitions,
+  overrides = list()
+) {
+
+  # Currently running sequentially only
+
+  dfs <- lapply(
+
+    seq(repetitions),
+    function(repetition) {
+      df <- run_simulation(pop = overrides$pop[[repetition]],
+                           parameters = overrides$parameters[[repetition]],
+                           max_age = overrides$max_age[[repetition]])
+      df$repetition <- repetition
+      df
+    }
+
+  )
+
+  do.call("rbind", dfs)
+
+}
