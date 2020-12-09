@@ -160,7 +160,7 @@
    <span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>discrete_age <span class="op">=</span> <span class="fu">mockery</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mockery/man/mock.html">mock</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
    <span class="va">events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mild_infection <span class="op">=</span> <span class="fu">mockery</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mockery/man/mock.html">mock</a></span><span class="op">(</span><span class="op">)</span>,
                   severe_infection <span class="op">=</span> <span class="fu">mockery</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mockery/man/mock.html">mock</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-   <span class="va">process</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_setup_process.html">create_setup_process</a></span><span class="op">(</span>
+   <span class="va">process</span> <span class="op">&lt;-</span> <span class="fu">create_setup_process</span><span class="op">(</span>
       <span class="va">individuals</span>,
       <span class="va">states</span>,
       <span class="va">events</span>,
@@ -253,11 +253,11 @@
   <span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="st">"ATG"</span><span class="op">)</span>
   <span class="va">events</span> <span class="op">&lt;-</span> <span class="fu">create_events</span><span class="op">(</span><span class="op">)</span>
   <span class="va">states</span> <span class="op">&lt;-</span> <span class="fu">create_states</span><span class="op">(</span><span class="va">parameters</span><span class="op">)</span>
-  <span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_variables.html">create_variables</a></span><span class="op">(</span><span class="va">pop</span>, <span class="va">parameters</span><span class="op">)</span>
+  <span class="va">variables</span> <span class="op">&lt;-</span> <span class="fu">create_variables</span><span class="op">(</span><span class="va">pop</span>, <span class="va">parameters</span><span class="op">)</span>
   <span class="va">human</span> <span class="op">&lt;-</span> <span class="fu">create_human</span><span class="op">(</span><span class="va">states</span>, <span class="va">variables</span>, <span class="va">events</span><span class="op">)</span>
 
   <span class="co"># Integrate the events and the listeners</span>
-  <span class="fu"><a href="reference/create_event_based_processes.html">create_event_based_processes</a></span><span class="op">(</span>
+  <span class="fu">create_event_based_processes</span><span class="op">(</span>
     <span class="va">human</span>,
     <span class="va">states</span>,
     <span class="va">variables</span>,
