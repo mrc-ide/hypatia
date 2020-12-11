@@ -8,11 +8,14 @@
 #' @param exposure event for covid exposure
 #' @param contact_matrix_set contact matrix set
 #' @noRd
-infection_process <- function(human, states, discrete_age, exposure, contact_matrix_set) {
+infection_process <- function(human, states, discrete_age, exposure,
+                              contact_matrix_set) {
 
   function(api) {
     pars <- api$get_parameters()
-    inf_states <- api$get_state(human, states$IMild, states$ICase)
+
+    inf_states <- api$get_state(human, states$IMild, states$IAsymp,
+                                states$ICase)
 
     # If IMild = ICase = 0, FOI = 0, i.e. no infected individuals
     if (length(inf_states) > 0) {

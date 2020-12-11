@@ -17,4 +17,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data\-raw$
+^TESTING\.md$
 

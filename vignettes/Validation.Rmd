@@ -49,6 +49,7 @@ df <- dplyr::bind_rows(df_1, .id = "group")
 statesnamevector <- c("human_S_count",
                            "human_E_count",
                            "human_IMild_count",
+                           "human_IAsymp_count",
                            "human_ICase_count",
                            "human_IOxGetLive_count",
                            "human_IOxGetDie_count",
@@ -108,23 +109,24 @@ plot(out)
 
 ```
 
-Get the actual comparative outputs. 
+Get the actual comparative outputs. - new state IAsymp in Hypatia so can't do
+this direct comparison at the moment
 
 ```{r}
-
-hyp <- tidyr::pivot_longer(df_1, -1)
-hyp <- dplyr::rename(hyp, t = timestep, compartment = name, y = value) 
-hyp <- dplyr::mutate(hyp, compartment = gsub("(^human_)(\\w*)(_count)", "\\2", compartment),
-         model = "hypatia") 
-hyp <- dplyr::select(hyp, c("t", "compartment", "y", "model"))
-
-sq <- squire::format_output(out, unique(hyp$compartment)) 
-sq <- dplyr::mutate(sq, model = "squire") 
-sq <- dplyr::select(sq, c("t", "compartment", "y", "model"))
-
-ggplot2::ggplot(rbind(sq, hyp), ggplot2::aes(t, y, color = model)) +
-  ggplot2::geom_line() +
-  ggplot2::facet_wrap(~compartment, scales = "free")
+# 
+# hyp <- tidyr::pivot_longer(df_1, -1)
+# hyp <- dplyr::rename(hyp, t = timestep, compartment = name, y = value) 
+# hyp <- dplyr::mutate(hyp, compartment = gsub("(^human_)(\\w*)(_count)", "\\2", compartment),
+#          model = "hypatia") 
+# hyp <- dplyr::select(hyp, c("t", "compartment", "y", "model"))
+# 
+# sq <- squire::format_output(out, unique(hyp$compartment)) 
+# sq <- dplyr::mutate(sq, model = "squire") 
+# sq <- dplyr::select(sq, c("t", "compartment", "y", "model"))
+# 
+# ggplot2::ggplot(rbind(sq, hyp), ggplot2::aes(t, y, color = model)) +
+#   ggplot2::geom_line() +
+#   ggplot2::facet_wrap(~compartment, scales = "free")
 
 
 

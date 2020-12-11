@@ -16,22 +16,45 @@ create_setup_process <- function(
       parameters <- api$get_parameters()
       exposed <- api$get_state(human, states$E)
       age <- api$get_variable(human, variables$discrete_age, exposed)
-      prob_hosp <- parameters$prob_hosp[as.integer(age)]
+      prob_hosp <- parameters$sq$prob_hosp[as.integer(age)]
       hosp <- bernoulli_multi_p(prob_hosp)
 
+      # Get those who have severe infections
       if(sum(hosp) > 0) {
          api$schedule(
             event = events$severe_infection,
             target = exposed[hosp],
-            delay = r_erlang(length(exposed[hosp]), parameters$dur_E)
+            delay = r_erlang(length(exposed[hosp]), parameters$sq$dur_E)
          )
       }
+
       if(sum(!hosp) > 0) {
-         api$schedule(
+
+        no_hosp <- which(!as.logical(hosp))
+        prob_asymp <-
+          parameters$prob_asymp[as.integer(variables$discrete_age()[no_hosp])]
+        asymp <- bernoulli_multi_p(prob_asymp)
+
+        # Get those who are asymptomatic
+        if (sum(asymp) > 0){
+          api$schedule(
+            event = events$asymp_infection,
+            target = exposed[no_hosp][asymp],
+            delay = r_erlang(length(exposed[no_hosp][asymp]),
+                             parameters$sq$dur_E)
+          )
+        }
+        # Get those who have mild infections
+        if (sum(!asymp) > 0){
+          api$schedule(
             event = events$mild_infection,
-            target = exposed[!hosp],
-            delay = r_erlang(length(exposed[!hosp]), parameters$dur_E)
-         )
+            target = exposed[no_hosp][!asymp],
+            delay = r_erlang(length(exposed[no_hosp][!asymp]),
+                             parameters$sq$dur_E)
+          )
+
+        }
+
       }
    }
 }
@@ -79,7 +102,7 @@ create_event_based_processes <- function(
       states$IAsymp
     )
   )
-  
+
   # ICase events
   events$severe_infection$add_listener(
     create_infection_update_listener(
@@ -189,7 +212,7 @@ create_event_based_processes <- function(
   events$mild_infection$add_listener(
     create_progression_listener(
       event = events$recovery,
-      duration = parameters$dur_IMild,
+      duration = parameters$sq$dur_IMild,
       func = r_exp
     )
   )
@@ -198,16 +221,16 @@ create_event_based_processes <- function(
   events$asymp_infection$add_listener(
     create_progression_listener(
       event = events$recovery,
-      duration = asymp_pars,
+      duration = parameters$dur_IAsymp,
       func = r_exp
     )
   )
-  
+
   # Severe Infection events
   events$severe_infection$add_listener(
     create_progression_listener(
-      event = events$hospitilisation, 
-      duration = parameters$dur_ICase
+      event = events$hospitilisation,
+      duration = parameters$sq$dur_ICase
     )
   )
 
@@ -225,7 +248,7 @@ create_event_based_processes <- function(
   events$imv_get_live$add_listener(
     create_progression_listener(
       event = events$stepdown,
-      duration = parameters$dur_get_mv_survive,
+      duration = parameters$sq$dur_get_mv_survive,
       shift = 1
     )
   )
@@ -233,7 +256,7 @@ create_event_based_processes <- function(
   events$imv_get_die$add_listener(
     create_progression_listener(
       event = events$death,
-      duration = parameters$dur_get_mv_die,
+      duration = parameters$sq$dur_get_mv_die,
       shift = 1
     )
   )
@@ -241,7 +264,7 @@ create_event_based_processes <- function(
   events$imv_not_get_live$add_listener(
     create_progression_listener(
       event = events$recovery,
-      duration = parameters$dur_not_get_mv_survive,
+      duration = parameters$sq$dur_not_get_mv_survive,
       shift = 1
     )
   )
@@ -249,7 +272,7 @@ create_event_based_processes <- function(
   events$imv_not_get_die$add_listener(
     create_progression_listener(
       event = events$death,
-      duration = parameters$dur_not_get_mv_die,
+      duration = parameters$sq$dur_not_get_mv_die,
       shift = 1
     )
   )
@@ -258,7 +281,7 @@ create_event_based_processes <- function(
   events$iox_get_live$add_listener(
     create_progression_listener(
       event = events$recovery,
-      duration = parameters$dur_get_ox_survive,
+      duration = parameters$sq$dur_get_ox_survive,
       shift = 1
     )
   )
@@ -266,7 +289,7 @@ create_event_based_processes <- function(
   events$iox_get_die$add_listener(
     create_progression_listener(
       event = events$death,
-      duration = parameters$dur_get_ox_die,
+      duration = parameters$sq$dur_get_ox_die,
       shift = 1
     )
   )
@@ -274,7 +297,7 @@ create_event_based_processes <- function(
   events$iox_not_get_live$add_listener(
     create_progression_listener(
       event = events$recovery,
-      duration = parameters$dur_not_get_ox_survive,
+      duration = parameters$sq$dur_not_get_ox_survive,
       shift = 1
     )
   )
@@ -282,7 +305,7 @@ create_event_based_processes <- function(
   events$iox_not_get_die$add_listener(
     create_progression_listener(
       event = events$death,
-      duration = parameters$dur_not_get_ox_die,
+      duration = parameters$sq$dur_not_get_ox_die,
       shift = 1
     )
   )
@@ -291,7 +314,7 @@ create_event_based_processes <- function(
   events$stepdown$add_listener(
     create_progression_listener(
       event = events$recovery,
-      duration = parameters$dur_rec
+      duration = parameters$sq$dur_rec
     )
   )
 
@@ -321,7 +344,7 @@ create_processes <- function(
       states,
       variables$discrete_age,
       events$exposure,
-      parameters$mix_mat_set
+      parameters$sq$mix_mat_set
     ),
     individual::state_count_renderer_process(
       human$name,
