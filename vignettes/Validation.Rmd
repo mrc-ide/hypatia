@@ -113,8 +113,6 @@ Get the actual comparative outputs. - remove state IAsymp as this is not in SQUI
 ```{r}
 
 df_1 <- dplyr::select(df_1, -human_IAsymp_count)
-# 
-#out <- append(out, "IAsymp" = rep(0.0, 200))
 
 hyp <- tidyr::pivot_longer(df_1, -1)
 hyp <- dplyr::rename(hyp, t = timestep, compartment = name, y = value)
