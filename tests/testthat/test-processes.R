@@ -3,9 +3,7 @@ test_that("test create_setup_process", {
    # these are mock arguments to be passed to the function
    # Because create_steup_process is istelf a wrapper to a function that takes
    # an argument api, we will mock the arguments passed to the api
-   # individuals <- list(
-   #    human = mockery::mock()
-   # )
+
    states <- list(
       E = mockery::mock()
    )
@@ -26,7 +24,7 @@ test_that("test create_setup_process", {
                get_state = mockery::mock(c(6, 7, 3, 2, 5, 8)),
                schedule = mockery::mock())
 
-   variables <- list(discrete_age = mockery::mock())
+   variables <- list(discrete_age = list(mockery::mock(problist)))
 
    events <- list(mild_infection = mockery::mock(),
                   asymp_infection = mockery::mock(),

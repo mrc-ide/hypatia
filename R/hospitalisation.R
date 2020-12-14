@@ -17,7 +17,7 @@ hospitilisation_flow_process <- function(
     parameters <- api$get_parameters()
     disc_ages <- api$get_variable(human, discrete_age)
     prob_severe <- prob_outcome(hospitalised, disc_ages,
-                                parameters$sq$prob_severe)
+                                parameters$prob_severe)
 
     # 1. Who needs a MV
     mv_success <- bernoulli_multi_p(prob_severe)
@@ -28,7 +28,7 @@ hospitilisation_flow_process <- function(
          human = human,
          need_treatment = need_mv,
          treated_state = states[c('IMVGetDie', 'IMVGetLive')],
-         limit = parameters$sq$ICU_beds
+         limit = parameters$ICU_beds
        )
 
        # schedule for those getting mv
@@ -72,7 +72,7 @@ hospitilisation_flow_process <- function(
         human = human,
         need_treatment = need_ox,
         treated_state = states[c('IOxGetDie', 'IOxGetLive', 'IRec')],
-        limit = parameters$sq$hosp_beds
+        limit = parameters$hosp_beds
       )
 
       # schedule for those getting ox

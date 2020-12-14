@@ -11,22 +11,22 @@
 create_states <- function(psq) {
 
   # Sum up the states from squire
-  S <- sum(psq$sq$S_0)
-  E <- sum(psq$sq$E1_0, psq$sq$E2_0)
-  IMild <- sum(psq$sq$IMild_0)
+  S <- sum(psq$S_0)
+  E <- sum(psq$E1_0, psq$E2_0)
+  IMild <- sum(psq$IMild_0)
   IAsymp <- sum(psq$IAsymp_0)
-  ICase <- sum(psq$sq$ICase1_0, psq$sq$ICase2_0)
-  IOxGetLive <- sum(psq$sq$IOxGetLive1_0, psq$sq$IOxGetLive2_0)
-  IOxGetDie <- sum(psq$sq$IOxGetDie1_0, psq$sq$IOxGetDie2_0)
-  IOxNotGetLive <- sum(psq$sq$IOxNotGetLive1_0, psq$sq$IOxNotGetLive2_0)
-  IOxNotGetDie <- sum(psq$sq$IOxNotGetDie1_0, psq$sq$IOxNotGetDie2_0)
-  IMVGetLive <- sum(psq$sq$IMVGetLive1_0, psq$sq$IMVGetLive2_0)
-  IMVGetDie <- sum(psq$sq$IMVGetDie1_0, psq$sq$IMVGetDie2_0)
-  IMVNotGetLive <- sum(psq$sq$IMVNotGetLive1_0, psq$sq$IMVNotGetLive2_0)
-  IMVNotGetDie <- sum(psq$sq$IMVNotGetDie1_0, psq$sq$IMVNotGetDie2_0)
-  IRec <- sum(psq$sq$IRec1_0, psq$sq$IRec2_0)
-  R <- sum(psq$sq$R_0)
-  D <- sum(psq$sq$D_0)
+  ICase <- sum(psq$ICase1_0, psq$ICase2_0)
+  IOxGetLive <- sum(psq$IOxGetLive1_0, psq$IOxGetLive2_0)
+  IOxGetDie <- sum(psq$IOxGetDie1_0, psq$IOxGetDie2_0)
+  IOxNotGetLive <- sum(psq$IOxNotGetLive1_0, psq$IOxNotGetLive2_0)
+  IOxNotGetDie <- sum(psq$IOxNotGetDie1_0, psq$IOxNotGetDie2_0)
+  IMVGetLive <- sum(psq$IMVGetLive1_0, psq$pIMVGetLive2_0)
+  IMVGetDie <- sum(psq$IMVGetDie1_0, psq$IMVGetDie2_0)
+  IMVNotGetLive <- sum(psq$IMVNotGetLive1_0, psq$IMVNotGetLive2_0)
+  IMVNotGetDie <- sum(psq$IMVNotGetDie1_0, psq$IMVNotGetDie2_0)
+  IRec <- sum(psq$IRec1_0, psq$IRec2_0)
+  R <- sum(psq$R_0)
+  D <- sum(psq$D_0)
 
   # Create states for Humans
   list(

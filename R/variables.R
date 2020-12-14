@@ -140,8 +140,8 @@ adjust_seeding_ages <- function(initial_values, parameters) {
   iv <- initial_values
 
   # what ages need to be at the back of our initials for seeding
-  ages <- rep(which(parameters$sq$E1_0 > 0),
-              parameters$sq$E1_0[parameters$sq$E1_0 > 0])
+  ages <- rep(which(parameters$E1_0 > 0),
+              parameters$E1_0[parameters$E1_0 > 0])
 
   # position of iv to be swapped out
   to_distribute <- tail(seq_along(iv), length(ages))

@@ -23,12 +23,12 @@ get_parameters <- function(iso3c = NULL,
   IAsymp_0 <- c(rep(0L, 17))
   dur_IAsymp <- 2.1
 
-  list(
+  parameters <- list(
     sq = squire::parameters_explicit_SEEIR(
       population = population,
       country = get_country(iso3c),
       contact_matrix_set = contact_matrix_set,
-      dt = 1, # dt should always be 1 as individual is always discrete time
+      dt = 1, # dt should always be 1 as individual is always a discrete time
       time_period = time_period,
       ...
     ),
@@ -39,21 +39,21 @@ get_parameters <- function(iso3c = NULL,
     max_age = max_age
   )
 
-  # c(
-  #   sq = squire::parameters_explicit_SEEIR(
-  #     population = population,
-  #     country = get_country(iso3c),
-  #     contact_matrix_set = contact_matrix_set,
-  #     dt = 1, # dt should always be 1 as individual is always discrete time
-  #     time_period = time_period,
-  #     ...
-  #   ),
-  #   prob_asymp = prob_asymp,
-  #   IAsymp_0 = IAsymp_0,
-  #   dur_IAsymp = dur_IAsymp,
-  #   time_period = time_period,
-  #   max_age = max_age
-  # )
+  # Remove contact _matrix_set from paraeter list as this is passed straight
+  # into infection_process
+  parstemp <- parameters$sq
+
+  parstemp <- parstemp[names(parstemp) != "contact_matrix_set"]
+
+  newlist <- list(prob_asymp = parameters$prob_asymp,
+                  IAsymp_0 = parameters$IAsymp_0,
+                  dur_IAsymp = parameters$dur_IAsymp,
+                  time_period = parameters$time_period,
+                  max_age = parameters$max_age)
+
+  pars <- append(parstemp, newlist)
+
+
 }
 
 #' @title Get population from SQUIRE model

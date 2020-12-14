@@ -6,7 +6,7 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
   tt_contact_matrix <- 0
 
   pop <- get_population("AFG")
-  pop$n <- as.integer(pop$n/1000)
+  pop$n <- as.integer(pop$n / 1000)
 
   psq <- get_parameters(
     iso3c = "AFG",
@@ -16,10 +16,11 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
     tt_contact_matrix = tt_contact_matrix,
   )
 
-  expect_equal(psq$sq$dur_E, 4.6)
-  expect_equal(psq$sq$N_age, 17)
-  expect_equal(length(psq$sq$S_0), 17)
-  expect_equal(length(psq$sq$IRec1_0), 17)
+  expect_equal(psq$dur_E, 4.6)
+  expect_equal(psq$N_age, 17)
+  expect_equal(length(psq$S_0), 17)
+  expect_equal(length(psq$IAsymp_0), 17)
+  expect_equal(length(psq$IRec1_0), 17)
   expect_equal(psq$time_period, 1000)
 
 })

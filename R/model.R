@@ -25,6 +25,7 @@ run_simulation <- function(pop, parameters) {
       parameters
     ),
     end_timestep  = parameters$time_period,
+    parameters = parameters,
     initialisation = create_setup_process(human, states, events, variables)
   )
 }

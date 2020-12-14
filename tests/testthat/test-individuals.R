@@ -66,7 +66,7 @@ test_that("test Create_states with S for 1st age group", {
     tt_contact_matrix = tt_contact_matrix
   )
 
-  Snew <- individual::State$new("S", sum(psq$sq$S_0))
+  Snew <- individual::State$new("S", sum(psq$S_0))
 
   states <- create_states(psq)
 

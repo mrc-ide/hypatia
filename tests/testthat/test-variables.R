@@ -61,7 +61,7 @@ test_that("test adjust_seeding_ages_works", {
   )
 
   # checks
-  e1 <- parameters$sq$E1_0
+  e1 <- parameters$E1_0
 
   expect_equal(
     tail(actual, 20),
