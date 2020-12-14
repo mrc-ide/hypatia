@@ -19,10 +19,6 @@ get_parameters <- function(iso3c = NULL,
     contact_matrix_set <- squire::get_mixing_matrix(iso3c = iso3c)
   }
 
-  prob_asymp <- c(0.3, 0.3, rep(0.2, 15))
-  IAsymp_0 <- c(rep(0L, 17))
-  dur_IAsymp <- 2.1
-
   parameters <- list(
     sq = squire::parameters_explicit_SEEIR(
       population = population,
@@ -32,27 +28,29 @@ get_parameters <- function(iso3c = NULL,
       time_period = time_period,
       ...
     ),
-    prob_asymp = prob_asymp,
-    IAsymp_0 = IAsymp_0,
-    dur_IAsymp = dur_IAsymp,
     time_period = time_period,
     max_age = max_age
   )
 
-  # Remove contact _matrix_set from paraeter list as this is passed straight
+  # Remove contact _matrix_set from parameter list as this is passed straight
   # into infection_process
   parstemp <- parameters$sq
 
-  parstemp <- parstemp[names(parstemp) != "contact_matrix_set"]
+  if (is.null(parameters$max_age)) {
+    newlist <- list(time_period = parameters$time_period, max_age = 100)
+    parstemp <- append(parstemp, newlist)
 
-  newlist <- list(prob_asymp = parameters$prob_asymp,
-                  IAsymp_0 = parameters$IAsymp_0,
-                  dur_IAsymp = parameters$dur_IAsymp,
-                  time_period = parameters$time_period,
-                  max_age = parameters$max_age)
+  }
+  else {
+    newlist <- list(time_period = parameters$time_period,
+                     max_age = parameters$max_age)
+    parstemp <- append(parstemp, newlist)
+  }
 
-  pars <- append(parstemp, newlist)
+  #Add asymptomatic parameters
+  pars_asymp <- get_asymptomatic()
 
+  pars <- append(parstemp, pars_asymp)
 
 }
 
@@ -67,4 +65,22 @@ get_population <- function(iso3c) {
 #' @noRd
 get_country <- function(iso3c) {
   squire::population[squire::population$iso3c == iso3c, "country"][[1]]
+}
+
+#' Function to add asymptomatic information
+#'
+#' @return list of asymptomatic parameters
+get_asymptomatic <- function()
+{
+
+  prob_asymp <- c(0.3, 0.3, rep(0.2, 15))
+  IAsymp_0 <- c(rep(0L, 17))
+  dur_IAsymp <- 2.1
+
+  list(
+    prob_asymp = prob_asymp,
+    IAsymp_0 = IAsymp_0,
+    dur_IAsymp = dur_IAsymp
+  )
+
 }
