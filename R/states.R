@@ -20,7 +20,7 @@ create_states <- function(psq) {
   IOxGetDie <- sum(psq$IOxGetDie1_0, psq$IOxGetDie2_0)
   IOxNotGetLive <- sum(psq$IOxNotGetLive1_0, psq$IOxNotGetLive2_0)
   IOxNotGetDie <- sum(psq$IOxNotGetDie1_0, psq$IOxNotGetDie2_0)
-  IMVGetLive <- sum(psq$IMVGetLive1_0, psq$pIMVGetLive2_0)
+  IMVGetLive <- sum(psq$IMVGetLive1_0, psq$IMVGetLive2_0)
   IMVGetDie <- sum(psq$IMVGetDie1_0, psq$IMVGetDie2_0)
   IMVNotGetLive <- sum(psq$IMVNotGetLive1_0, psq$IMVNotGetLive2_0)
   IMVNotGetDie <- sum(psq$IMVNotGetDie1_0, psq$IMVNotGetDie2_0)
