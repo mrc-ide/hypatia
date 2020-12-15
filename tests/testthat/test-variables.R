@@ -45,7 +45,9 @@ test_that("test adjust_seeding_ages_works", {
 
   # Create our parameters
   pop <- squire::get_population(iso3c = "ATG")
-  pop$n <- as.integer(pop$n)/100
+
+  pop$n <- as.integer(pop$n) / 100
+
   parameters <- get_parameters(
     iso3c = "ATG", population = pop$n
   )
@@ -60,9 +62,10 @@ test_that("test adjust_seeding_ages_works", {
 
   # checks
   e1 <- parameters$E1_0
+
   expect_equal(
     tail(actual, 20),
-    rep(which(e1>0), e1[e1>0])
+    rep(which(e1 > 0), e1[e1 > 0])
   )
 
 })

@@ -4,6 +4,7 @@ test_that("infection_process does not schedule infections when no-one is infecte
 
   exposure = mockery::mock()
   discrete_age = mockery::mock()
+  age = mockery::mock()
 
   states <- list(
     IMild = mockery::mock(),
@@ -26,6 +27,7 @@ test_that("infection_process does not schedule infections when no-one is infecte
     1,
     human,
     states$IMild,
+    states$IAsymp,
     states$ICase
   )
 
@@ -41,6 +43,7 @@ test_that("infection_process does not schedule when no-one infects by chance", {
   )
   exposure = mockery::mock()
   discrete_age = mockery::mock()
+  age = mockery::mock()
   contact_matrix <- mockery::mock()
 
   process <- infection_process(human, states, discrete_age, exposure,
@@ -84,6 +87,7 @@ test_that("infection_process gives correct lambda for infections", {
   )
   exposure = mockery::mock()
   discrete_age = mockery::mock()
+  age = mockery::mock()
   contact_matrix <- mockery::mock()
 
   process <- infection_process(human, states, discrete_age, exposure,

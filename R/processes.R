@@ -19,6 +19,7 @@ create_setup_process <- function(
       prob_hosp <- parameters$prob_hosp[as.integer(age)]
       hosp <- bernoulli_multi_p(prob_hosp)
 
+      # Get those who have severe infections
       if(sum(hosp) > 0) {
          api$schedule(
             event = events$severe_infection,
@@ -26,12 +27,34 @@ create_setup_process <- function(
             delay = r_erlang(length(exposed[hosp]), parameters$dur_E)
          )
       }
+
       if(sum(!hosp) > 0) {
-         api$schedule(
+
+        no_hosp <- which(!hosp)
+        prob_asymp <-
+          parameters$prob_asymp[variables$discrete_age$initial_values[no_hosp]]
+        asymp <- bernoulli_multi_p(prob_asymp)
+
+        # Get those who are asymptomatic
+        if (sum(asymp) > 0){
+          api$schedule(
+            event = events$asymp_infection,
+            target = exposed[no_hosp][asymp],
+            delay = r_erlang(length(exposed[no_hosp][asymp]),
+                             parameters$dur_E)
+          )
+        }
+        # Get those who have mild infections
+        if (sum(!asymp) > 0){
+          api$schedule(
             event = events$mild_infection,
-            target = exposed[!hosp],
-            delay = r_erlang(length(exposed[!hosp]), parameters$dur_E)
-         )
+            target = exposed[no_hosp][!asymp],
+            delay = r_erlang(length(exposed[no_hosp][!asymp]),
+                             parameters$dur_E)
+          )
+
+        }
+
       }
    }
 }
@@ -69,6 +92,14 @@ create_event_based_processes <- function(
     create_infection_update_listener(
       human,
       states$IMild
+    )
+  )
+
+    # IAsymp events
+  events$asymp_infection$add_listener(
+    create_infection_update_listener(
+      human,
+      states$IAsymp
     )
   )
 
@@ -186,10 +217,19 @@ create_event_based_processes <- function(
     )
   )
 
+  # Asymptotic Infection events
+  events$asymp_infection$add_listener(
+    create_progression_listener(
+      event = events$recovery,
+      duration = parameters$dur_IAsymp,
+      func = r_exp
+    )
+  )
+
   # Severe Infection events
   events$severe_infection$add_listener(
     create_progression_listener(
-      event = events$hospitilisation, 
+      event = events$hospitilisation,
       duration = parameters$dur_ICase
     )
   )
@@ -270,7 +310,7 @@ create_event_based_processes <- function(
     )
   )
 
-  # Stepdon
+  # Stepdown
   events$stepdown$add_listener(
     create_progression_listener(
       event = events$recovery,

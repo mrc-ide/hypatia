@@ -8,12 +8,13 @@
 #' @param parameters model parameters
 #' @export
 run_simulation <- function(pop, parameters) {
-  parameters <- remove_non_numerics(parameters)
-  states <- create_states(parameters)
+
   variables <- create_variables(pop, parameters)
+  states <- create_states(parameters)
   events <- create_events()
   human <- create_human(states, variables, events)
   create_event_based_processes(human, states, variables, events, parameters)
+
   individual::simulate(
     individuals = list(human),
     processes = create_processes(

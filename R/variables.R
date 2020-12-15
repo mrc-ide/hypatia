@@ -77,7 +77,6 @@ get_age_bins <- function(groups) {
 #'
 #' @param pop population list
 #' @param parameters model parameters
-#'
 #' @noRd
 #' @return named list of individual::Variable
 create_age_variables <- function(pop, parameters) {
@@ -140,7 +139,8 @@ adjust_seeding_ages <- function(initial_values, parameters) {
   iv <- initial_values
 
   # what ages need to be at the back of our initials for seeding
-  ages <- rep(which(parameters$E1_0 > 0), parameters$E1_0[parameters$E1_0 > 0])
+  ages <- rep(which(parameters$E1_0 > 0),
+              parameters$E1_0[parameters$E1_0 > 0])
 
   # position of iv to be swapped out
   to_distribute <- tail(seq_along(iv), length(ages))

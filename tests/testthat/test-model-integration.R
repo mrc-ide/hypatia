@@ -7,6 +7,7 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
   iso3c <- "AFG"
   pop <- get_population(iso3c)
   pop$n <- as.integer(pop$n / 1000)
+
   psq <- get_parameters(
     population = pop$n,
     contact_matrix_set = squire::get_mixing_matrix(iso3c = iso3c),
@@ -19,6 +20,9 @@ test_that("run_simulation can parameterise and run an Afghan model for 10 days",
 
   expect_equal(length(output$timestep), 1000)
   expect_equal(nrow(output), 1000)
+  expect_equal(length(output$human_E_count), 1000)
+  expect_equal(length(output$human_IMild_count), 1000)
+  expect_equal(length(output$human_IMVNotGetLive_count), 1000)
 
 })
 
@@ -135,7 +139,7 @@ test_that("run 2 models with run_simulation sequentially on real data", {
     overrides
   )
 
-  expect_equal(length(dfs), 17)
+  expect_equal(length(dfs), 18)
   expect_equal(length(dfs$timestep), 2000)
   expect_equal(dfs$human_S_count[1], 952)
   expect_equal(dfs$human_E_count[1], 20)

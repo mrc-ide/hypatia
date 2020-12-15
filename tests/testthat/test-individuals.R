@@ -28,6 +28,7 @@ test_that("test that create_human works", {
       states$S,
       states$E,
       states$IMild,
+      states$IAsymp,
       states$ICase,
       states$IOxGetLive,
       states$IOxGetDie,

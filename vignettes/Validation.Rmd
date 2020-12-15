@@ -49,6 +49,7 @@ df <- dplyr::bind_rows(df_1, .id = "group")
 statesnamevector <- c("human_S_count",
                            "human_E_count",
                            "human_IMild_count",
+                           "human_IAsymp_count",
                            "human_ICase_count",
                            "human_IOxGetLive_count",
                            "human_IOxGetDie_count",
@@ -68,7 +69,6 @@ df <- tidyr::pivot_longer(tibble::as_tibble(df), all_of(statesnamevector))
 strname <- "Hypatia Model Simulation"
 subtitle <- paste(
     "Simulation for 1 run and 1000 data points")
-
 time <- seq(1, time_period, 1)
 
 ggplot2::ggplot(
@@ -102,24 +102,26 @@ out <- squire::run_explicit_SEEIR_model(
   replicates = 1,
   day_return = TRUE, 
   dt = 0.01
-  )
+)
 
 plot(out)
 
 ```
 
-Get the actual comparative outputs. 
+Get the actual comparative outputs. - remove state IAsymp as this is not in SQUIRE
 
 ```{r}
 
+df_1 <- dplyr::select(df_1, -human_IAsymp_count)
+
 hyp <- tidyr::pivot_longer(df_1, -1)
-hyp <- dplyr::rename(hyp, t = timestep, compartment = name, y = value) 
+hyp <- dplyr::rename(hyp, t = timestep, compartment = name, y = value)
 hyp <- dplyr::mutate(hyp, compartment = gsub("(^human_)(\\w*)(_count)", "\\2", compartment),
-         model = "hypatia") 
+         model = "hypatia")
 hyp <- dplyr::select(hyp, c("t", "compartment", "y", "model"))
 
-sq <- squire::format_output(out, unique(hyp$compartment)) 
-sq <- dplyr::mutate(sq, model = "squire") 
+sq <- squire::format_output(out, unique(hyp$compartment))
+sq <- dplyr::mutate(sq, model = "squire")
 sq <- dplyr::select(sq, c("t", "compartment", "y", "model"))
 
 ggplot2::ggplot(rbind(sq, hyp), ggplot2::aes(t, y, color = model)) +

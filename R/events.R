@@ -7,6 +7,7 @@ create_events <- function() {
     # Human infection events
     exposure = individual::Event$new('exposure'),
     mild_infection = individual::Event$new('mild_infection'),
+    asymp_infection = individual::Event$new('asymp_infection'),
     severe_infection = individual::Event$new('severe_infection'), # requiring hospital eventually
     hospitilisation = individual::Event$new('hospitilisation'), # either ICU or MV
     imv_get_live = individual::Event$new('imv_get_live'),
@@ -87,6 +88,7 @@ create_exposure_update_listener <- function(
     prob_hosp <- parameters$prob_hosp[as.integer(disc_ages)]
     hosp <- bernoulli_multi_p(prob_hosp)
 
+    # Severe infections
     if(sum(hosp) > 0) {
       api$schedule(
         event = events$severe_infection,
@@ -94,12 +96,33 @@ create_exposure_update_listener <- function(
         delay = r_erlang(length(to_move[hosp]), parameters$dur_E) + 1
       )
     }
+
+    # Non severe infections
     if(sum(!hosp) > 0){
-      api$schedule(
-        event = events$mild_infection,
-        target = to_move[!hosp],
-        delay = r_erlang(length(to_move[!hosp]), parameters$dur_E) + 1
-      )
+      # Get individuals not going to hospital
+      no_hosp <- which(!hosp)
+      prob_asymp <- parameters$prob_asymp[as.integer(disc_ages[no_hosp])]
+      asymp <- bernoulli_multi_p(prob_asymp)
+
+      # Get those who are asymptomatic
+      if (sum(asymp) > 0){
+        api$schedule(
+          event = events$asymp_infection,
+          target = to_move[no_hosp][asymp],
+          delay = r_erlang(length(to_move[no_hosp][asymp]),
+                           parameters$dur_E) + 1
+        )
+      }
+      # Get those who have mild infections
+      if (sum(!asymp) > 0){
+        api$schedule(
+          event = events$mild_infection,
+          target = to_move[no_hosp][!asymp],
+          delay = r_erlang(length(to_move[no_hosp][!asymp]),
+                           parameters$dur_E) + 1
+        )
+      }
+
     }
   }
 }
