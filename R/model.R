@@ -9,8 +9,6 @@
 #' @export
 run_simulation <- function(pop, parameters) {
 
-  #parameters <- remove_non_numerics(parameters)
-
   variables <- create_variables(pop, parameters)
   states <- create_states(parameters)
   events <- create_events()

@@ -14,45 +14,36 @@ get_parameters <- function(iso3c = NULL,
                            max_age = 100,
                            ...) {
 
-  # if missing a contact matrix but have the iso3c use that
+  # if missing a contact matrix but have iso3c then use that
   if (!is.null(iso3c) && is.null(contact_matrix_set)) {
     contact_matrix_set <- squire::get_mixing_matrix(iso3c = iso3c)
   }
 
-  parameters <- list(
-    sq = squire::parameters_explicit_SEEIR(
-      population = population,
-      country = get_country(iso3c),
-      contact_matrix_set = contact_matrix_set,
-      dt = 1, # dt should always be 1 as individual is always a discrete time
-      time_period = time_period,
-      ...
-    ),
-    time_period = time_period,
-    max_age = max_age
-  )
+  # Get squire parameters
+  squire_parameters <- squire::parameters_explicit_SEEIR(
+        population = population,
+        country = get_country(iso3c),
+        contact_matrix_set = contact_matrix_set,
+        dt = 1, # dt should always be 1 as individual is always a discrete time
+        time_period = time_period)
 
-  parstemp <- parameters$sq
+  squire_parameters$contact_matrix_set <- NULL # remove contact_matrix_set
 
-  if (is.null(parameters$max_age)) {
-    newlist <- list(time_period = parameters$time_period, max_age = 100)
-    parstemp <- append(parstemp, newlist)
+  asymp_list <- get_asymptomatic() # create list of asymptomatic parameters
 
-  }
-  else {
-    newlist <- list(time_period = parameters$time_period,
-                     max_age = parameters$max_age)
-    parstemp <- append(parstemp, newlist)
-  }
+  # create list with hypatia parameters
+  newlist <- list(time_period = time_period, max_age = max_age)
 
-  #Add asymptomatic parameters
-  pars_asymp <- get_asymptomatic()
+  # Then add all 3 lists together into pars, the list to be returned
+  pars <- squire_parameters
 
-  pars <- append(parstemp, pars_asymp)
+  pars <- append(pars, asymp_list)
 
-  # Remove contact _matrix_set from parameter list as this is passed straight
-  # into infection_process
-  pars <- remove_non_numerics(pars)
+  pars <- append(pars, newlist)
+
+  pars <- remove_non_numerics(pars) # remove non numerics
+
+  pars
 
 }
 
