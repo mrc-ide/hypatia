@@ -55,4 +55,35 @@ test_that("test get_parameters returns the correct values from SQUIRE", {
 
 })
 
+test_that("test that if max-age is set as NULL get_parameters returns the
+          correct values from SQUIRE", {
+
+  R0 <- 2
+  timestep <- 100
+  time_period <- 1000
+  tt_contact_matrix <- 0
+
+  pop <- get_population("AFG")
+  pop$n <- as.integer(pop$n / 1000)
+
+  psq <- get_parameters(
+    iso3c = "AFG",
+    population = pop$n,
+    R0 = R0,
+    time_period = time_period,
+    tt_contact_matrix = tt_contact_matrix,
+    max_age = NULL
+  )
+
+  expect_equal(psq$dur_E, 4.6)
+  expect_equal(psq$N_age, 17)
+  expect_equal(length(psq$S_0), 17)
+  expect_equal(length(psq$IAsymp_0), 17)
+  expect_equal(psq$dur_IAsymp, 2.1)
+  expect_equal(psq$prob_asymp[8], 0.2)
+  expect_equal(length(psq$IRec1_0), 17)
+  expect_equal(psq$time_period, 1000)
+
+})
+
 

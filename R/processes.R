@@ -30,10 +30,9 @@ create_setup_process <- function(
 
       if(sum(!hosp) > 0) {
 
-        no_hosp <- which(!as.logical(hosp))
+        no_hosp <- which(!hosp)
         prob_asymp <-
-          parameters$prob_asymp[as.integer(
-            variables$discrete_age$initial_values[no_hosp])]
+          parameters$prob_asymp[variables$discrete_age$initial_values[no_hosp]]
         asymp <- bernoulli_multi_p(prob_asymp)
 
         # Get those who are asymptomatic

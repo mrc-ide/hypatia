@@ -121,8 +121,6 @@ test_that("test create_exposure_update_listener", {
 
   to_move <- c(6, 7, 3, 2, 5, 8)
 
-  discrete_age <- mockery::mock()
-
   mockery::stub(ret, 'r_erlang', mockery::mock(c(0.5, 0.5), c(0.4, 0.4),
                                                c(0.7, 0.7)))
 

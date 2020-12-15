@@ -75,9 +75,8 @@ get_age_bins <- function(groups) {
 #' @title Create age variables
 #' @description Create individual variables for continuous and discrete age
 #'
-#'
-#'
-#'
+#' @param pop population list
+#' @param parameters model parameters
 #' @noRd
 #' @return named list of individual::Variable
 create_age_variables <- function(pop, parameters) {

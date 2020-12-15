@@ -100,7 +100,7 @@ create_exposure_update_listener <- function(
     # Non severe infections
     if(sum(!hosp) > 0){
       # Get individuals not going to hospital
-      no_hosp <- which(!as.logical(hosp))
+      no_hosp <- which(!hosp)
       prob_asymp <- parameters$prob_asymp[as.integer(disc_ages[no_hosp])]
       asymp <- bernoulli_multi_p(prob_asymp)
 

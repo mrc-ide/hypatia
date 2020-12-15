@@ -32,8 +32,6 @@ get_parameters <- function(iso3c = NULL,
     max_age = max_age
   )
 
-  # Remove contact _matrix_set from parameter list as this is passed straight
-  # into infection_process
   parstemp <- parameters$sq
 
   if (is.null(parameters$max_age)) {
@@ -51,6 +49,10 @@ get_parameters <- function(iso3c = NULL,
   pars_asymp <- get_asymptomatic()
 
   pars <- append(parstemp, pars_asymp)
+
+  # Remove contact _matrix_set from parameter list as this is passed straight
+  # into infection_process
+  pars <- remove_non_numerics(pars)
 
 }
 
@@ -73,6 +75,8 @@ get_country <- function(iso3c) {
 get_asymptomatic <- function()
 {
 
+  # Temporary values just for testing purposes. Literature derived values
+  # will be supplied later
   prob_asymp <- c(0.3, 0.3, rep(0.2, 15))
   IAsymp_0 <- c(rep(0L, 17))
   dur_IAsymp <- 2.1
