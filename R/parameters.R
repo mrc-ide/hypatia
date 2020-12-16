@@ -25,7 +25,8 @@ get_parameters <- function(iso3c = NULL,
         country = get_country(iso3c),
         contact_matrix_set = contact_matrix_set,
         dt = 1, # dt should always be 1 as individual is always a discrete time
-        time_period = time_period)
+        time_period = time_period,
+        ...)
 
   squire_parameters$contact_matrix_set <- NULL # remove contact_matrix_set
 
@@ -51,6 +52,7 @@ get_parameters <- function(iso3c = NULL,
 #' @description rounds population sizes to discrete numbers
 #'
 #' @param iso3c three letter code for your country of interest
+#' @export
 get_population <- function(iso3c) {
   squire::get_population(iso3c = iso3c, simple_SEIR = FALSE)
 }

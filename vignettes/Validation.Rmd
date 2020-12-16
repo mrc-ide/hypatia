@@ -31,7 +31,7 @@ R0 <- 2
 time_period <- 200
 tt_contact_matrix <- 0
 
-parameters <- hypatia:::get_parameters(
+parameters <- hypatia::get_parameters(
   population = pop$n,
   contact_matrix_set = squire::get_mixing_matrix(iso3c = iso3c),
   iso3c = iso3c,
@@ -43,7 +43,7 @@ parameters <- hypatia:::get_parameters(
 ```
 
 
-Run our simulation - default timesteps = 200
+## Run our simulation - default timesteps = 200
 
 ```{r}
 
@@ -51,9 +51,9 @@ df_1 <- hypatia::run_simulation(pop, parameters)
 
 ```
 
-PLOT RESULTS
+## PLOT RESULTS
 
-First setup output data
+*First setup output data*
 
 ```{r}
 
@@ -89,7 +89,7 @@ time <- seq(1, time_period, 1)
 
 ```
 
-Plot data
+*Plot data*
 
 ```{r}
 
@@ -112,7 +112,7 @@ df, ggplot2::aes(x = timestep, y = value,
 
 ```
 
-Does it look similar to the squire output:
+*Does it look similar to the squire output:*
 
 ```{r}
 
@@ -130,7 +130,7 @@ plot(out)
 
 ```
 
-Get the actual comparative outputs. - remove state IAsymp as this is not in SQUIRE
+*Get the actual comparative outputs. - remove state IAsymp as this is not in SQUIRE*
 
 ```{r}
 
