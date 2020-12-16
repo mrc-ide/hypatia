@@ -137,10 +137,9 @@ identify_ages_to_adjust <- function(discrete_ages, parameters) {
   to_swap <- vector()
 
   for (i in seq_along(unique(ages))) {
-    tsi1 <- list()
-    tsi2 <- list()
-    tsi1 <- which(iv == unique(ages)[i])
-    tsi2 <- head(tsi1, sum(ages == unique(ages)[i]))
+    unique_age <- unique(ages)[i]
+    tsi1 <- which(iv == unique_age)
+    tsi2 <- head(tsi1, sum(ages == unique_age))
     to_swap <- c(to_swap, tsi2)
   }
 

@@ -51,6 +51,7 @@ get_parameters <- function(iso3c = NULL,
 #' @description rounds population sizes to discrete numbers
 #'
 #' @param iso3c three letter code for your country of interest
+#' @export
 get_population <- function(iso3c) {
   squire::get_population(iso3c = iso3c, simple_SEIR = FALSE)
 }
