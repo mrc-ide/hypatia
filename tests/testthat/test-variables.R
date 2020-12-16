@@ -40,8 +40,7 @@ test_that("test create_discrete_age_variable", {
   expect_equal(as.numeric(table(disc_ages)), pop$n)
 })
 
-
-test_that("test adjust_seeding_ages_works", {
+test_that("test identify_ages_to_adjust and doing_the_swap work", {
 
   # Create our parameters
   pop <- squire::get_population(iso3c = "ATG")
@@ -52,13 +51,13 @@ test_that("test adjust_seeding_ages_works", {
     iso3c = "ATG", population = pop$n
   )
 
-  age_cont <- create_continuous_age_variable(pop)
+  cont_age <- create_continuous_age_variable(pop, parameters$max_age)
 
-  # Adjust the seeding ages
-  actual <- adjust_seeding_ages(
-    initial_values = age_cont,
-    parameters = parameters
-  )
+  discrete_age <- create_discrete_age_variable(cont_age, pop)
+
+  swaps <- identify_ages_to_adjust(discrete_age, parameters)
+
+  actual <- doing_the_swap(swaps, discrete_age)
 
   # Check that values agree
   e1 <- parameters$E1_0

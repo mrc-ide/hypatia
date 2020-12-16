@@ -80,14 +80,19 @@ get_age_bins <- function(groups) {
 #' @noRd
 #' @return named list of individual::Variable
 create_age_variables <- function(pop, parameters) {
-  age <- adjust_seeding_ages(
-    create_continuous_age_variable(pop, parameters$max_age),
-    parameters
-  )
-  discrete_age <- create_discrete_age_variable(age, pop)
+
+  cont_age <- create_continuous_age_variable(pop, parameters$max_age)
+
+  discrete_age <- create_discrete_age_variable(cont_age, pop)
+
+  swaps <- identify_ages_to_adjust(discrete_age, parameters)
+
+  discrete_age <- doing_the_swap(swaps, discrete_age)
+
+  cont_age <- doing_the_swap(swaps, cont_age)
 
   list(
-    age = individual::Variable$new("age", age),
+    age = individual::Variable$new("age", cont_age),
     discrete_age = individual::Variable$new("discrete_age", discrete_age)
   )
 }
@@ -104,78 +109,61 @@ create_variables <- function(pop, parameters) {
   create_age_variables(pop, parameters)
 }
 
-#' Adjust seeding ages
+#' @title Identify ages to adjust
 #'
-#' @details Switches age variables based on parameters object
+#' @details Identifies age variables to be switched based on parameters object
+#' @param discrete_ages discrete ages
 #' @param initial_values Vector of inital values from with variables object
 #'   created by \code{\link{create_variables}}
 #' @param parameters Parameters object created by \code{\link{get_parameters}}
-#' @return Returns modified initial_values vector
+#' @return Returns values to swap
 #' @importFrom utils head tail
 #'
 #' @noRd
-#' @examples
-#' \dontrun{
-#' Create our parameters
-#' pop <- squire::get_population(iso3c = "ATG")
-#' pop$n <- as.integer(pop$n)/100
-#' parameters <- get_parameters(
-#'    population = pop$n, contact_matrix_set = squire::contact_matrices[1]
-#' )
-#'
-#' # Create our variables
-#' variables <- create_variables(pop)
-#'
-#' # adjust the seeding ages
-#' variables$discrete_age$initial_values <- adjust_seeding_ages(
-#' initial_values = variables$discrete_age$initial_values,
-#'   parameters = parameters
-#' )
-#' }
-
-adjust_seeding_ages <- function(initial_values, parameters) {
+identify_ages_to_adjust <- function(discrete_ages, parameters) {
 
   # what are the ages that have been initialised
-  iv <- initial_values
+  iv <- discrete_ages
 
   e1 <- parameters$E1_0
 
   # what ages need to be at the back of our initials for seeding
   ages <- rep(which(e1 > 0), e1[e1 > 0])
 
-  # position of iv to be swapped out
+  # # position of iv to be swapped out
   to_distribute <- tail(seq_along(iv), length(ages))
 
   # position of iv to be swapped in
   to_swap <- vector()
 
   for (i in seq_along(unique(ages))) {
-
-    tsi <- which(iv == unique(ages)[i])
-    tsi <- head(tsi, sum(ages == unique(ages)[i]))
-    to_swap <- c(to_swap, tsi)
+    tsi1 <- list()
+    tsi2 <- list()
+    tsi1 <- which(iv == unique(ages)[i])
+    tsi2 <- head(tsi1, sum(ages == unique(ages)[i]))
+    to_swap <- c(to_swap, tsi2)
   }
+
+  list(to_distribute = to_distribute, to_swap = to_swap)
+
+}
+
+#' @title Swap values that have been identified
+#'
+#' @param swaps values to be swapped
+#' @param age discrete age or continuous age
+#'
+#' @return age
+doing_the_swap <- function(swaps, age) {
 
   # what values are being moved around
-  to_distribute_values <- iv[to_distribute]
-  to_swap_values <- iv[to_swap]
+  to_distribute_values <- age[swaps$to_distribute]
+  to_swap_values <- age[swaps$to_swap]
 
   # do the swap
-  iv[to_distribute] <- to_swap_values
-  iv[to_swap] <- to_distribute_values
+  age[swaps$to_distribute] <- to_swap_values
+  age[swaps$to_swap] <- to_distribute_values
 
-  # Check that the calculated iv matches with ages
-  vec1 <- unlist(ages)
-
-  listiv <- tail(iv, 20)
-  vec2 <- unlist(listiv)
-
-  ans <- all.equal(vec1, vec2, check.attributes=FALSE)
-
-  if (!is.logical(ans)) {
-    adjust_seeding_ages(initial_values, parameters)
-  }
-
-  return(iv)
+  return(age)
 
 }
