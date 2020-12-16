@@ -25,7 +25,8 @@ get_parameters <- function(iso3c = NULL,
         country = get_country(iso3c),
         contact_matrix_set = contact_matrix_set,
         dt = 1, # dt should always be 1 as individual is always a discrete time
-        time_period = time_period)
+        time_period = time_period,
+        ...)
 
   squire_parameters$contact_matrix_set <- NULL # remove contact_matrix_set
 

@@ -148,3 +148,29 @@ test_that("run 2 models with run_simulation sequentially on real data", {
   expect_equal(dfs$timestep[2], 2)
 
 })
+
+test_that("Check that applying vector R0 values gives a vector of beta_set
+          values.", {
+
+  end_timestep <- 1000
+  R0 <- c(rep(2, end_timestep))
+  tt_contact_matrix <- 0
+  time_period = seq(1, end_timestep, 1)
+  tt_R0 =  seq(1, end_timestep, 1)
+
+  iso3c <- "AFG"
+  pop <- get_population(iso3c)
+  pop$n <- as.integer(pop$n / 1000)
+
+  psq <- get_parameters(
+    population = pop$n,
+    contact_matrix_set = squire::get_mixing_matrix(iso3c = iso3c),
+    iso3c = iso3c,
+    time_period = time_period,
+    R0 = R0,
+    tt_R0 = tt_R0
+  )
+
+  expect_equal(length(psq$beta_set), length(R0))
+
+})
