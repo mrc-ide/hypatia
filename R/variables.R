@@ -138,21 +138,22 @@ adjust_seeding_ages <- function(initial_values, parameters) {
   # what are the ages that have been initialised
   iv <- initial_values
 
+  e1 <- parameters$E1_0
+
   # what ages need to be at the back of our initials for seeding
-  ages <- rep(which(parameters$E1_0 > 0),
-              parameters$E1_0[parameters$E1_0 > 0])
+  ages <- rep(which(e1 > 0), e1[e1 > 0])
 
   # position of iv to be swapped out
   to_distribute <- tail(seq_along(iv), length(ages))
 
   # position of iv to be swapped in
   to_swap <- vector()
+
   for (i in seq_along(unique(ages))) {
 
     tsi <- which(iv == unique(ages)[i])
     tsi <- head(tsi, sum(ages == unique(ages)[i]))
     to_swap <- c(to_swap, tsi)
-
   }
 
   # what values are being moved around
@@ -162,6 +163,18 @@ adjust_seeding_ages <- function(initial_values, parameters) {
   # do the swap
   iv[to_distribute] <- to_swap_values
   iv[to_swap] <- to_distribute_values
+
+  # Check that the calculated iv matches with ages
+  vec1 <- unlist(ages)
+
+  listiv <- tail(iv, 20)
+  vec2 <- unlist(listiv)
+
+  ans <- all.equal(vec1, vec2, check.attributes=FALSE)
+
+  if (!is.logical(ans)) {
+    adjust_seeding_ages(initial_values, parameters)
+  }
 
   return(iv)
 

@@ -54,13 +54,13 @@ test_that("test adjust_seeding_ages_works", {
 
   age_cont <- create_continuous_age_variable(pop)
 
-  # adjust the seeding ages
+  # Adjust the seeding ages
   actual <- adjust_seeding_ages(
     initial_values = age_cont,
     parameters = parameters
   )
 
-  # checks
+  # Check that values agree
   e1 <- parameters$E1_0
 
   expect_equal(
